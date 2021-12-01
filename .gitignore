@@ -9,3 +9,16 @@
 
 # Undo-tree save-files
 *.~undo-tree
+
+# Files dependent on local file structure
+.lsp-session*
+SessionDesktop.el
+auto-save-list
+bookmarks
+
+# Ignore downloaded packages for now
+elpa
+
+# Local history
+eshell
+transient
