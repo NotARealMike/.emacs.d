@@ -17,6 +17,7 @@
 (setq ispell-program-name "/usr/local/bin/ispell")
 (dolist (hook '(text-mode-hook))
       (add-hook hook (lambda () (flyspell-mode 1))))
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; _____________________________________________________________________________
 ;; Load extra configuration
