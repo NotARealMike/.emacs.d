@@ -8,6 +8,22 @@ A repo on GitHub with lots of interesting packages and configuration. It is an i
 * packages and config to copy
 * writing config as a literate org file
 
+# Homebrew
+
+Make sure that tools installed using Homebrew are accessible from Emacs.
+
+Last time I installed brew, it told me this at the end. I should figure out how to add these to my emacs config.
+
+```
+==> Next steps:
+- Run these two commands in your terminal to add Homebrew to your PATH:
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/mike/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+- Run `brew help` to get started
+- Further documentation:
+    https://docs.brew.sh
+```
+
 # [libvterm](https://github.com/akermu/emacs-libvterm)
 
 An emacs mode for running a terminal.
