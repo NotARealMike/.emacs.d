@@ -35,20 +35,3 @@ Caveat: these may no longer be relevant after looking at the "Emacs from scratch
 Have a look through the [advertised main features](https://emacs-lsp.github.io/lsp-mode/page/main-features/) and see if there is anything else I want to add.
 
 Have a look through the [options available in gopls](https://github.com/golang/tools/blob/master/gopls/doc/emacs.md).
-
-Figure out what the following does:
-
-```
-(use-package lsp-mode
-  :ensure t
-  :hook (go-mode . lsp)
-
-  :config
-  (setq-default lsp-enable-file-watchers nil) ;; This causes problems with large repos, but means changing branches is worse
-  (setq-default lsp-go-directory-filters ["-vendor" "-manifests"])
-
-  (lsp-register-custom-settings
-   '(("gopls.memoryMode" "DegradeClosed")
-	   ("gopls.experimentalWorkspaceModule" t t)
-	   ("gopls.staticcheck" t t))))
-```
