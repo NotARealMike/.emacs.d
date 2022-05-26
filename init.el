@@ -12,6 +12,12 @@
 ;(global-set-key ("s-l") 'goto-line)
 (global-set-key (kbd "C-c C-c") 'comment-or-uncomment-region)
 
+(global-set-key (kbd "C-<tab>") 'other-window)
+(defun switch-to-prev-window ()
+  (interactive)
+  (other-window -1))
+(global-set-key (kbd "C-S-<tab>") 'switch-to-prev-window)
+
 (setq sentence-end-double-space nil)
 
 (setq ispell-program-name "/usr/local/bin/ispell")
