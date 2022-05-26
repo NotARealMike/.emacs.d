@@ -39,8 +39,7 @@
 ;; _____________________________________________________________________________
 
 (use-package magit
-  :bind ("C-x g" . magit-status)
-  )
+  :bind ("C-x g" . magit-status))
 
 ;; _____________________________________________________________________________
 ;; Org-mode
@@ -53,8 +52,7 @@
   (setq org-agenda-files '("~/org/gtd.org"))
   (setq org-agenda-log-mode-items '(closed clock state))
   (setq org-capture-templates
-	'("t" "Task" entry (file+headline "~/org/gtd.org" "Tasks") "** NEXT %i%?")
-	)
+	'("t" "Task" entry (file+headline "~/org/gtd.org" "Tasks") "** NEXT %i%?"))
   (setq org-refile-targets
 	'(("~/org/gtd.org" :maxlevel . 5)))
   (setq org-todo-keywords
@@ -63,9 +61,7 @@
   :bind
   ("\C-cl" . org-store-link)
   ("s-c" . org-capture)
-  ("s-a" . org-agenda)
-  ;; (global-set-key "\C-cb" 'org-iswitchb)
-  )
+  ("s-a" . org-agenda))
 
 ;; _____________________________________________________________________________
 ;; Go-mode
@@ -76,11 +72,8 @@
   :commands (lsp lsp-deferred)
   :hook (go-mode . lsp-deferred)
   :bind
-  (
-   :map lsp-mode-map
-	("M-." . xref-find-definitions)
-	)
-  )
+  (:map lsp-mode-map
+	("M-." . xref-find-definitions)))
 
 (setq lsp-headerline-breadcrumb-segments '(project path-up-to-project file symbols))
 
@@ -96,8 +89,7 @@
 (use-package lsp-ui
   :ensure t
   :commands lsp-ui-mode
-  :init
-  )
+  :init)
 
 ;; I'm not sure what these do. They come from here:
 ;; https://arenzana.org/posts/2019-12-03-emacs-go-mode-revisited/
@@ -134,8 +126,7 @@
       lsp-ui-flycheck-enable t)
 
 (defun custom-go-mode ()
-  (display-line-numbers-mode 1)
-  )
+  (display-line-numbers-mode 1))
 
 (use-package go-mode
   :defer t
@@ -145,27 +136,19 @@
   (setq compile-command "echo Formating... && go fmt && echo Building... && go build -v && echo Testing... && go test -v")
   (setq compilation-read-command nil)
   (add-hook 'go-mode-hook 'custom-go-mode)
-; This needs to be here and not in a :hook statement because :hook
-; automatically sufixes '-hook' to 'gofmt-before-save'
+  ;; This needs to be here and not in a :hook statement because :hook
+  ;; automatically sufixes '-hook' to 'gofmt-before-save'
   (add-hook 'before-save-hook 'gofmt-before-save)
   :bind (
 	 :map go-mode-map
 	      ("M-," . compile)
-	      ("s-l" . goto-line)
-	 ;; ("M-." . godef-jump)
-	 )
-  )
+	      ("s-l" . goto-line)))
 
-;;(setq compilation-window-height 20)
 (defun my-compilation-hook ()
   (when (not (get-buffer-window "*compilation*"))
     (save-selected-window
       (save-excursion
-	;; (let* ((w (split-window-vertically))
-	;;        (h (window-height w)))
-	;;   (select-window w)
 	  (switch-to-buffer "*compilation*")))))
-;;	  (shrink-window (- h compilation-window-height)))))))
 (add-hook 'compilation-mode-hook 'my-compilation-hook)
 
 (setq compilation-scroll-output t)
