@@ -75,7 +75,7 @@
 
 (use-package lsp-mode
   :ensure t
-  :commands (lsp lsp-deferred)
+  :commands (lsp lsp-deferred lsp-register-custom-settings)
   :hook (go-mode . lsp-deferred)
   :bind
   (:map lsp-mode-map
@@ -158,6 +158,12 @@
 (add-hook 'compilation-mode-hook 'my-compilation-hook)
 
 (setq compilation-scroll-output t)
+
+;; Handle Go modules in large monorepos
+(setq lsp-go-directory-filters ["-vendor" "-manifests"])
+(lsp-register-custom-settings
+ '(("gopls.memoryMode" "DegradeClosed")
+   ("gopls.expandWorkspaceToModule" nil t)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
