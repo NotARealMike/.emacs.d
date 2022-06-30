@@ -32,13 +32,24 @@
 (load-file "~/.emacs.d/local.el")
 
 ;; _____________________________________________________________________________
-;; MELPA
+;; Package management
 ;; _____________________________________________________________________________
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
 (package-initialize)
+
+(unless package-archive-contents
+ (package-refresh-contents))
+
+;; Make sure use-package is used. This should only ever run once.
+(unless (package-installed-p 'use-package)
+   (package-install 'use-package))
+
+(require 'use-package)
+;; This avoids confusion as to what is loaded or not
+(setq use-package-always-ensure t)
 
 ;; _____________________________________________________________________________
 ;; Magit
@@ -52,7 +63,6 @@
 ;; _____________________________________________________________________________
 
 (use-package org
-  :ensure t
   :hook (org-mode . auto-fill-mode)
   :init
   (setq org-agenda-files '("~/org/gtd.org"))
@@ -74,7 +84,6 @@
 ;; _____________________________________________________________________________
 
 (use-package lsp-mode
-  :ensure t
   :commands (lsp lsp-deferred lsp-register-custom-settings)
   :hook (go-mode . lsp-deferred)
   :bind
@@ -93,7 +102,6 @@
 ;;Optional - provides fancier overlays.
 
 (use-package lsp-ui
-  :ensure t
   :commands lsp-ui-mode
   :init)
 
@@ -109,7 +117,6 @@
 ;;completion-at-point also works out of the box but doesn't support snippets.
 
 (use-package company
-  :ensure t
   :hook ((emacs-lisp-mode go-mode) . company-mode)
   :config
   (setq company-idle-delay 0)
@@ -118,7 +125,6 @@
 ;;Optional - provides snippet support.
 
 (use-package yasnippet
-  :ensure t
   :commands yas-minor-mode
   :hook (go-mode . yas-minor-mode))
 
@@ -136,7 +142,6 @@
 
 (use-package go-mode
   :defer t
-  :ensure t
   :mode ("\\.go\\'" . go-mode)
   :init
   (setq compile-command "echo Formating... && go fmt && echo Building... && go build -v && echo Testing... && go test -v")
