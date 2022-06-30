@@ -3,27 +3,37 @@
 ;; _____________________________________________________________________________
 ;; Stuff I want to apply everywhere
 
+;; Assign registers to common files
 (set-register ?e (cons 'file "~/.emacs.d"))
 (set-register ?i (cons 'file "~/.emacs.d/init.el"))
 (set-register ?g (cons 'file "~/org/gtd.org"))
 
+;; Theme and display configuration
+(load-theme 'tango-dark t)
 (column-number-mode)
 (global-display-line-numbers-mode)
-;(global-set-key ("s-l") 'goto-line)
+
+;; Make the right option key not act as meta, to let me type characters that need option
+(setq ns-right-alternate-modifier 'none)
+
+;; Easy commenting
 (global-set-key (kbd "C-c C-c") 'comment-or-uncomment-region)
 
+;; Cycle through windows easily
 (global-set-key (kbd "C-<tab>") 'other-window)
 (defun switch-to-prev-window ()
   (interactive)
   (other-window -1))
 (global-set-key (kbd "C-S-<tab>") 'switch-to-prev-window)
 
-(setq sentence-end-double-space nil)
+;; Simplify yes-or-no prompts
+(defalias 'yes-or-no-p 'y-or-n-p)
 
+;; Natural language formatting and spelling
+(setq sentence-end-double-space nil)
 (setq ispell-program-name "/usr/local/bin/ispell")
 (dolist (hook '(text-mode-hook))
       (add-hook hook (lambda () (flyspell-mode 1))))
-(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; _____________________________________________________________________________
 ;; Load extra configuration
@@ -170,25 +180,3 @@
  '(("gopls.memoryMode" "DegradeClosed")
    ("gopls.expandWorkspaceToModule" nil t)))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(custom-enabled-themes '(deeper-blue))
- '(custom-safe-themes
-   '("3d4df186126c347e002c8366d32016948068d2e9198c496093a96775cc3b3eaa" default))
- '(ns-right-alternate-modifier 'none)
- '(package-selected-packages
-   '(magit protobuf-mode ac-ispell abyss-theme go-mode lsp-mode gnu-elpa-keyring-update use-package)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-(put 'magit-clean 'disabled nil)
