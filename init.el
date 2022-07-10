@@ -27,7 +27,7 @@
 (set-register ?i (cons 'file "~/.emacs.d/init.el"))
 
 ;; Easy commenting
-(global-set-key (kbd "C-c C-c") 'comment-or-uncomment-region)
+(global-set-key (kbd "M-/") 'comment-or-uncomment-region)
 
 ;; Cycle through windows easily
 (global-set-key (kbd "C-<tab>") 'other-window)
