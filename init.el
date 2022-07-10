@@ -34,6 +34,20 @@
 (setq ispell-program-name "/usr/local/bin/ispell")
 (dolist (hook '(text-mode-hook))
       (add-hook hook (lambda () (flyspell-mode 1))))
+;; Rainbow delimiters
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode)
+  :config
+  (set-face-background 'rainbow-delimiters-base-error-face "#e6194b")
+  (set-face-foreground 'rainbow-delimiters-depth-1-face "#e6194b")
+  (set-face-foreground 'rainbow-delimiters-depth-2-face "#f58231")
+  (set-face-foreground 'rainbow-delimiters-depth-3-face "#ffe119")
+  (set-face-foreground 'rainbow-delimiters-depth-4-face "#bfef45")
+  (set-face-foreground 'rainbow-delimiters-depth-5-face "#aaffc3")
+  (set-face-foreground 'rainbow-delimiters-depth-6-face "#42d4f4")
+  (set-face-foreground 'rainbow-delimiters-depth-7-face "#4363d8")
+  (set-face-foreground 'rainbow-delimiters-depth-8-face "#911eb4")
+  (set-face-foreground 'rainbow-delimiters-depth-9-face "#f032e6"))
 
 ;; _____________________________________________________________________________
 ;; Load extra configuration
