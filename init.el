@@ -252,3 +252,22 @@
  '(("gopls.memoryMode" "DegradeClosed")
    ("gopls.expandWorkspaceToModule" nil t)))
 
+;; ___________________________________________________________________________
+;; Beancount
+;; ___________________________________________________________________________
+
+;; (defun beancount-save () (interactive)
+;;        (beancount-align-numbers (point-min) (point-max))
+;;   (delete-trailing-whitespace)
+;;   (save-buffer)
+;;   )
+
+;; (add-to-list 'load-path "~/.emacs.d/beancount-mode")
+;; (require 'beancount)
+
+;; (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+;; (add-hook 'beancount-mode-hook #'outline-minor-mode)
+
+;; ;;(define-key beancount-mode-map (kbd "s-s") 'beancount-save)
+;; (define-key beancount-mode-map (kbd "C-c C-n") #'outline-next-visible-heading)
+;; (define-key beancount-mode-map (kbd "C-c C-p") #'outline-previous-visible-heading)
