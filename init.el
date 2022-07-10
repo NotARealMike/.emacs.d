@@ -171,6 +171,8 @@
   (lsp lsp-deferred lsp-register-custom-settings)
   :hook
   (go-mode . lsp-deferred)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
   :bind
   (:map lsp-mode-map
 	("M-." . xref-find-definitions))
@@ -185,7 +187,7 @@
   (setq lsp-idle-delay 0.200))
 
 (use-package lsp-ui
-  :commands lsp-ui-mode
+  :hook (lsp-mode . lsp-ui-mode)
   :config
   (setq lsp-ui-doc-enable t
 	lsp-ui-peek-enable t
@@ -193,9 +195,8 @@
 	lsp-ui-imenu-enable t
 	lsp-ui-flycheck-enable t))
 
-
 (use-package company
-  :hook ((emacs-lisp-mode go-mode) . company-mode)
+  :hook ((prog-mode) . company-mode)
   :config
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1))
