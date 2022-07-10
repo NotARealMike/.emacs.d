@@ -80,6 +80,8 @@
 ;; _____________________________________________________________________________
 
 (use-package magit
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   :bind ("C-x g" . magit-status))
 
 ;; _____________________________________________________________________________
