@@ -53,7 +53,7 @@
 
 ;; Natural language formatting and spelling
 (setq sentence-end-double-space nil)
-(setq ispell-program-name "/usr/local/bin/ispell")
+(setq ispell-program-name "/opt/homebrew/bin/ispell")
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 
