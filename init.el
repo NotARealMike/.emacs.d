@@ -6,7 +6,6 @@
 ;; Assign registers to common files
 (set-register ?e (cons 'file "~/.emacs.d"))
 (set-register ?i (cons 'file "~/.emacs.d/init.el"))
-(set-register ?g (cons 'file "~/org/gtd.org"))
 
 ;; Theme and display configuration
 (load-theme 'tango-dark t)
@@ -89,21 +88,78 @@
 ;; _____________________________________________________________________________
 
 (use-package org
-  :hook (org-mode . auto-fill-mode)
-  :init
-  (setq org-agenda-files '("~/org/gtd.org"))
-  (setq org-agenda-log-mode-items '(closed clock state))
-  (setq org-capture-templates
-	'("t" "Task" entry (file+headline "~/org/gtd.org" "Tasks") "** NEXT %i%?"))
-  (setq org-refile-targets
-	'(("~/org/gtd.org" :maxlevel . 5)))
-  (setq org-todo-keywords
-	'((sequence "NEXT(n)" "TODO(t)" "WAIT(w)" "|" "DONE(d)" "CNLD(c)")))
-  (setq org-log-done 'time)
   :bind
   ("\C-cl" . org-store-link)
+  ("s-a" . org-agenda)
   ("s-c" . org-capture)
-  ("s-a" . org-agenda))
+  :config
+  (setq org-ellipsis " ▾"))
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+;; File structure
+(setq org-directory "~/gtd")
+(set-register ?g (cons 'file org-directory))
+
+(setq org-agenda-files
+      '("inbox.org"
+	"tasks.org"
+	"projects.org"))
+
+(setq org-refile-targets
+      '(("tasks.org" :maxlevel . 1)
+	("projects.org" :maxlevel . 1)
+	("rar.org" :maxlevel . 1)
+	("media.org" :maxlevel . 1)))
+
+;; Save all org buffers after refiling
+(advice-add 'org-refile :after 'org-save-all-org-buffers)
+
+;; Workflow states
+(setq org-todo-keywords
+      '((sequence "BACKLOG(b)" "SCOPE(s)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
+
+(setq org-capture-templates
+    `(("t" "Task" entry (file "inbox.org")
+       "* SCOPE %?\n%U\n%a" :prepend t)
+      ("m" "Meeting notes" entry (file+datetree "meetings.org")
+       "* %?\n%U" :tree-type week)))
+
+(setq org-log-done 'time)
+(setq org-log-into-drawer t)
+
+;; Agenda configuration
+(setq org-agenda-start-with-log-mode t)
+(setq org-agenda-log-mode-items '(closed clock state))
+
+(setq org-agenda-custom-commands
+      '(("d" "Dashboard"
+	 ((agenda "" ((org-deadline-warning-days 7)))
+	  (todo "TODO"
+		((org-agenda-overriding-header "Next Tasks")))))
+
+	("w" "Workflow Status"
+	 ((todo "WAIT"
+		((org-agenda-overriding-header "Waiting")
+		 (org-agenda-files org-agenda-files)))
+	  (todo "REVIEW"
+		((org-agenda-overriding-header "In Review")
+		 (org-agenda-files org-agenda-files)))
+	  (todo "TODO"
+		((org-agenda-overriding-header "Ready for Work")
+		 (org-agenda-files org-agenda-files)))
+	  (todo "SCOPE"
+		((org-agenda-overriding-header "In Scoping")
+		 (org-agenda-todo-list-sublevels nil)
+		 (org-agenda-files org-agenda-files)))
+	  (todo "BACKLOG"
+		((org-agenda-overriding-header "Project Backlog")
+		 (org-agenda-todo-list-sublevels nil)
+		 (org-agenda-files org-agenda-files)))))))
 
 ;; _____________________________________________________________________________
 ;; Go-mode
