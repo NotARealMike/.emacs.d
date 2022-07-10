@@ -1,3 +1,19 @@
+#+title: Emacs configuration
+#+PROPERTY: header-args:emacs-lisp :tangle ./init.el
+
+* About
+
+My very own Emacs configuration. Based on [Emacs from scratch](https://github.com/daviwil/emacs-from-scratch), customised to what I actually need.
+
+I keep some comments in the Emacs Lisp snippets, as well as comments in the org file, so that the init.el file is easier to navigate.
+
+* Package management
+
+- Set up the MELPA archive.
+- Make sure that use-package is installed, so that it can be used to install all the other packages.
+- Always ensure packages to avoid confusion over what is or isn't installed.
+
+#+begin_src emacs-lisp
 ;; _____________________________________________________________________________
 ;; Package management
 ;; _____________________________________________________________________________
@@ -16,6 +32,11 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+#+end_src
+
+* Global configuration
+
+#+begin_src emacs-lisp
 ;; _____________________________________________________________________________
 ;; Global configuration
 ;; _____________________________________________________________________________
@@ -55,6 +76,11 @@
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 
+#+end_src
+
+* Magit
+
+#+begin_src emacs-lisp
 ;; _____________________________________________________________________________
 ;; Magit
 ;; _____________________________________________________________________________
@@ -64,6 +90,13 @@
   (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   :bind ("C-x g" . magit-status))
 
+#+end_src
+
+* Org
+
+** org-mode and UI
+
+#+begin_src emacs-lisp
 ;; _____________________________________________________________________________
 ;; Org
 ;; _____________________________________________________________________________
@@ -82,6 +115,22 @@
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
+#+end_src
+
+** Workflow
+
+My workflow is based on the Getting Things Done approach.
+
+Tasks can be in one of the following states:
+- BACKLOG: I have identified there is something I want to do/process, but it isn't urgent. It is noted down for later.
+- SCOPE: I want to do something about this task soon, but I haven't decided what. I need to spend some time figuring out what I need to do, if anything.
+- TODO: I have something to do, and I know exactly what it is. This task is ready to be worked on, as soon as I decided to pick it up.
+- WAIT: This task is blocked on something, such as receiving an email response. I should check in every once in a while, but there is nothing I can actively do about it.
+- REVIEW: I have finished this task, and I should spend some time writing a mini-debrief about it with any notes I want to keep, as well as any next actions.
+- DONE: This task is done, reviewed, and archived somewhere.
+- CANCELLED: I decided not to do this task.
+
+#+begin_src emacs-lisp
 ;; Workflow states
 (setq org-todo-keywords
       '((sequence "BACKLOG(b)" "SCOPE(s)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
@@ -89,6 +138,18 @@
 (setq org-log-done 'time)
 (setq org-log-into-drawer t)
 
+#+end_src
+
+** File structure
+
+- All org files used in my gtd setup are in the same directory.
+- Tasks and projects each have their own file. This is because I want to keep different levels of detail in the notes I keep for projects and tasks.
+- The inbox file is used to quickly capture ideas of things I should do without interrupting my focus.
+- The rar and media files are used to keep personal notes.
+- I want to easily move org entries between files, but not into the inbox file. The only way into the inbox file should be through capture, and entries in the inbox file should be moved to the appropriate place once I process them.
+- Save all org buffers after refiling, to prevent entries being lost if Emacs crashes.
+
+#+begin_src emacs-lisp
 ;; File structure
 (setq org-directory "~/gtd")
 (set-register ?g (cons 'file org-directory))
@@ -106,12 +167,32 @@
 
 (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
+#+end_src
+
+** Capture templates
+
+- As mentioned above, quickly capture ideas into the inbox file, to be processed later.
+- Also, quickly start taking meeting notes, organised in a file sorted by date.
+
+To quickly jump to the last captured entry, call `bookmark-jump org-capture-last-stored`, which is bound to "C-x r b".
+
+#+begin_src emacs-lisp
 (setq org-capture-templates
     `(("t" "Task" entry (file "inbox.org")
        "* SCOPE %?\n%U\n%a" :prepend t)
       ("m" "Meeting notes" entry (file+datetree "meetings.org")
        "* %?\n%U" :tree-type week)))
 
+#+end_src
+
+** Agenda configuration
+
+- Start org agenda with log-mode, so done items are displayed along with their completion times.
+- Set custom agenda commands to:
+  - Show my schedule and next actions;
+  - Show tasks organised by workflow status.
+
+#+begin_src emacs-lisp
 ;; Agenda configuration
 (setq org-agenda-start-with-log-mode t)
 (setq org-agenda-log-mode-items '(closed clock state))
@@ -141,6 +222,17 @@
 		 (org-agenda-todo-list-sublevels nil)
 		 (org-agenda-files org-agenda-files)))))))
 
+#+end_src
+
+** Babel
+
+How meta!
+
+- Automatically tangle this file on save to generate init.el.
+- Don't ask for permission to run code in org babel.
+- Make it easier to insert code snippets.
+  
+#+begin_src emacs-lisp
 ;; _____________________________________________________________________________
 ;; Babel
 ;; _____________________________________________________________________________
@@ -160,6 +252,13 @@
 
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 
+#+end_src
+
+* Programming
+
+** Rainbow delimiters
+
+#+begin_src emacs-lisp
 ;; _____________________________________________________________________________
 ;; Rainbow delimiters
 ;; _____________________________________________________________________________
@@ -178,6 +277,11 @@
   (set-face-foreground 'rainbow-delimiters-depth-8-face "#911eb4")
   (set-face-foreground 'rainbow-delimiters-depth-9-face "#f032e6"))
 
+#+end_src
+
+** LSP mode
+
+#+begin_src emacs-lisp
 ;; _____________________________________________________________________________
 ;; lsp-mode
 ;; _____________________________________________________________________________
@@ -211,16 +315,35 @@
 	lsp-ui-imenu-enable t
 	lsp-ui-flycheck-enable t))
 
+#+end_src
+
+** Company
+
+- Hook company to prog-mode and not lsp-mode because Emacs Lisp doesn't use an LSP.
+
+#+begin_src emacs-lisp
 (use-package company
   :hook ((prog-mode) . company-mode)
   :config
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1))
 
+#+end_src
+
+** Yasnippet
+
+#+begin_src emacs-lisp
 (use-package yasnippet
   :commands yas-minor-mode
   :hook (lsp-mode . yas-minor-mode))
 
+#+end_src
+
+** Go
+
+This needs some cleaning up. I accumulated this configuration while working with Go a lot. I am not currently developing in Go, so fixing this is not urgent.
+
+#+begin_src emacs-lisp
 ;; _____________________________________________________________________________
 ;; go-mode
 ;; _____________________________________________________________________________
@@ -273,6 +396,13 @@
 ;; (setq lsp-go-goimports-local "<set of imports to separate, eg github.com/your-company>")
 ;; (setq gofmt-args '("-local" "<same as the variable above>"))
 
+#+end_src
+
+* Beancount
+
+This is required to use beancount to manage my personal ledger. Beancount isn't available on an ELPA, so I need to figure out a way to cleanly include this in my configuration.
+
+#+begin_src emacs-lisp
 ;; ___________________________________________________________________________
 ;; Beancount
 ;; ___________________________________________________________________________
@@ -292,3 +422,5 @@
 ;; ;;(define-key beancount-mode-map (kbd "s-s") 'beancount-save)
 ;; (define-key beancount-mode-map (kbd "C-c C-n") #'outline-next-visible-heading)
 ;; (define-key beancount-mode-map (kbd "C-c C-p") #'outline-previous-visible-heading)
+
+#+end_src
