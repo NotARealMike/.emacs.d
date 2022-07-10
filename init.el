@@ -145,6 +145,25 @@
 		 (org-agenda-files org-agenda-files)))))))
 
 ;; _____________________________________________________________________________
+;; Babel
+;; _____________________________________________________________________________
+
+;; Automatically tangle the README.org file on save
+(defun nrm/org-babel-tangle-config ()
+  (when (string-equal (buffer-file-name)
+                      (expand-file-name "~/.emacs.d/README.org"))
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(setq org-confirm-babel-evaluate nil)
+
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'nrm/org-babel-tangle-config)))
+
+(require 'org-tempo)
+
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+
+;; _____________________________________________________________________________
 ;; Rainbow delimiters
 ;; _____________________________________________________________________________
 
