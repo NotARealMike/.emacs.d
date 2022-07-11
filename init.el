@@ -49,11 +49,29 @@
 (global-display-line-numbers-mode)
 (global-visual-line-mode)
 
+;; Icons that can be used by several packages
+(use-package all-the-icons)
+
 ;; Natural language formatting and spelling
 (setq sentence-end-double-space nil)
 (setq ispell-program-name "/opt/homebrew/bin/ispell")
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
+
+;; _____________________________________________________________________________
+;; Dired
+;; _____________________________________________________________________________
+
+(use-package dired
+  :ensure nil
+  :hook (dired-mode . dired-omit-mode)
+  :custom ((dired-listing-switches "-lah --group-directories-first"))
+  :config
+  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
+  (setq insert-directory-program "gls"))
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 ;; _____________________________________________________________________________
 ;; Magit

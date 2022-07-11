@@ -36,6 +36,8 @@ I keep some comments in the Emacs Lisp snippets, as well as comments in the org 
 
 * Global configuration
 
+Run `M-x all-the-icons-install-fonts` to actually install icons.
+
 #+begin_src emacs-lisp
 ;; _____________________________________________________________________________
 ;; Global configuration
@@ -70,11 +72,39 @@ I keep some comments in the Emacs Lisp snippets, as well as comments in the org 
 (global-display-line-numbers-mode)
 (global-visual-line-mode)
 
+;; Icons that can be used by several packages
+(use-package all-the-icons)
+
 ;; Natural language formatting and spelling
 (setq sentence-end-double-space nil)
 (setq ispell-program-name "/opt/homebrew/bin/ispell")
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
+
+#+end_src
+
+* Dired
+
+** Better UI
+
+- Run `brew instal coreutils` on MacOS to get gls, which supports the `--group-directories-first` option.
+- Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files such as backup and dot files. This is better than hiding files through options passed to the ls command because it lets me quickly toggle the mode when I need to look at dot files, for example.
+
+#+begin_src emacs-lisp
+;; _____________________________________________________________________________
+;; Dired
+;; _____________________________________________________________________________
+
+(use-package dired
+  :ensure nil
+  :hook (dired-mode . dired-omit-mode)
+  :custom ((dired-listing-switches "-lah --group-directories-first"))
+  :config
+  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
+  (setq insert-directory-program "gls"))
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
 
 #+end_src
 
