@@ -159,6 +159,17 @@
 (require 'org-tempo)
 
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+
+;; _____________________________________________________________________________
+;; Shell
+;; _____________________________________________________________________________
+
+(use-package vterm
+  :commands vterm
+  :config
+  (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
+  (setq vterm-max-scrollback 10000))
 
 ;; _____________________________________________________________________________
 ;; Rainbow delimiters
