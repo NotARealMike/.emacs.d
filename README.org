@@ -7,6 +7,8 @@ My very own Emacs configuration. Based on [Emacs from scratch](https://github.co
 
 I keep some comments in the Emacs Lisp snippets, as well as comments in the org file, so that the init.el file is easier to navigate.
 
+Instructions on how to set Caps Lock to act as Control are [[https://support.apple.com/en-gb/guide/mac-help/mchlp1011/mac][here]]. Remember to do this for each machine and each connected keyboard!
+
 * Package management
 
 - Set up the MELPA archive.
