@@ -20,9 +20,10 @@
 ;; Global configuration
 ;; _____________________________________________________________________________
 
+(setq inhibit-startup-message t)
+
 ;; Make it easier to access emacs config
-(set-register ?e (cons 'file "~/.emacs.d"))
-(set-register ?i (cons 'file "~/.emacs.d/init.el"))
+(set-register ?e (cons 'file "~/.emacs.d/README.org"))
 
 ;; Easy commenting
 (global-set-key (kbd "M-/") 'comment-or-uncomment-region)
