@@ -16,23 +16,23 @@ Instructions on how to set Caps Lock to act as Control are [[https://support.app
 - Always ensure packages to avoid confusion over what is or isn't installed.
 
 #+begin_src emacs-lisp
-;; _____________________________________________________________________________
-;; Package management
-;; _____________________________________________________________________________
+  ;; _____________________________________________________________________________
+  ;; Package management
+  ;; _____________________________________________________________________________
 
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (require 'package)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(package-initialize)
+  (package-initialize)
 
-(unless package-archive-contents
- (package-refresh-contents))
+  (unless package-archive-contents
+   (package-refresh-contents))
 
-(unless (package-installed-p 'use-package)
-   (package-install 'use-package))
+  (unless (package-installed-p 'use-package)
+     (package-install 'use-package))
 
-(require 'use-package)
-(setq use-package-always-ensure t)
+  (require 'use-package)
+  (setq use-package-always-ensure t)
 
 #+end_src
 
@@ -41,47 +41,47 @@ Instructions on how to set Caps Lock to act as Control are [[https://support.app
 Run `M-x all-the-icons-install-fonts` to actually install icons.
 
 #+begin_src emacs-lisp
-;; _____________________________________________________________________________
-;; Global configuration
-;; _____________________________________________________________________________
+  ;; _____________________________________________________________________________
+  ;; Global configuration
+  ;; _____________________________________________________________________________
 
-;; Make it easier to access emacs config
-(set-register ?e (cons 'file "~/.emacs.d"))
-(set-register ?i (cons 'file "~/.emacs.d/init.el"))
+  ;; Make it easier to access emacs config
+  (set-register ?e (cons 'file "~/.emacs.d"))
+  (set-register ?i (cons 'file "~/.emacs.d/init.el"))
 
-;; Easy commenting
-(global-set-key (kbd "M-/") 'comment-or-uncomment-region)
+  ;; Easy commenting
+  (global-set-key (kbd "M-/") 'comment-or-uncomment-region)
 
-;; Cycle through windows easily
-(global-set-key (kbd "C-<tab>") 'other-window)
-(defun switch-to-prev-window ()
-  (interactive)
-  (other-window -1))
-(global-set-key (kbd "C-S-<tab>") 'switch-to-prev-window)
+  ;; Cycle through windows easily
+  (global-set-key (kbd "C-<tab>") 'other-window)
+  (defun switch-to-prev-window ()
+    (interactive)
+    (other-window -1))
+  (global-set-key (kbd "C-S-<tab>") 'switch-to-prev-window)
 
-;; Simplify yes-or-no prompts
-(defalias 'yes-or-no-p 'y-or-n-p)
+  ;; Simplify yes-or-no prompts
+  (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Automatically show a Lisp debugger when a command errors
-(toggle-debug-on-error)
+  ;; Automatically show a Lisp debugger when a command errors
+  (toggle-debug-on-error)
 
-;; Make the right option key not act as meta, to let me type characters that need option
-(setq ns-right-alternate-modifier 'none)
+  ;; Make the right option key not act as meta, to let me type characters that need option
+  (setq ns-right-alternate-modifier 'none)
 
-;; Theme and display configuration
-(load-theme 'tango-dark t)
-(column-number-mode)
-(global-display-line-numbers-mode)
-(global-visual-line-mode)
+  ;; Theme and display configuration
+  (load-theme 'tango-dark t)
+  (column-number-mode)
+  (global-display-line-numbers-mode)
+  (global-visual-line-mode)
 
-;; Icons that can be used by several packages
-(use-package all-the-icons)
+  ;; Icons that can be used by several packages
+  (use-package all-the-icons)
 
-;; Natural language formatting and spelling
-(setq sentence-end-double-space nil)
-(setq ispell-program-name "/opt/homebrew/bin/ispell")
-(dolist (hook '(text-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode 1))))
+  ;; Natural language formatting and spelling
+  (setq sentence-end-double-space nil)
+  (setq ispell-program-name "/opt/homebrew/bin/ispell")
+  (dolist (hook '(text-mode-hook))
+    (add-hook hook (lambda () (flyspell-mode 1))))
 
 #+end_src
 
@@ -93,34 +93,34 @@ Run `M-x all-the-icons-install-fonts` to actually install icons.
 - Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files such as backup and dot files. This is better than hiding files through options passed to the ls command because it lets me quickly toggle the mode when I need to look at dot files, for example.
 
 #+begin_src emacs-lisp
-;; _____________________________________________________________________________
-;; Dired
-;; _____________________________________________________________________________
+  ;; _____________________________________________________________________________
+  ;; Dired
+  ;; _____________________________________________________________________________
 
-(use-package dired
-  :ensure nil
-  :hook (dired-mode . dired-omit-mode)
-  :custom ((dired-listing-switches "-lah --group-directories-first"))
-  :config
-  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
-  (setq insert-directory-program "gls"))
+  (use-package dired
+    :ensure nil
+    :hook (dired-mode . dired-omit-mode)
+    :custom ((dired-listing-switches "-lah --group-directories-first"))
+    :config
+    (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
+    (setq insert-directory-program "gls"))
 
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
+  (use-package all-the-icons-dired
+    :hook (dired-mode . all-the-icons-dired-mode))
 
 #+end_src
 
 * Magit
 
 #+begin_src emacs-lisp
-;; _____________________________________________________________________________
-;; Magit
-;; _____________________________________________________________________________
+  ;; _____________________________________________________________________________
+  ;; Magit
+  ;; _____________________________________________________________________________
 
-(use-package magit
-  :custom
-  (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
-  :bind ("C-x g" . magit-status))
+  (use-package magit
+    :custom
+    (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+    :bind ("C-x g" . magit-status))
 
 #+end_src
 
@@ -129,23 +129,23 @@ Run `M-x all-the-icons-install-fonts` to actually install icons.
 ** org-mode and UI
 
 #+begin_src emacs-lisp
-;; _____________________________________________________________________________
-;; Org
-;; _____________________________________________________________________________
+  ;; _____________________________________________________________________________
+  ;; Org
+  ;; _____________________________________________________________________________
 
-(use-package org
-  :bind
-  ("\C-cl" . org-store-link)
-  ("s-a" . org-agenda)
-  ("s-c" . org-capture)
-  :config
-  (setq org-ellipsis " ▾"))
+  (use-package org
+    :bind
+    ("\C-cl" . org-store-link)
+    ("s-a" . org-agenda)
+    ("s-c" . org-capture)
+    :config
+    (setq org-ellipsis " ▾"))
 
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  (use-package org-bullets
+    :after org
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
 #+end_src
 
@@ -296,20 +296,20 @@ I choose to use [[https://github.com/akermu/emacs-libvterm/][vterm]] because it 
 To get vterm to run on OSX machines, run
 
 #+begin_src shell
-brew install cmake
-brew install libtool
+  brew install cmake
+  brew install libtool
 #+end_src
 
 #+begin_src emacs-lisp
-;; _____________________________________________________________________________
-;; Shell
-;; _____________________________________________________________________________
+  ;; _____________________________________________________________________________
+  ;; Shell
+  ;; _____________________________________________________________________________
 
-(use-package vterm
-  :commands vterm
-  :config
-  (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
-  (setq vterm-max-scrollback 10000))
+  (use-package vterm
+    :commands vterm
+    :config
+    (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
+    (setq vterm-max-scrollback 10000))
 
 #+end_src
 
@@ -318,61 +318,61 @@ brew install libtool
 ** Rainbow delimiters
 
 #+begin_src emacs-lisp
-;; _____________________________________________________________________________
-;; Rainbow delimiters
-;; _____________________________________________________________________________
+  ;; _____________________________________________________________________________
+  ;; Rainbow delimiters
+  ;; _____________________________________________________________________________
 
-(use-package rainbow-delimiters
-  :hook (prog-mode . rainbow-delimiters-mode)
-  :config
-  (set-face-background 'rainbow-delimiters-base-error-face "#e6194b")
-  (set-face-foreground 'rainbow-delimiters-depth-1-face "#e6194b")
-  (set-face-foreground 'rainbow-delimiters-depth-2-face "#f58231")
-  (set-face-foreground 'rainbow-delimiters-depth-3-face "#ffe119")
-  (set-face-foreground 'rainbow-delimiters-depth-4-face "#bfef45")
-  (set-face-foreground 'rainbow-delimiters-depth-5-face "#aaffc3")
-  (set-face-foreground 'rainbow-delimiters-depth-6-face "#42d4f4")
-  (set-face-foreground 'rainbow-delimiters-depth-7-face "#4363d8")
-  (set-face-foreground 'rainbow-delimiters-depth-8-face "#911eb4")
-  (set-face-foreground 'rainbow-delimiters-depth-9-face "#f032e6"))
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode)
+    :config
+    (set-face-background 'rainbow-delimiters-base-error-face "#e6194b")
+    (set-face-foreground 'rainbow-delimiters-depth-1-face "#e6194b")
+    (set-face-foreground 'rainbow-delimiters-depth-2-face "#f58231")
+    (set-face-foreground 'rainbow-delimiters-depth-3-face "#ffe119")
+    (set-face-foreground 'rainbow-delimiters-depth-4-face "#bfef45")
+    (set-face-foreground 'rainbow-delimiters-depth-5-face "#aaffc3")
+    (set-face-foreground 'rainbow-delimiters-depth-6-face "#42d4f4")
+    (set-face-foreground 'rainbow-delimiters-depth-7-face "#4363d8")
+    (set-face-foreground 'rainbow-delimiters-depth-8-face "#911eb4")
+    (set-face-foreground 'rainbow-delimiters-depth-9-face "#f032e6"))
 
 #+end_src
 
 ** LSP mode
 
 #+begin_src emacs-lisp
-;; _____________________________________________________________________________
-;; lsp-mode
-;; _____________________________________________________________________________
+  ;; _____________________________________________________________________________
+  ;; lsp-mode
+  ;; _____________________________________________________________________________
 
-(use-package lsp-mode
-  :commands
-  (lsp lsp-deferred lsp-register-custom-settings)
-  :hook
-  (go-mode . lsp-deferred)
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  :bind
-  (:map lsp-mode-map
-	("M-." . xref-find-definitions))
-  :config
-  (setq lsp-headerline-breadcrumb-segments '(project path-up-to-project file symbols))
-  (setq lsp-eldoc-render-all t)
+  (use-package lsp-mode
+    :commands
+    (lsp lsp-deferred lsp-register-custom-settings)
+    :hook
+    (go-mode . lsp-deferred)
+    :init
+    (setq lsp-keymap-prefix "C-c l")
+    :bind
+    (:map lsp-mode-map
+	  ("M-." . xref-find-definitions))
+    :config
+    (setq lsp-headerline-breadcrumb-segments '(project path-up-to-project file symbols))
+    (setq lsp-eldoc-render-all t)
 
-  ;; Performance hax from here: https://emacs-lsp.github.io/lsp-mode/page/performance/
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024)) ;; 1mb
-  (setq lsp-log-io nil) ; if set to true can cause a performance hit
-  (setq lsp-idle-delay 0.200))
+    ;; Performance hax from here: https://emacs-lsp.github.io/lsp-mode/page/performance/
+    (setq gc-cons-threshold 100000000)
+    (setq read-process-output-max (* 1024 1024)) ;; 1mb
+    (setq lsp-log-io nil) ; if set to true can cause a performance hit
+    (setq lsp-idle-delay 0.200))
 
-(use-package lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
-  :config
-  (setq lsp-ui-doc-enable t
-	lsp-ui-peek-enable t
-	lsp-ui-sideline-enable t
-	lsp-ui-imenu-enable t
-	lsp-ui-flycheck-enable t))
+  (use-package lsp-ui
+    :hook (lsp-mode . lsp-ui-mode)
+    :config
+    (setq lsp-ui-doc-enable t
+	  lsp-ui-peek-enable t
+	  lsp-ui-sideline-enable t
+	  lsp-ui-imenu-enable t
+	  lsp-ui-flycheck-enable t))
 
 #+end_src
 
@@ -381,20 +381,20 @@ brew install libtool
 - Hook company to prog-mode and not lsp-mode because Emacs Lisp doesn't use an LSP.
 
 #+begin_src emacs-lisp
-(use-package company
-  :hook ((prog-mode) . company-mode)
-  :config
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 1))
+  (use-package company
+    :hook ((prog-mode) . company-mode)
+    :config
+    (setq company-idle-delay 0)
+    (setq company-minimum-prefix-length 1))
 
 #+end_src
 
 ** Yasnippet
 
 #+begin_src emacs-lisp
-(use-package yasnippet
-  :commands yas-minor-mode
-  :hook (lsp-mode . yas-minor-mode))
+  (use-package yasnippet
+    :commands yas-minor-mode
+    :hook (lsp-mode . yas-minor-mode))
 
 #+end_src
 
@@ -403,57 +403,57 @@ brew install libtool
 This needs some cleaning up. I accumulated this configuration while working with Go a lot. I am not currently developing in Go, so fixing this is not urgent.
 
 #+begin_src emacs-lisp
-;; _____________________________________________________________________________
-;; go-mode
-;; _____________________________________________________________________________
+  ;; _____________________________________________________________________________
+  ;; go-mode
+  ;; _____________________________________________________________________________
 
-;; (setenv "GOPATH" "<~/>")
-;; (setenv "GOROOT" "<output of "which go">")
+  ;; (setenv "GOPATH" "<~/>")
+  ;; (setenv "GOROOT" "<output of "which go">")
 
-(setenv "PATH"
-	(concat
-	 (getenv "GOPATH") "/bin:"
-	 (getenv "GOROOT") "/bin:"
-	 "/usr/local/bin:"
-	 (getenv "PATH")))
+  (setenv "PATH"
+	  (concat
+	   (getenv "GOPATH") "/bin:"
+	   (getenv "GOROOT") "/bin:"
+	   "/usr/local/bin:"
+	   (getenv "PATH")))
 
-;; (setq lsp-go-gopls-server-path "<output of "which gopls", eg ~/bin/gopls>")
+  ;; (setq lsp-go-gopls-server-path "<output of "which gopls", eg ~/bin/gopls>")
 
-(use-package go-mode
-  :defer t
-  :mode ("\\.go\\'" . go-mode)
-  :init
-  (setq compile-command "echo Formating... && go fmt && echo Building... && go build -v && echo Testing... && go test -v")
-  (setq compilation-read-command nil)
-  ;; This needs to be here and not in a :hook statement because :hook
-  ;; automatically sufixes '-hook' to 'gofmt-before-save'
-  (add-hook 'before-save-hook 'gofmt-before-save)
-  :bind
-  (:map go-mode-map
-	 ("M-," . compile)
-	 ("s-l" . goto-line)))
+  (use-package go-mode
+    :defer t
+    :mode ("\\.go\\'" . go-mode)
+    :init
+    (setq compile-command "echo Formating... && go fmt && echo Building... && go build -v && echo Testing... && go test -v")
+    (setq compilation-read-command nil)
+    ;; This needs to be here and not in a :hook statement because :hook
+    ;; automatically sufixes '-hook' to 'gofmt-before-save'
+    (add-hook 'before-save-hook 'gofmt-before-save)
+    :bind
+    (:map go-mode-map
+	   ("M-," . compile)
+	   ("s-l" . goto-line)))
 
-(defun nrm/go-compilation-hook ()
-  (when (not (get-buffer-window "*compilation*"))
-    (save-selected-window
-      (save-excursion
-	  (switch-to-buffer "*compilation*")))))
+  (defun nrm/go-compilation-hook ()
+    (when (not (get-buffer-window "*compilation*"))
+      (save-selected-window
+	(save-excursion
+	    (switch-to-buffer "*compilation*")))))
 
-(add-hook 'compilation-mode-hook 'nrm/go-compilation-hook)
+  (add-hook 'compilation-mode-hook 'nrm/go-compilation-hook)
 
-(setq compilation-scroll-output t)
+  (setq compilation-scroll-output t)
 
-;; Handle Go modules in large monorepos
-(setq lsp-go-directory-filters ["-vendor" "-manifests"])
-(lsp-register-custom-settings
- '(("gopls.memoryMode" "DegradeClosed")
-   ("gopls.expandWorkspaceToModule" nil t)))
+  ;; Handle Go modules in large monorepos
+  (setq lsp-go-directory-filters ["-vendor" "-manifests"])
+  (lsp-register-custom-settings
+   '(("gopls.memoryMode" "DegradeClosed")
+     ("gopls.expandWorkspaceToModule" nil t)))
 
-;; Configure goimports
-;; (setq gofmt-command "<path to goimports, eg ~/bin/goimports>")
-;; TODO: The following lines don't seem to cause the behaviour I expect. Fix them.
-;; (setq lsp-go-goimports-local "<set of imports to separate, eg github.com/your-company>")
-;; (setq gofmt-args '("-local" "<same as the variable above>"))
+  ;; Configure goimports
+  ;; (setq gofmt-command "<path to goimports, eg ~/bin/goimports>")
+  ;; TODO: The following lines don't seem to cause the behaviour I expect. Fix them.
+  ;; (setq lsp-go-goimports-local "<set of imports to separate, eg github.com/your-company>")
+  ;; (setq gofmt-args '("-local" "<same as the variable above>"))
 
 #+end_src
 
@@ -462,24 +462,24 @@ This needs some cleaning up. I accumulated this configuration while working with
 This is required to use beancount to manage my personal ledger. Beancount isn't available on an ELPA, so I need to figure out a way to cleanly include this in my configuration.
 
 #+begin_src emacs-lisp
-;; ___________________________________________________________________________
-;; Beancount
-;; ___________________________________________________________________________
+  ;; ___________________________________________________________________________
+  ;; Beancount
+  ;; ___________________________________________________________________________
 
-;; (defun beancount-save () (interactive)
-;;        (beancount-align-numbers (point-min) (point-max))
-;;   (delete-trailing-whitespace)
-;;   (save-buffer)
-;;   )
+  ;; (defun beancount-save () (interactive)
+  ;;        (beancount-align-numbers (point-min) (point-max))
+  ;;   (delete-trailing-whitespace)
+  ;;   (save-buffer)
+  ;;   )
 
-;; (add-to-list 'load-path "~/.emacs.d/beancount-mode")
-;; (require 'beancount)
+  ;; (add-to-list 'load-path "~/.emacs.d/beancount-mode")
+  ;; (require 'beancount)
 
-;; (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
-;; (add-hook 'beancount-mode-hook #'outline-minor-mode)
+  ;; (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+  ;; (add-hook 'beancount-mode-hook #'outline-minor-mode)
 
-;; ;;(define-key beancount-mode-map (kbd "s-s") 'beancount-save)
-;; (define-key beancount-mode-map (kbd "C-c C-n") #'outline-next-visible-heading)
-;; (define-key beancount-mode-map (kbd "C-c C-p") #'outline-previous-visible-heading)
+  ;; ;;(define-key beancount-mode-map (kbd "s-s") 'beancount-save)
+  ;; (define-key beancount-mode-map (kbd "C-c C-n") #'outline-next-visible-heading)
+  ;; (define-key beancount-mode-map (kbd "C-c C-p") #'outline-previous-visible-heading)
 
 #+end_src
