@@ -67,6 +67,7 @@
   :hook (dired-mode . dired-omit-mode)
   :custom ((dired-listing-switches "-lah --group-directories-first"))
   :config
+  (require 'dired-x)
   (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
   (setq insert-directory-program "gls"))
 
