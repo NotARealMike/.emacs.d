@@ -140,6 +140,26 @@ Replaces some common functions with versions that are easier to integrate with I
 
 #+end_src
 
+** Helpful
+
+This helpful package replaces the default help functions with ones that provide more information, such as source code snippets.
+
+The functions to describe functions and variables are passed through the counsel commands so that they have completion using counsel and ivy-rich, rather than just Ivy.
+
+#+begin_src emacs-lisp
+  (use-package helpful
+    :commands (helpful-callable helpful-variable helpful-command helpful-key)
+    :custom
+    (counsel-describe-function-function #'helpful-callable)
+    (counsel-describe-variable-function #'helpful-variable)
+    :bind
+    ([remap describe-function] . counsel-describe-function)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-variable] . counsel-describe-variable)
+    ([remap describe-key] . helpful-key))
+
+#+end_src
+
 * Dired
 
 ** Better UI
