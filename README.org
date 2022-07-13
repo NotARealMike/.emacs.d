@@ -140,6 +140,19 @@ Replaces some common functions with versions that are easier to integrate with I
 
 #+end_src
 
+** Prescient
+
+Sorts completions by recently used and most used, instead of the default sorting order. There is a separate package to do the same with company.
+
+#+begin_src emacs-lisp
+  (use-package ivy-prescient
+    :custom
+    (ivy-prescient-enable-filtering nil)
+    :config
+    (prescient-persist-mode 1)
+    (ivy-prescient-mode 1))
+
+#+end_src
 ** Helpful
 
 This helpful package replaces the default help functions with ones that provide more information, such as source code snippets.
@@ -463,6 +476,10 @@ To get vterm to run on OSX machines, run
     (setq company-idle-delay 0)
     (setq company-minimum-prefix-length 1))
 
+  (use-package company-prescient
+    :after company
+    :config
+    (company-prescient-mode 1))
 #+end_src
 
 ** Yasnippet

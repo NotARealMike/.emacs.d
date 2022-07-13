@@ -82,6 +82,13 @@
 (use-package counsel
   :config (counsel-mode 1))
 
+(use-package ivy-prescient
+  :custom
+  (ivy-prescient-enable-filtering nil)
+  :config
+  (prescient-persist-mode 1)
+  (ivy-prescient-mode 1))
+
 (use-package helpful
   :commands (helpful-callable helpful-variable helpful-command helpful-key)
   :custom
@@ -281,6 +288,11 @@
   :config
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 1))
+
+(use-package company-prescient
+  :after company
+  :config
+  (company-prescient-mode 1))
 
 (use-package yasnippet
   :commands yas-minor-mode
