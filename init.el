@@ -53,6 +53,15 @@
 ;; Icons that can be used by several packages
 (use-package all-the-icons)
 
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :custom
+  (doom-modeline-buffer-encoding nil)
+  (doom-modeline-minor-modes t))
+
+(use-package nyan-mode
+  :config (nyan-mode 1))
+
 ;; Natural language formatting and spelling
 (setq sentence-end-double-space nil)
 (setq ispell-program-name "/opt/homebrew/bin/ispell")
