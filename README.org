@@ -86,6 +86,20 @@ Run `M-x all-the-icons-install-fonts` to actually install icons.
 
 #+end_src
 
+* Completion
+
+** which-key
+
+When typing a key bind prefix, WK mode expands the minibuffer to display commands under that prefix.
+
+#+begin_src emacs-lisp
+  (use-package which-key
+    :config
+    (which-key-mode)
+    (setq which-key-idle-delay 0.5))
+
+#+end_src
+
 * Dired
 
 ** Better UI

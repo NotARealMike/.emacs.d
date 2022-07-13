@@ -59,6 +59,11 @@
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
 
+(use-package which-key
+  :config
+  (which-key-mode)
+  (setq which-key-idle-delay 0.5))
+
 ;; _____________________________________________________________________________
 ;; Dired
 ;; _____________________________________________________________________________
