@@ -64,6 +64,24 @@
   (which-key-mode)
   (setq which-key-idle-delay 0.5))
 
+(use-package ivy
+  :demand
+  :bind (:map ivy-minibuffer-map
+	      ("TAB" . ivy-alt-done))
+  :config
+  (ivy-mode 1))
+
+(use-package ivy-rich
+  :config
+  (ivy-rich-mode 1))
+
+(use-package swiper
+  :demand
+  :bind ("C-s" . swiper-thing-at-point))
+
+(use-package counsel
+  :config (counsel-mode 1))
+
 ;; _____________________________________________________________________________
 ;; Dired
 ;; _____________________________________________________________________________

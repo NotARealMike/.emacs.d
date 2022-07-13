@@ -100,6 +100,46 @@ When typing a key bind prefix, WK mode expands the minibuffer to display command
 
 #+end_src
 
+** Ivy
+
+Ivy provides completion functions for all interactive functions that require input, such as find-file and switch-buffer.
+
+`ivy-rich` provides a better UI to some of these commands.
+
+#+begin_src emacs-lisp
+  (use-package ivy
+    :demand
+    :bind (:map ivy-minibuffer-map
+		("TAB" . ivy-alt-done))
+    :config
+    (ivy-mode 1))
+
+  (use-package ivy-rich
+    :config
+    (ivy-rich-mode 1))
+
+#+end_src
+
+** Swiper
+
+A better version of isearch to fuzzy search in a file.
+
+#+begin_src emacs-lisp
+  (use-package swiper
+    :demand
+    :bind ("C-s" . swiper-thing-at-point))
+#+end_src
+
+** Counsel
+
+Replaces some common functions with versions that are easier to integrate with Ivy and other packages.
+
+#+begin_src emacs-lisp
+  (use-package counsel
+    :config (counsel-mode 1))
+
+#+end_src
+
 * Dired
 
 ** Better UI
