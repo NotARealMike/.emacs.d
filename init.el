@@ -80,6 +80,7 @@
   :bind (:map ivy-minibuffer-map
 	      ("TAB" . ivy-alt-done))
   :config
+  (setq ivy-initial-inputs-alist nil)
   (ivy-mode 1))
 
 (use-package ivy-rich
