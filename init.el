@@ -170,6 +170,13 @@
 	"tasks.org"
 	"projects.org"))
 
+;; Allow hadlines to be refiled to top level in a file, rather than under another headline
+(setq org-refile-use-outline-path 'file)
+;; Show file and headline paths in the refile completion buffer
+(setq org-outline-path-complete-in-steps nil)
+;; Refile targets to the top of files and headlines, rather than the end
+(setq org-reverse-note-order t)
+
 (setq org-refile-targets
       '(("tasks.org" :maxlevel . 1)
 	("projects.org" :maxlevel . 1)

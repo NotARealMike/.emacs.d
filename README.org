@@ -289,22 +289,29 @@ Tasks can be in one of the following states:
 - Save all org buffers after refiling, to prevent entries being lost if Emacs crashes.
 
 #+begin_src emacs-lisp
-;; File structure
-(setq org-directory "~/gtd")
-(set-register ?g (cons 'file org-directory))
+  ;; File structure
+  (setq org-directory "~/gtd")
+  (set-register ?g (cons 'file org-directory))
 
-(setq org-agenda-files
-      '("inbox.org"
-	"tasks.org"
-	"projects.org"))
+  (setq org-agenda-files
+	'("inbox.org"
+	  "tasks.org"
+	  "projects.org"))
 
-(setq org-refile-targets
-      '(("tasks.org" :maxlevel . 1)
-	("projects.org" :maxlevel . 1)
-	("rar.org" :maxlevel . 1)
-	("media.org" :maxlevel . 1)))
+  ;; Allow hadlines to be refiled to top level in a file, rather than under another headline
+  (setq org-refile-use-outline-path 'file)
+  ;; Show file and headline paths in the refile completion buffer
+  (setq org-outline-path-complete-in-steps nil)
+  ;; Refile targets to the top of files and headlines, rather than the end
+  (setq org-reverse-note-order t)
 
-(advice-add 'org-refile :after 'org-save-all-org-buffers)
+  (setq org-refile-targets
+	'(("tasks.org" :maxlevel . 1)
+	  ("projects.org" :maxlevel . 1)
+	  ("rar.org" :maxlevel . 1)
+	  ("media.org" :maxlevel . 1)))
+
+  (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
 #+end_src
 
