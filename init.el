@@ -59,14 +59,16 @@
   (doom-modeline-buffer-encoding nil)
   (doom-modeline-minor-modes t))
 
-(use-package nyan-mode
-  :config (nyan-mode 1))
-
 ;; Natural language formatting and spelling
 (setq sentence-end-double-space nil)
 (setq ispell-program-name "/opt/homebrew/bin/ispell")
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
+
+(use-package nyan-mode
+  :config (nyan-mode 1))
+
+(use-package dad-joke)
 
 (use-package which-key
   :config
