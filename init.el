@@ -155,9 +155,29 @@
   :custom
   (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
+;; _____________________________________________________________________________
+;; Babel
+;; _____________________________________________________________________________
+
+;; Automatically tangle the README.org file on save
+(defun nrm/org-babel-tangle-config ()
+  (when (string-equal (buffer-file-name)
+		      (expand-file-name "~/.emacs.d/README.org"))
+    (let ((org-confirm-babel-evaluate nil))
+      (org-babel-tangle))))
+
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'nrm/org-babel-tangle-config)))
+
+(setq org-confirm-babel-evaluate nil)
+
+(require 'org-tempo)
+
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+
 ;; Workflow states
 (setq org-todo-keywords
-      '((sequence "BACKLOG(b)" "SCOPE(s)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
+      '((sequence "SCOPE(s)" "BACKLOG(b)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
 
 (setq org-log-done 'time)
 (setq org-log-into-drawer t)
@@ -220,26 +240,6 @@
 		((org-agenda-overriding-header "Project Backlog")
 		 (org-agenda-todo-list-sublevels nil)
 		 (org-agenda-files org-agenda-files)))))))
-
-;; _____________________________________________________________________________
-;; Babel
-;; _____________________________________________________________________________
-
-;; Automatically tangle the README.org file on save
-(defun nrm/org-babel-tangle-config ()
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "~/.emacs.d/README.org"))
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
-
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'nrm/org-babel-tangle-config)))
-
-(setq org-confirm-babel-evaluate nil)
-
-(require 'org-tempo)
-
-(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 
 ;; _____________________________________________________________________________
 ;; Shell
