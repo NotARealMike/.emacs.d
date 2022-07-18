@@ -122,8 +122,6 @@ When typing a key bind prefix, WK mode expands the minibuffer to display command
 
 Ivy provides completion functions for all interactive functions that require input, such as find-file and switch-buffer.
 
-`ivy-rich` provides a better UI to some of these commands.
-
 #+begin_src emacs-lisp
   (use-package ivy
     :demand
@@ -132,10 +130,6 @@ Ivy provides completion functions for all interactive functions that require inp
     :config
     (setq ivy-initial-inputs-alist nil)
     (ivy-mode 1))
-
-  (use-package ivy-rich
-    :config
-    (ivy-rich-mode 1))
 
 #+end_src
 
@@ -153,9 +147,15 @@ A better version of isearch to fuzzy search in a file.
 
 Replaces some common functions with versions that are easier to integrate with Ivy and other packages.
 
+`ivy-rich` provides a better UI for counsel.
+
 #+begin_src emacs-lisp
   (use-package counsel
     :config (counsel-mode 1))
+
+  (use-package ivy-rich
+    :config
+    (ivy-rich-mode 1))
 
 #+end_src
 

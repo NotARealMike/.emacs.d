@@ -83,16 +83,16 @@
   (setq ivy-initial-inputs-alist nil)
   (ivy-mode 1))
 
-(use-package ivy-rich
-  :config
-  (ivy-rich-mode 1))
-
 (use-package swiper
   :demand
   :bind ("C-s" . swiper-thing-at-point))
 
 (use-package counsel
   :config (counsel-mode 1))
+
+(use-package ivy-rich
+  :config
+  (ivy-rich-mode 1))
 
 (use-package ivy-prescient
   :custom
