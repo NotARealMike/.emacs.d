@@ -3,11 +3,42 @@
 
 * About
 
-My very own Emacs configuration. Based on [Emacs from scratch](https://github.com/daviwil/emacs-from-scratch), customised to what I actually need.
+My very own Emacs configuration. Based on [[https://github.com/daviwil/emacs-from-scratch][Emacs from scratch]], customised to what I actually need.
 
 I keep some comments in the Emacs Lisp snippets, as well as comments in the org file, so that the init.el file is easier to navigate.
 
 Instructions on how to set Caps Lock to act as Control are [[https://support.apple.com/en-gb/guide/mac-help/mchlp1011/mac][here]]. Remember to do this for each machine and each connected keyboard!
+
+Some of the things I want to do with my configuration:
+
+- [X] Rename org files
+- [X] Fix org-mode capture
+- [X] Org mode changes
+  - Bullets
+  - Ellypsis
+- [X] Rainbow delimiters
+- [X] Use Org Babel to document Emacs config
+- [X] Ivy + ivy-rich + which-key + counsel + helpful
+- [X] Shell mode
+- [X] dad-joke
+- [X] Prescient
+- [X] Homebrew
+- [ ] Configure list-buffers
+  Make the buffer take up the whole frame, and try to sort buffers by mode?
+- [ ] Roam
+- [ ] Capture notes for a future meeting
+- [ ] org-gcal
+- [ ] Python mode
+- [ ] Beancount mode
+- [ ] gnu-elpa-keyring-update
+- [ ] Java mode
+- [ ] Protobuf mode
+- [ ] Learn more about lexical binding in ELisp
+- [ ] LaTeX mode
+- [ ] LSP optimisations
+  Have a look through the [advertised main features](https://emacs-lsp.github.io/lsp-mode/page/main-features/) and see if there is anything else I want to add.
+- [ ] gopls optimisations
+  Have a look through the [options available in gopls](https://github.com/golang/tools/blob/master/gopls/doc/emacs.md).
 
 * Package management
 
