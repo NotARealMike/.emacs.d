@@ -140,7 +140,7 @@ A better version of isearch to fuzzy search in a file.
 #+begin_src emacs-lisp
   (use-package swiper
     :demand
-    :bind ("C-s" . swiper-thing-at-point))
+    :bind ("C-s" . swiper))
 #+end_src
 
 ** Counsel

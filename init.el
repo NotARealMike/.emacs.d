@@ -85,7 +85,7 @@
 
 (use-package swiper
   :demand
-  :bind ("C-s" . swiper-thing-at-point))
+  :bind ("C-s" . swiper))
 
 (use-package counsel
   :config (counsel-mode 1))
