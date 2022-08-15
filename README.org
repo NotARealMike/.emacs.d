@@ -633,3 +633,18 @@ This is required to use beancount to manage my personal ledger. Beancount isn't 
   ;; (define-key beancount-mode-map (kbd "C-c C-p") #'outline-previous-visible-heading)
 
 #+end_src
+
+* Local config
+
+Load configuration that is specific to the local machine. For example, functions that are only useful on my work machine.
+
+#+begin_src emacs-lisp
+  ;; ___________________________________________________________________________
+  ;; Local config
+  ;; ___________________________________________________________________________
+
+  (let ((local-config "~/local-config.el"))
+   (when (file-exists-p local-config)
+     (load-file local-config)))
+
+#+end_src

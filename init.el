@@ -388,3 +388,11 @@
 ;; ;;(define-key beancount-mode-map (kbd "s-s") 'beancount-save)
 ;; (define-key beancount-mode-map (kbd "C-c C-n") #'outline-next-visible-heading)
 ;; (define-key beancount-mode-map (kbd "C-c C-p") #'outline-previous-visible-heading)
+
+;; ___________________________________________________________________________
+;; Local config
+;; ___________________________________________________________________________
+
+(let ((local-config "~/local-config.el"))
+ (when (file-exists-p local-config)
+   (load-file local-config)))
