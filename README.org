@@ -84,6 +84,10 @@ Run `M-x all-the-icons-install-fonts` to actually install icons.
   ;; Easy commenting
   (global-set-key (kbd "M-/") 'comment-or-uncomment-region)
 
+  ;; Cycle through buffers easily
+  (global-set-key (kbd "s-<left>") 'previous-buffer)
+  (global-set-key (kbd "s-<right>") 'next-buffer)
+
   ;; Cycle through windows easily
   (global-set-key (kbd "C-<tab>") 'other-window)
   (defun switch-to-prev-window ()
