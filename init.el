@@ -214,11 +214,12 @@
     `(("t" "Task" entry (file "inbox.org")
        "* SCOPE %?\n%U\n%a" :prepend t)
       ("m" "Meeting notes" entry (file+datetree "meetings.org")
-       "* %?\n%U" :tree-type week)))
+       "* %?" :tree-type week)))
 
 ;; Agenda configuration
 (setq org-agenda-start-with-log-mode t)
 (setq org-agenda-log-mode-items '(closed clock state))
+(setq org-agenda-window-setup "current-window")
 
 (setq org-agenda-custom-commands
       '(("d" "Dashboard"
