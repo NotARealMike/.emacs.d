@@ -192,6 +192,7 @@
 
 (setq org-agenda-files
       '("inbox.org"
+	"meetings.org"
 	"tasks.org"
 	"projects.org"))
 
@@ -213,8 +214,8 @@
 (setq org-capture-templates
     `(("t" "Task" entry (file "inbox.org")
        "* SCOPE %?\n%U\n%a" :prepend t)
-      ("m" "Meeting notes" entry (file+datetree "meetings.org")
-       "* %?" :tree-type week)))
+      ("m" "Meeting notes" entry (file "meetings.org")
+       "* %?\n%U")))
 
 ;; Agenda configuration
 (setq org-agenda-start-with-log-mode t)
