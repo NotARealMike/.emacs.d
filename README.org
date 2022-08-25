@@ -455,6 +455,8 @@ To get vterm to run on OSX machines, run
   brew install libtool
 #+end_src
 
+The command `M-x multi-vterm` lets me easily create multiple terminals.
+
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
   ;; Shell
@@ -466,6 +468,7 @@ To get vterm to run on OSX machines, run
     (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
     (setq vterm-max-scrollback 10000))
 
+  (use-package multi-vterm)
 #+end_src
 
 * Programming
