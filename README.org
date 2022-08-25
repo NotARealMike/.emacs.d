@@ -201,7 +201,7 @@ Replaces some common functions with versions that are easier to integrate with I
 
 ** Prescient
 
-Sorts completions by recently used and most used, instead of the default sorting order. There is a separate package to do the same with company.
+Sorts completions by recently used and most used, instead of the default sorting order.
 
 #+begin_src emacs-lisp
   (use-package ivy-prescient
@@ -212,6 +212,24 @@ Sorts completions by recently used and most used, instead of the default sorting
     (ivy-prescient-mode 1))
 
 #+end_src
+
+** Company
+
+- Text completion for source code and natural language.
+
+#+begin_src emacs-lisp
+  (use-package company
+    :hook ((prog-mode text-mode) . company-mode)
+    :config
+    (setq company-idle-delay 0)
+    (setq company-minimum-prefix-length 1))
+
+  (use-package company-prescient
+    :after company
+    :config
+    (company-prescient-mode 1))
+#+end_src
+
 ** Helpful
 
 This helpful package replaces the default help functions with ones that provide more information, such as source code snippets.
@@ -574,23 +592,6 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
 	  lsp-ui-imenu-enable t
 	  lsp-ui-flycheck-enable t))
 
-#+end_src
-
-** Company
-
-- Hook company to prog-mode and not lsp-mode because Emacs Lisp doesn't use an LSP.
-
-#+begin_src emacs-lisp
-  (use-package company
-    :hook ((prog-mode) . company-mode)
-    :config
-    (setq company-idle-delay 0)
-    (setq company-minimum-prefix-length 1))
-
-  (use-package company-prescient
-    :after company
-    :config
-    (company-prescient-mode 1))
 #+end_src
 
 ** Yasnippet

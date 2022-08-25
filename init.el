@@ -108,6 +108,17 @@
   (prescient-persist-mode 1)
   (ivy-prescient-mode 1))
 
+(use-package company
+  :hook ((prog-mode text-mode) . company-mode)
+  :config
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1))
+
+(use-package company-prescient
+  :after company
+  :config
+  (company-prescient-mode 1))
+
 (use-package helpful
   :commands (helpful-callable helpful-variable helpful-command helpful-key)
   :custom
@@ -344,17 +355,6 @@
 	lsp-ui-sideline-enable t
 	lsp-ui-imenu-enable t
 	lsp-ui-flycheck-enable t))
-
-(use-package company
-  :hook ((prog-mode) . company-mode)
-  :config
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 1))
-
-(use-package company-prescient
-  :after company
-  :config
-  (company-prescient-mode 1))
 
 (use-package yasnippet
   :commands yas-minor-mode
