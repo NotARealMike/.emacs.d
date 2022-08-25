@@ -24,7 +24,11 @@ Some of the things I want to do with my configuration:
 - [X] Prescient
 - [X] Homebrew
 - [ ] Configure list-buffers
-  Make the buffer take up the whole frame, and try to sort buffers by mode?
+- [ ] Replace tasks and projects with actions
+- [ ] Make counsel-find-file not show ./ and ../
+- [ ] Tune gc cons threshold
+- [ ] Replace lsp-mode with eglot
+- [ ] imenu
 - [ ] Roam
 - [ ] Capture notes for a future meeting
 - [ ] org-gcal
@@ -36,7 +40,6 @@ Some of the things I want to do with my configuration:
 - [ ] Learn more about lexical binding in ELisp
 - [ ] LaTeX mode
 - [ ] LSP optimisations
-  Have a look through the [advertised main features](https://emacs-lsp.github.io/lsp-mode/page/main-features/) and see if there is anything else I want to add.
 - [ ] gopls optimisations
   Have a look through the [options available in gopls](https://github.com/golang/tools/blob/master/gopls/doc/emacs.md).
 
