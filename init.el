@@ -232,13 +232,12 @@
 
 ;; File structure
 (setq org-directory "~/gtd")
-(set-register ?g (cons 'file org-directory))
+(set-register ?g (cons 'file (concat org-directory "/actions.org")))
 
 (setq org-agenda-files
       '("inbox.org"
 	"meetings.org"
-	"tasks.org"
-	"projects.org"))
+	"actions.org"))
 
 ;; Allow hadlines to be refiled to top level in a file, rather than under another headline
 (setq org-refile-use-outline-path 'file)
@@ -248,8 +247,7 @@
 (setq org-reverse-note-order t)
 
 (setq org-refile-targets
-      '(("tasks.org" :maxlevel . 1)
-	("projects.org" :maxlevel . 1)
+      '(("actions.org" :maxlevel . 1)
 	("rar.org" :maxlevel . 1)
 	("media.org" :maxlevel . 1)))
 

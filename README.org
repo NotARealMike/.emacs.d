@@ -24,7 +24,7 @@ Some of the things I want to do with my configuration:
 - [X] Prescient
 - [X] Homebrew
 - [X] Configure list-buffers
-- [ ] Replace tasks and projects with actions
+- [X] Replace tasks and projects with actions
 - [X] Make counsel-find-file not show ./ and ../
 - [ ] Tune gc cons threshold
 - [ ] Replace lsp-mode with eglot
@@ -410,7 +410,7 @@ Tasks can be in one of the following states:
 ** File structure
 
 - All org files used in my gtd setup are in the same directory.
-- Tasks and projects each have their own file. This is because I want to keep different levels of detail in the notes I keep for projects and tasks.
+- Tasks and projects are stored in the actions file.
 - The inbox file is used to quickly capture ideas of things I should do without interrupting my focus.
 - The rar and media files are used to keep personal notes.
 - I want to easily move org entries between files, but not into the inbox file. The only way into the inbox file should be through capture, and entries in the inbox file should be moved to the appropriate place once I process them.
@@ -419,13 +419,12 @@ Tasks can be in one of the following states:
 #+begin_src emacs-lisp
   ;; File structure
   (setq org-directory "~/gtd")
-  (set-register ?g (cons 'file org-directory))
+  (set-register ?g (cons 'file (concat org-directory "/actions.org")))
 
   (setq org-agenda-files
 	'("inbox.org"
 	  "meetings.org"
-	  "tasks.org"
-	  "projects.org"))
+	  "actions.org"))
 
   ;; Allow hadlines to be refiled to top level in a file, rather than under another headline
   (setq org-refile-use-outline-path 'file)
@@ -435,8 +434,7 @@ Tasks can be in one of the following states:
   (setq org-reverse-note-order t)
 
   (setq org-refile-targets
-	'(("tasks.org" :maxlevel . 1)
-	  ("projects.org" :maxlevel . 1)
+	'(("actions.org" :maxlevel . 1)
 	  ("rar.org" :maxlevel . 1)
 	  ("media.org" :maxlevel . 1)))
 
