@@ -87,6 +87,9 @@
   (setq ivy-initial-inputs-alist nil)
   (ivy-mode 1))
 
+;; Stop ./ and ../ from showing up in filepath completions
+(setq ivy-extra-directories nil)
+
 (use-package swiper
   :demand
   :bind ("C-s" . swiper))

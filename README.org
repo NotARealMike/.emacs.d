@@ -25,7 +25,7 @@ Some of the things I want to do with my configuration:
 - [X] Homebrew
 - [X] Configure list-buffers
 - [ ] Replace tasks and projects with actions
-- [ ] Make counsel-find-file not show ./ and ../
+- [X] Make counsel-find-file not show ./ and ../
 - [ ] Tune gc cons threshold
 - [ ] Replace lsp-mode with eglot
 - [ ] imenu
@@ -169,6 +169,8 @@ Ivy provides completion functions for all interactive functions that require inp
     (setq ivy-initial-inputs-alist nil)
     (ivy-mode 1))
 
+  ;; Stop ./ and ../ from showing up in filepath completions
+  (setq ivy-extra-directories nil)
 #+end_src
 
 ** Swiper
