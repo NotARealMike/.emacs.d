@@ -257,6 +257,8 @@
   (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
   (setq vterm-max-scrollback 10000))
 
+(global-set-key (kbd "s-t") 'vterm)
+
 (use-package multi-vterm)
 
 ;; _____________________________________________________________________________
