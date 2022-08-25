@@ -133,6 +133,36 @@
   :hook (dired-mode . all-the-icons-dired-mode))
 
 ;; _____________________________________________________________________________
+;; IBuffer
+;; _____________________________________________________________________________
+
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(setq ibuffer-saved-filter-groups
+      (quote (("default"
+	       ("Side effects" (or
+				(derived-mode . helpful-mode)
+				(and
+				 (name . "^\\*")
+				 (size-lt . 1))))
+	       ("Dired" (mode . dired-mode))
+	       ("Org" (mode . org-mode))
+	       ("Source code" (derived-mode . prog-mode))
+	       ("Version control" (derived-mode . magit-section-mode))))))
+
+(add-hook 'ibuffer-mode-hook
+	  (lambda () (ibuffer-switch-to-saved-filter-groups "default")))
+
+(setq ibuffer-default-sorting-mode 'filename/process)
+
+(defun nrm/ibuffer-toggle-current-group()
+  (interactive)
+  (ibuffer-forward-filter-group)
+  (ibuffer-backward-filter-group)
+  (ibuffer-toggle-filter-group))
+
+(define-key ibuffer-mode-map (kbd "<tab>") 'nrm/ibuffer-toggle-current-group)
+
+;; _____________________________________________________________________________
 ;; Magit
 ;; _____________________________________________________________________________
 

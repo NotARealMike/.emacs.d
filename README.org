@@ -23,7 +23,7 @@ Some of the things I want to do with my configuration:
 - [X] dad-joke
 - [X] Prescient
 - [X] Homebrew
-- [ ] Configure list-buffers
+- [X] Configure list-buffers
 - [ ] Replace tasks and projects with actions
 - [ ] Make counsel-find-file not show ./ and ../
 - [ ] Tune gc cons threshold
@@ -230,11 +230,11 @@ The functions to describe functions and variables are passed through the counsel
 
 #+end_src
 
-* Dired
+* Better built-ins
 
-** Better UI
+** Dired
 
-- Run `brew instal coreutils` on MacOS to get gls, which supports the `--group-directories-first` option.
+- Run `brew install coreutils` on MacOS to get gls, which supports the `--group-directories-first` option.
 - Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files such as backup and dot files. This is better than hiding files through options passed to the ls command because it lets me quickly toggle the mode when I need to look at dot files, for example.
 
 #+begin_src emacs-lisp
@@ -253,6 +253,44 @@ The functions to describe functions and variables are passed through the counsel
 
   (use-package all-the-icons-dired
     :hook (dired-mode . all-the-icons-dired-mode))
+
+#+end_src
+
+** IBuffer
+
+- Replace `list-buffers` the more powerful built-in `ibuffer`.
+- Group buffers by type, and make it easier to collapse groups.
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; IBuffer
+  ;; _____________________________________________________________________________
+
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+  (setq ibuffer-saved-filter-groups
+	(quote (("default"
+		 ("Side effects" (or
+				  (derived-mode . helpful-mode)
+				  (and
+				   (name . "^\\*")
+				   (size-lt . 1))))
+		 ("Dired" (mode . dired-mode))
+		 ("Org" (mode . org-mode))
+		 ("Source code" (derived-mode . prog-mode))
+		 ("Version control" (derived-mode . magit-section-mode))))))
+
+  (add-hook 'ibuffer-mode-hook
+	    (lambda () (ibuffer-switch-to-saved-filter-groups "default")))
+
+  (setq ibuffer-default-sorting-mode 'filename/process)
+
+  (defun nrm/ibuffer-toggle-current-group()
+    (interactive)
+    (ibuffer-forward-filter-group)
+    (ibuffer-backward-filter-group)
+    (ibuffer-toggle-filter-group))
+
+  (define-key ibuffer-mode-map (kbd "<tab>") 'nrm/ibuffer-toggle-current-group)
 
 #+end_src
 
