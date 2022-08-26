@@ -42,9 +42,6 @@
 ;; Simplify yes-or-no prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Automatically show a Lisp debugger when a command errors
-(toggle-debug-on-error)
-
 ;; Make the right option key not act as meta, to let me type characters that need option
 (setq ns-right-alternate-modifier 'none)
 
