@@ -147,6 +147,7 @@
 ;; IBuffer
 ;; _____________________________________________________________________________
 
+(require 'ibuffer)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (setq ibuffer-saved-filter-groups
       (quote (("default"
@@ -157,13 +158,30 @@
 				 (size-lt . 1))))
 	       ("Dired" (mode . dired-mode))
 	       ("Org" (mode . org-mode))
-	       ("Source code" (derived-mode . prog-mode))
+	       ("Source code" (or
+			       (derived-mode . prog-mode)
+			       (derived-mode . protobuf-mode)))
 	       ("Version control" (derived-mode . magit-section-mode))))))
 
 (add-hook 'ibuffer-mode-hook
 	  (lambda () (ibuffer-switch-to-saved-filter-groups "default")))
 
 (setq ibuffer-default-sorting-mode 'filename/process)
+
+(setq ibuffer-fontification-alist
+      '((100 (eq major-mode 'java-mode) magit-process-ng)
+	(10 buffer-read-only font-lock-constant-face)
+	(15 (and buffer-file-name
+		 (string-match ibuffer-compressed-file-name-regexp
+			       buffer-file-name))
+	    font-lock-doc-face)
+	(20 (string-match "^\\*" (buffer-name)) font-lock-keyword-face)
+	(25 (and (string-match "^ " (buffer-name))
+		 (null buffer-file-name))
+	    italic)
+	(30 (memq major-mode ibuffer-help-buffer-modes) font-lock-comment-face)
+	(35 (derived-mode-p 'dired-mode) font-lock-function-name-face)
+	(40 (and (boundp 'emacs-lock-mode) emacs-lock-mode) ibuffer-locked-buffer)))
 
 (defun nrm/ibuffer-toggle-current-group()
   (interactive)
