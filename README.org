@@ -329,6 +329,19 @@ The functions to describe functions and variables are passed through the counsel
 
 #+end_src
 
+** wgrep
+
+- Writable grep results.
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; IBuffer
+  ;; _____________________________________________________________________________
+
+  (use-package wgrep)
+
+#+end_src
+
 * Magit
 
 #+begin_src emacs-lisp
