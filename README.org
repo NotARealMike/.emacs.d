@@ -44,6 +44,20 @@ Some of the things I want to do with my configuration:
 - [ ] gopls optimisations
   Have a look through the [options available in gopls](https://github.com/golang/tools/blob/master/gopls/doc/emacs.md).
 
+* Start
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Start loading config
+  ;; _____________________________________________________________________________
+
+  (toggle-debug-on-error)
+
+  (switch-to-buffer "*Messages*")
+  (message "Started loading config at %s" (format-time-string "%T"))
+
+#+end_src
+
 * Package management
 
 - Set up the MELPA archive.
@@ -729,4 +743,21 @@ Load configuration that is specific to the local machine. For example, functions
    (when (file-exists-p local-config)
      (load-file local-config)))
 
+#+end_src
+
+* End
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Finish loading config
+  ;; _____________________________________________________________________________
+
+  (toggle-debug-on-error)
+
+  (message "Finished loading config at %s" (format-time-string "%T"))
+  (message "Emacs loaded in %s with %d garbage collections."
+	   (format "%.2f seconds"
+		   (float-time
+		    (time-subtract after-init-time before-init-time)))
+	   gcs-done)
 #+end_src

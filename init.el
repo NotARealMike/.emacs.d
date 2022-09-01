@@ -1,4 +1,13 @@
 ;; _____________________________________________________________________________
+;; Start loading config
+;; _____________________________________________________________________________
+
+(toggle-debug-on-error)
+
+(switch-to-buffer "*Messages*")
+(message "Started loading config at %s" (format-time-string "%T"))
+
+;; _____________________________________________________________________________
 ;; Package management
 ;; _____________________________________________________________________________
 
@@ -458,3 +467,16 @@
 (let ((local-config "~/local-config.el"))
  (when (file-exists-p local-config)
    (load-file local-config)))
+
+;; _____________________________________________________________________________
+;; Finish loading config
+;; _____________________________________________________________________________
+
+(toggle-debug-on-error)
+
+(message "Finished loading config at %s" (format-time-string "%T"))
+(message "Emacs loaded in %s with %d garbage collections."
+	 (format "%.2f seconds"
+		 (float-time
+		  (time-subtract after-init-time before-init-time)))
+	 gcs-done)
