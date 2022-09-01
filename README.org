@@ -26,16 +26,17 @@ Some of the things I want to do with my configuration:
 - [X] Configure list-buffers
 - [X] Replace tasks and projects with actions
 - [X] Make counsel-find-file not show ./ and ../
-- [ ] Tune gc cons threshold
 - [ ] Replace lsp-mode with eglot
 - [ ] imenu
-- [ ] Roam
-- [ ] Capture notes for a future meeting
-- [ ] org-gcal
 - [ ] Python mode
 - [ ] Beancount mode
-- [ ] gnu-elpa-keyring-update
+- [ ] org-gcal
+- [ ] Roam
+- [ ] Look into ag + something? as a replacement for rgrep/wgrep
+- [ ] Tune gc cons threshold
 - [ ] Java mode
+- [ ] Capture notes for a future meeting
+- [ ] gnu-elpa-keyring-update
 - [ ] Protobuf mode
 - [ ] Learn more about lexical binding in ELisp
 - [ ] LaTeX mode
