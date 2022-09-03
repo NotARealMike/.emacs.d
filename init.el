@@ -366,41 +366,26 @@
 (setq compilation-scroll-output t)
 
 ;; _____________________________________________________________________________
-;; lsp-mode
+;; Flymake
 ;; _____________________________________________________________________________
 
-(use-package lsp-mode
-  :commands
-  (lsp lsp-deferred lsp-register-custom-settings)
-  :hook
-  (go-mode . lsp-deferred)
-  :init
-  (setq lsp-keymap-prefix "C-c l")
+(use-package flymake
   :bind
-  (:map lsp-mode-map
-	("M-." . xref-find-definitions))
-  :config
-  (setq lsp-headerline-breadcrumb-segments '(project path-up-to-project file symbols))
-  (setq lsp-eldoc-render-all t)
+  (:map flymake-mode-map
+	 ("M-n" . flymake-goto-next-error)
+	 ("M-p" . flymake-goto-prev-error)))
 
-  ;; Performance hax from here: https://emacs-lsp.github.io/lsp-mode/page/performance/
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024)) ;; 1mb
-  (setq lsp-log-io nil) ; if set to true can cause a performance hit
-  (setq lsp-idle-delay 0.200))
+;; _____________________________________________________________________________
+;; Eglot
+;; _____________________________________________________________________________
 
-(use-package lsp-ui
-  :hook (lsp-mode . lsp-ui-mode)
-  :config
-  (setq lsp-ui-doc-enable t
-	lsp-ui-peek-enable t
-	lsp-ui-sideline-enable t
-	lsp-ui-imenu-enable t
-	lsp-ui-flycheck-enable t))
-
-(use-package yasnippet
-  :commands yas-minor-mode
-  :hook (lsp-mode . yas-minor-mode))
+(use-package eglot
+  :init
+  (dolist (hook '(go-mode-hook python-mode-hook))
+    (add-hook hook 'eglot-ensure))
+  :custom
+  (eglot-autoshutdown t)
+  (eglot-sync-connect nil))
 
 ;; _____________________________________________________________________________
 ;; go-mode
