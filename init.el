@@ -352,6 +352,20 @@
   (set-face-foreground 'rainbow-delimiters-depth-9-face "#f032e6"))
 
 ;; _____________________________________________________________________________
+;; Compilation
+;; _____________________________________________________________________________
+
+(defun nrm/compilation-hook ()
+  (when (not (get-buffer-window "*compilation*"))
+    (save-selected-window
+      (save-excursion
+	  (switch-to-buffer "*compilation*")))))
+
+(add-hook 'compilation-mode-hook 'nrm/compilation-hook)
+
+(setq compilation-scroll-output t)
+
+;; _____________________________________________________________________________
 ;; lsp-mode
 ;; _____________________________________________________________________________
 
@@ -392,9 +406,6 @@
 ;; go-mode
 ;; _____________________________________________________________________________
 
-;; (setenv "GOPATH" "<~/>")
-;; (setenv "GOROOT" "<output of "which go">")
-
 (setenv "PATH"
 	(concat
 	 (getenv "GOPATH") "/bin:"
@@ -402,43 +413,16 @@
 	 "/usr/local/bin:"
 	 (getenv "PATH")))
 
-;; (setq lsp-go-gopls-server-path "<output of "which gopls", eg ~/bin/gopls>")
-
 (use-package go-mode
   :defer t
   :mode ("\\.go\\'" . go-mode)
   :init
   (setq compile-command "echo Formating... && go fmt && echo Building... && go build -v && echo Testing... && go test -v")
   (setq compilation-read-command nil)
-  ;; This needs to be here and not in a :hook statement because :hook
-  ;; automatically sufixes '-hook' to 'gofmt-before-save'
-  (add-hook 'before-save-hook 'gofmt-before-save)
-  :bind
-  (:map go-mode-map
-	 ("M-," . compile)
-	 ("s-l" . goto-line)))
-
-(defun nrm/go-compilation-hook ()
-  (when (not (get-buffer-window "*compilation*"))
-    (save-selected-window
-      (save-excursion
-	  (switch-to-buffer "*compilation*")))))
-
-(add-hook 'compilation-mode-hook 'nrm/go-compilation-hook)
-
-(setq compilation-scroll-output t)
-
-;; Handle Go modules in large monorepos
-(setq lsp-go-directory-filters ["-vendor" "-manifests"])
-(lsp-register-custom-settings
- '(("gopls.memoryMode" "DegradeClosed")
-   ("gopls.expandWorkspaceToModule" nil t)))
+  (add-hook 'before-save-hook 'gofmt-before-save))
 
 ;; Configure goimports
 ;; (setq gofmt-command "<path to goimports, eg ~/bin/goimports>")
-;; TODO: The following lines don't seem to cause the behaviour I expect. Fix them.
-;; (setq lsp-go-goimports-local "<set of imports to separate, eg github.com/your-company>")
-;; (setq gofmt-args '("-local" "<same as the variable above>"))
 
 ;; ___________________________________________________________________________
 ;; Beancount
