@@ -413,21 +413,26 @@
 ;; Beancount
 ;; ___________________________________________________________________________
 
-;; (defun beancount-save () (interactive)
-;;        (beancount-align-numbers (point-min) (point-max))
-;;   (delete-trailing-whitespace)
-;;   (save-buffer)
-;;   )
+(use-package beancount-mode
+  :ensure nil
+  :mode ("\\.beancount\\'" . beancount-mode)
+  :config
+  (add-hook 'beancount-mode-hook 'outline-minor-mode)
+  (add-hook 'save-buffer 'beancount-format-file)
+  :bind
+  (:map beancount-mode
+	("C-c C-n" . outline-next-visible-heading)
+	("C-c C-p" . outline-previous-visible-heading)))
 
-;; (add-to-list 'load-path "~/.emacs.d/beancount-mode")
-;; (require 'beancount)
+;; Copied from beancount-mode/etc/emacsrc
+(defun beancount-format-file ()
+  (interactive)
+  (let ((line-no (line-number-at-pos)))
+    (call-process-region (point-min) (point-max) "bean-format" t (current-buffer))
+    (goto-line line-no)
+    (recenter)))
 
-;; (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
-;; (add-hook 'beancount-mode-hook #'outline-minor-mode)
-
-;; ;;(define-key beancount-mode-map (kbd "s-s") 'beancount-save)
-;; (define-key beancount-mode-map (kbd "C-c C-n") #'outline-next-visible-heading)
-;; (define-key beancount-mode-map (kbd "C-c C-p") #'outline-previous-visible-heading)
+(set-register ?b (cons 'file "~/beans"))
 
 ;; ___________________________________________________________________________
 ;; Local config

@@ -29,7 +29,7 @@ Some of the things I want to do with my configuration:
 - [X] Replace lsp-mode with eglot
 - [ ] imenu
 - [ ] Python mode
-- [ ] Beancount mode
+- [X] Beancount mode
 - [ ] org-gcal
 - [ ] Roam
 - [ ] Look into ag + something? as a replacement for rgrep/wgrep
@@ -39,6 +39,7 @@ Some of the things I want to do with my configuration:
 - [ ] gnu-elpa-keyring-update
 - [ ] Protobuf mode
 - [ ] Learn more about lexical binding in ELisp
+- [ ] Figure out how I used to use org and beancount modes simultaneously
 - [ ] LaTeX mode
 - [ ] LSP optimisations
 - [ ] gopls optimisations
@@ -679,28 +680,35 @@ This needs some cleaning up. I accumulated this configuration while working with
 
 * Beancount
 
-This is required to use beancount to manage my personal ledger. Beancount isn't available on an ELPA, so I need to figure out a way to cleanly include this in my configuration.
+Beancount isn't available through ELPA, so I cloned the repo into my emacs config. For it to be accessible through `use-package`, run `M-x package-install-file ~/.emacs.d/beancount-mode/beancount`.
+
+Follow the instructions in my beans repo to install all the needed Python packages.
 
 #+begin_src emacs-lisp
   ;; ___________________________________________________________________________
   ;; Beancount
   ;; ___________________________________________________________________________
 
-  ;; (defun beancount-save () (interactive)
-  ;;        (beancount-align-numbers (point-min) (point-max))
-  ;;   (delete-trailing-whitespace)
-  ;;   (save-buffer)
-  ;;   )
+  (use-package beancount-mode
+    :ensure nil
+    :mode ("\\.beancount\\'" . beancount-mode)
+    :config
+    (add-hook 'beancount-mode-hook 'outline-minor-mode)
+    (add-hook 'save-buffer 'beancount-format-file)
+    :bind
+    (:map beancount-mode
+	  ("C-c C-n" . outline-next-visible-heading)
+	  ("C-c C-p" . outline-previous-visible-heading)))
 
-  ;; (add-to-list 'load-path "~/.emacs.d/beancount-mode")
-  ;; (require 'beancount)
+  ;; Copied from beancount-mode/etc/emacsrc
+  (defun beancount-format-file ()
+    (interactive)
+    (let ((line-no (line-number-at-pos)))
+      (call-process-region (point-min) (point-max) "bean-format" t (current-buffer))
+      (goto-line line-no)
+      (recenter)))
 
-  ;; (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
-  ;; (add-hook 'beancount-mode-hook #'outline-minor-mode)
-
-  ;; ;;(define-key beancount-mode-map (kbd "s-s") 'beancount-save)
-  ;; (define-key beancount-mode-map (kbd "C-c C-n") #'outline-next-visible-heading)
-  ;; (define-key beancount-mode-map (kbd "C-c C-p") #'outline-previous-visible-heading)
+  (set-register ?b (cons 'file "~/beans"))
 
 #+end_src
 
