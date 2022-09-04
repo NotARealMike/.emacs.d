@@ -28,22 +28,22 @@ Some of the things I want to do with my configuration:
 - [X] Make counsel-find-file not show ./ and ../
 - [X] Replace lsp-mode with eglot
 - [ ] imenu
-- [ ] Python mode
 - [X] Beancount mode
 - [ ] org-gcal
 - [ ] Roam
 - [ ] Look into ag + something? as a replacement for rgrep/wgrep
 - [ ] Tune gc cons threshold
-- [ ] Java mode
 - [ ] Capture notes for a future meeting
 - [ ] gnu-elpa-keyring-update
-- [ ] Protobuf mode
 - [ ] Learn more about lexical binding in ELisp
 - [ ] Figure out how I used to use org and beancount modes simultaneously
-- [ ] LaTeX mode
-- [ ] LSP optimisations
-- [ ] gopls optimisations
-  Have a look through the [options available in gopls](https://github.com/golang/tools/blob/master/gopls/doc/emacs.md).
+- Language-specific features
+  - [ ] Java mode
+  - [ ] Python mode
+  - [ ] Protobuf mode
+  - [ ] LaTeX mode
+  - [ ] gopls optimisations
+    Have a look through the [options available in gopls](https://github.com/golang/tools/blob/master/gopls/doc/emacs.md).
 
 * Start
 
