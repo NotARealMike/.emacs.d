@@ -653,17 +653,12 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
 
 This needs some cleaning up. I accumulated this configuration while working with Go a lot. I am not currently developing in Go, so fixing this is not urgent.
 
+For this to work, add GOROOT and GOPATH to PATH in ~/.profile (or equivalent).
+
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
   ;; go-mode
   ;; _____________________________________________________________________________
-
-  (setenv "PATH"
-	  (concat
-	   (getenv "GOPATH") "/bin:"
-	   (getenv "GOROOT") "/bin:"
-	   "/usr/local/bin:"
-	   (getenv "PATH")))
 
   (use-package go-mode
     :defer t

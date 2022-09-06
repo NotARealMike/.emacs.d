@@ -391,13 +391,6 @@
 ;; go-mode
 ;; _____________________________________________________________________________
 
-(setenv "PATH"
-	(concat
-	 (getenv "GOPATH") "/bin:"
-	 (getenv "GOROOT") "/bin:"
-	 "/usr/local/bin:"
-	 (getenv "PATH")))
-
 (use-package go-mode
   :defer t
   :mode ("\\.go\\'" . go-mode)
