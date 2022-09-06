@@ -35,6 +35,7 @@ Some of the things I want to do with my configuration:
 - [ ] Tune gc cons threshold
 - [ ] Capture notes for a future meeting
 - [ ] gnu-elpa-keyring-update
+- [ ] Figure out how to force tramp to use my ~/.ssh/config
 - [ ] Learn more about lexical binding in ELisp
 - [ ] Figure out how I used to use org and beancount modes simultaneously
 - Language-specific features
