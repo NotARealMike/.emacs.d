@@ -381,7 +381,7 @@
 
 (use-package eglot
   :init
-  (dolist (hook '(go-mode-hook python-mode-hook))
+  (dolist (hook '(go-mode-hook python-mode-hook java-mode-hook))
     (add-hook hook 'eglot-ensure))
   :custom
   (eglot-autoshutdown t)
