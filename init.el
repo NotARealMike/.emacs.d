@@ -101,7 +101,8 @@
   :bind ("C-s" . swiper))
 
 (use-package counsel
-  :config (counsel-mode 1))
+  :config (counsel-mode 1)
+  :bind ("C-c i" . counsel-imenu))
 
 (use-package ivy-rich
   :config

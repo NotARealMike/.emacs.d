@@ -27,7 +27,7 @@ Some of the things I want to do with my configuration:
 - [X] Replace tasks and projects with actions
 - [X] Make counsel-find-file not show ./ and ../
 - [X] Replace lsp-mode with eglot
-- [ ] imenu
+- [X] imenu
 - [X] Beancount mode
 - [ ] org-gcal
 - [ ] Roam
@@ -205,7 +205,8 @@ Replaces some common functions with versions that are easier to integrate with I
 
 #+begin_src emacs-lisp
   (use-package counsel
-    :config (counsel-mode 1))
+    :config (counsel-mode 1)
+    :bind ("C-c i" . counsel-imenu))
 
   (use-package ivy-rich
     :config
