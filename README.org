@@ -600,6 +600,21 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
 
 #+end_src
 
+** imenu-list
+
+Show a side buffer with a structured overview of the tags in the current buffer.
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; imenu-list
+  ;; _____________________________________________________________________________
+
+  (use-package imenu-list
+    :bind ("s-i" . imenu-list-smart-toggle)
+    :custom (imenu-list-focus-after-activation t))
+
+#+end_src
+
 ** Compilation
 
 #+begin_src emacs-lisp
