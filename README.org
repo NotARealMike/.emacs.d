@@ -482,7 +482,8 @@ Tasks can be in one of the following states:
   (setq org-refile-targets
 	'(("actions.org" :maxlevel . 1)
 	  ("rar.org" :maxlevel . 1)
-	  ("media.org" :maxlevel . 1)))
+	  ("media.org" :maxlevel . 1)
+	  ("meetings.org" :maxlevel . 1)))
 
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
@@ -500,7 +501,7 @@ To quickly jump to the last captured entry, call `bookmark-jump org-capture-last
       `(("t" "Task" entry (file "inbox.org")
 	 "* SCOPE %?\n%U\n%a" :prepend t)
 	("m" "Meeting notes" entry (file "meetings.org")
-	 "* %?\n%U")))
+	 "* REVIEW %?\n%t" :prepend t)))
 
 #+end_src
 

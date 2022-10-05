@@ -280,7 +280,8 @@
 (setq org-refile-targets
       '(("actions.org" :maxlevel . 1)
 	("rar.org" :maxlevel . 1)
-	("media.org" :maxlevel . 1)))
+	("media.org" :maxlevel . 1)
+	("meetings.org" :maxlevel . 1)))
 
 (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
@@ -288,7 +289,7 @@
     `(("t" "Task" entry (file "inbox.org")
        "* SCOPE %?\n%U\n%a" :prepend t)
       ("m" "Meeting notes" entry (file "meetings.org")
-       "* %?\n%U")))
+       "* REVIEW %?\n%t" :prepend t)))
 
 ;; Agenda configuration
 (setq org-agenda-start-with-log-mode t)
