@@ -295,12 +295,21 @@
 (setq org-agenda-start-with-log-mode t)
 (setq org-agenda-log-mode-items '(closed clock state))
 (setq org-agenda-window-setup "current-window")
+;; If an entry has a TODO label, don't check its children
+(setq org-agenda-todo-list-sublevels nil)
 
 (setq org-agenda-custom-commands
       '(("d" "Dashboard"
 	 ((agenda "" ((org-deadline-warning-days 7)))
+	  (todo "REVIEW"
+		((org-agenda-overriding-header "In Review")
+		 (org-agenda-files org-agenda-files)))
 	  (todo "TODO"
-		((org-agenda-overriding-header "Next Tasks")))))
+		((org-agenda-overriding-header "Ready for Work")
+		 (org-agenda-files org-agenda-files)))
+	  (todo "SCOPE"
+		((org-agenda-overriding-header "In Scoping")
+		 (org-agenda-files org-agenda-files)))))
 
 	("w" "Workflow Status"
 	 ((todo "WAIT"
@@ -314,11 +323,9 @@
 		 (org-agenda-files org-agenda-files)))
 	  (todo "SCOPE"
 		((org-agenda-overriding-header "In Scoping")
-		 (org-agenda-todo-list-sublevels nil)
 		 (org-agenda-files org-agenda-files)))
 	  (todo "BACKLOG"
 		((org-agenda-overriding-header "Project Backlog")
-		 (org-agenda-todo-list-sublevels nil)
 		 (org-agenda-files org-agenda-files)))))))
 
 ;; _____________________________________________________________________________
