@@ -37,7 +37,8 @@ Some of the things I want to do with my configuration:
 - [ ] gnu-elpa-keyring-update
 - [ ] Figure out how to force tramp to use my ~/.ssh/config
 - [ ] Learn more about lexical binding in ELisp
-- [ ] Figure out how I used to use org and beancount modes simultaneously
+- [X] Figure out how I used to use org and beancount modes simultaneously
+  Added a hook to use outline-minor-mode with beancount mode. Beancount files should not have headers specifying modes.
 - Language-specific features
   - [ ] Java mode
   - [ ] Python mode
@@ -732,11 +733,10 @@ Follow the instructions in my beans repo to install all the needed Python packag
   (use-package beancount-mode
     :ensure nil
     :mode ("\\.beancount\\'" . beancount-mode)
-    :config
-    (add-hook 'beancount-mode-hook 'outline-minor-mode)
-    (add-hook 'save-buffer 'beancount-format-file)
+    :init
+    (add-hook 'beancount-mode-hook #'outline-minor-mode)
     :bind
-    (:map beancount-mode
+    (:map beancount-mode-map
 	  ("C-c C-n" . outline-next-visible-heading)
 	  ("C-c C-p" . outline-previous-visible-heading)))
 

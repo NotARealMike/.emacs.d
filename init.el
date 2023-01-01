@@ -441,11 +441,10 @@
 (use-package beancount-mode
   :ensure nil
   :mode ("\\.beancount\\'" . beancount-mode)
-  :config
-  (add-hook 'beancount-mode-hook 'outline-minor-mode)
-  (add-hook 'save-buffer 'beancount-format-file)
+  :init
+  (add-hook 'beancount-mode-hook #'outline-minor-mode)
   :bind
-  (:map beancount-mode
+  (:map beancount-mode-map
 	("C-c C-n" . outline-next-visible-heading)
 	("C-c C-p" . outline-previous-visible-heading)))
 
