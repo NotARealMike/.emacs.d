@@ -41,6 +41,7 @@ Some of the things I want to do with my configuration:
 - Language-specific features
   - [ ] Java mode
   - [ ] Python mode
+    Currently, the pyright server doesn't start. It's trying to install something to do with nodeenv, which is a node.js thing. Python development isn't a huge priority at the moment, and I already have syntax highlighting from python mode, so I'll postpone installing node things just to use eglot with python.
   - [ ] Protobuf mode
   - [ ] LaTeX mode
   - [ ] gopls optimisations
