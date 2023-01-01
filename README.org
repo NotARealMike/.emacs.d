@@ -33,9 +33,9 @@ Some of the things I want to do with my configuration:
 - [ ] Roam
 - [ ] Look into ag + something? as a replacement for rgrep/wgrep
 - [ ] Tune gc cons threshold
-- [ ] Capture notes for a future meeting
+- [X] Capture notes for a future meeting
 - [ ] gnu-elpa-keyring-update
-- [ ] Figure out how to force tramp to use my ~/.ssh/config
+- [X] Figure out how to force tramp to use my ~/.ssh/config
 - [ ] Learn more about lexical binding in ELisp
 - [X] Figure out how I used to use org and beancount modes simultaneously
   Added a hook to use outline-minor-mode with beancount mode. Beancount files should not have headers specifying modes.
