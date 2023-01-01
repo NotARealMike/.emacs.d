@@ -583,6 +583,25 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
   (use-package multi-vterm)
 #+end_src
 
+* TRAMP
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; TRAMP
+  ;; _____________________________________________________________________________
+
+  (use-package tramp
+    :custom
+    (tramp-default-method "ssh")
+    ;; Change this to get, for example, error messages only
+    (tramp-verbose 3)
+    ;; Load controlmaster options from ~/.ssh/config directly
+    (tramp-use-ssh-controlmaster-options nil)
+    :config
+    (add-to-list 'tramp-connection-properties
+		 (list "/ssh:" "direct-async-process" t)))
+#+end_src
+
 * Programming
 
 ** Rainbow delimiters

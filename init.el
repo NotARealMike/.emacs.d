@@ -343,6 +343,21 @@
 (use-package multi-vterm)
 
 ;; _____________________________________________________________________________
+;; TRAMP
+;; _____________________________________________________________________________
+
+(use-package tramp
+  :custom
+  (tramp-default-method "ssh")
+  ;; Change this to get, for example, error messages only
+  (tramp-verbose 3)
+  ;; Load controlmaster options from ~/.ssh/config directly
+  (tramp-use-ssh-controlmaster-options nil)
+  :config
+  (add-to-list 'tramp-connection-properties
+	       (list "/ssh:" "direct-async-process" t)))
+
+;; _____________________________________________________________________________
 ;; Rainbow delimiters
 ;; _____________________________________________________________________________
 
