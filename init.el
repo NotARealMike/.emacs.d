@@ -334,6 +334,7 @@
 
 (use-package vterm
   :commands vterm
+  :hook (vterm-mode . goto-address-mode)
   :config
   (setq term-prompt-regexp "^[^#$%>\n]*[#$%>] *")
   (setq vterm-max-scrollback 10000))
@@ -394,6 +395,7 @@
 	  (switch-to-buffer "*compilation*")))))
 
 (add-hook 'compilation-mode-hook 'nrm/compilation-hook)
+(add-hook 'compilation-mode-hook 'goto-address-mode)
 
 (setq compilation-scroll-output t)
 
