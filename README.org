@@ -29,6 +29,7 @@ Some of the things I want to do with my configuration:
 - [X] Replace lsp-mode with eglot
 - [X] imenu
 - [X] Beancount mode
+- [ ] Look into org tags for quick win tasks
 - [ ] org-gcal
 - [ ] Roam
 - [ ] Look into ag + something? as a replacement for rgrep/wgrep
