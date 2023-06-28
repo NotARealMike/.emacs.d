@@ -31,6 +31,7 @@ Some of the things I want to do with my configuration:
 - [X] Beancount mode
 - [ ] Look into org tags for quick win tasks
 - [ ] org-gcal
+- [ ] org-present
 - [ ] Roam
 - [ ] Look into ag + something? as a replacement for rgrep/wgrep
 - [ ] Tune gc cons threshold
