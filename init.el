@@ -259,6 +259,7 @@
       '((sequence "SCOPE(s)" "BACKLOG(b)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
 
 (setq org-log-done 'time)
+(setq org-log-done-with-time nil)
 (setq org-log-into-drawer t)
 
 ;; File structure
@@ -278,7 +279,7 @@
 (setq org-reverse-note-order t)
 
 (setq org-refile-targets
-      '(("actions.org" :maxlevel . 1)
+      '(("actions.org" :maxlevel . 3)
 	("rar.org" :maxlevel . 1)
 	("media.org" :maxlevel . 1)
 	("meetings.org" :maxlevel . 1)))
