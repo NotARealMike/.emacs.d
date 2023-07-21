@@ -272,14 +272,57 @@
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 
+;; _____________________________________________________________________________
+;; Roam
+;; _____________________________________________________________________________
+
+(use-package org-roam
+  :demand
+  :custom
+  (org-roam-directory "~/brain")
+  (org-roam-capture-templates
+   '(("t" "Topic" plain
+      "%?"
+      :target (file+head "roam-${slug}.org" "#+title: ${title}\n#+filetags: Topic\n#+date: %U")
+      :unnarrowed t)
+     ("a" "Action" plain
+      "* Goals\n%?\n* Actions\n"
+      :target (file+head "roam-${slug}.org" "#+title: ${title}\n#+filetags: Actions AgendaSource\n#+date: %U")
+      :unnarrowed t)
+     ("p" "Person" plain
+      "%?"
+      :target (file+head "roam-${slug}.org" "#+title: ${title}\n#+filetags: Person\n#+date: %U")
+      :unnarrowed t)
+     ("b" "Book" plain
+      "- Author: %?\n- Notes: \n\n* Summary\n\n* Chapters\n\n* Comments\n"
+      :target (file+head "roam-${slug}.org" "#+title: ${title}\n#+filetags: Book\n#+date: %U")
+      :unnarrowed t)
+     ("l" "Location" plain
+      "* Comments\n%?\n* Visits\n\n* Ice cream\n\n* Restaurants\n\n* Points of interest\n"
+      :target (file+head "roam-${slug}.org" "#+title: ${title}\n#+filetags: Location\n#+date: %U")
+      :unnarrowed t)))
+  :bind (("s-r" . org-roam-node-find)
+	 :map org-mode-map
+	 ("C-c i" . org-roam-node-insert)
+	 ("C-c b" . org-roam-buffer-toggle))
+  :config
+  (org-roam-db-autosync-enable))
+
+(defun nrm/roam-list-files-with-tag (tag-name)
+  (mapcar #'org-roam-node-file
+	  (seq-filter
+	   (lambda (elt) (member tag-name (org-roam-node-tags elt)))
+	   (org-roam-node-list))))
+
+(setq org-agenda-files (nrm/roam-list-files-with-tag "Test"))
+
 ;; File structure
 (setq org-directory "~/gtd")
 (set-register ?g (cons 'file (concat org-directory "/actions.org")))
 
-(setq org-agenda-files
-      '("inbox.org"
-	"meetings.org"
-	"actions.org"))
+(add-to-list 'org-agenda-files "inbox.org")
+(add-to-list 'org-agenda-files "meetings.org")
+(add-to-list 'org-agenda-files "actions.org")
 
 (setq org-refile-targets
       '(("actions.org" :maxlevel . 3)
