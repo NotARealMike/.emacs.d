@@ -382,6 +382,17 @@ The functions to describe functions and variables are passed through the counsel
 
 ** org-mode and UI
 
+Configuration that I want to apply to every Org buffer by default.
+
+Actions can be in one of the following states, according to the GTD method:
+- SCOPE: I want to do something about this, but I haven't decided what. I need to spend some time figuring out what I need to do, if anything.
+- BACKLOG: I have identified there is something I want to do/process, but it isn't urgent. It is noted down for later.
+- TODO: I have something to do, and I know exactly what it is. This task is ready to be worked on, as soon as I decide to pick it up.
+- WAIT: This task is blocked on something, such as receiving an email response. I should check in every once in a while, but there is nothing I can currently do about it.
+- REVIEW: I have finished this task, and I should spend some time writing a mini-debrief about it with any notes I want to keep, as well as any next actions.
+- DONE: This task is done, reviewed, and archived somewhere.
+- CANCELLED: I decided not to do this task.
+
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
   ;; Org
@@ -392,8 +403,27 @@ The functions to describe functions and variables are passed through the counsel
     ("\C-cl" . org-store-link)
     ("s-a" . org-agenda)
     ("s-c" . org-capture)
+    :custom
+    (org-ellipsis " ▾")
+    (org-todo-keywords '((sequence "SCOPE(s)" "BACKLOG(b)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
+    ;; Record the date but not the time of day when a todo item is done
+    (org-log-done 'time)
+    (org-log-done-with-time nil)
+    (org-log-into-drawer t)
+    ;; Allow items to be refiled to the top level in a file, rather than under another headline
+    (org-refile-use-outline-path 'file)
+    ;; Show file and headline paths in the refile completion buffer
+    (org-outline-path-complete-in-steps nil)
+    ;; Refile targets to the top of files and headlines, rather than the end
+    (org-reverse-note-order t)
+    ;; Display done items with their completion date
+    (org-agenda-start-with-log-mode t)
+    (org-agenda-log-mode-items '(closed clock state))
+    (org-agenda-window-setup "current-window")
+    ;; If an entry has a TODO label, don't check its children
+    (org-agenda-todo-list-sublevels nil)
     :config
-    (setq org-ellipsis " ▾"))
+    (advice-add 'org-refile :after 'org-save-all-org-buffers))
 
   (use-package org-bullets
     :after org
@@ -420,8 +450,7 @@ How meta!
   (defun nrm/org-babel-tangle-config ()
     (when (string-equal (buffer-file-name)
 			(expand-file-name "~/.emacs.d/README.org"))
-      (let ((org-confirm-babel-evaluate nil))
-	(org-babel-tangle))))
+      (org-babel-tangle)))
 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'nrm/org-babel-tangle-config)))
 
@@ -431,30 +460,6 @@ How meta!
 
   (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
   (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-
-#+end_src
-
-** Workflow
-
-My workflow is based on the Getting Things Done approach.
-
-Tasks can be in one of the following states:
-- SCOPE: I want to do something about this, but I haven't decided what. I need to spend some time figuring out what I need to do, if anything.
-- BACKLOG: I have identified there is something I want to do/process, but it isn't urgent. It is noted down for later.
-- TODO: I have something to do, and I know exactly what it is. This task is ready to be worked on, as soon as I decide to pick it up.
-- WAIT: This task is blocked on something, such as receiving an email response. I should check in every once in a while, but there is nothing I can currently do about it.
-- REVIEW: I have finished this task, and I should spend some time writing a mini-debrief about it with any notes I want to keep, as well as any next actions.
-- DONE: This task is done, reviewed, and archived somewhere.
-- CANCELLED: I decided not to do this task.
-
-#+begin_src emacs-lisp
-  ;; Workflow states
-  (setq org-todo-keywords
-	'((sequence "SCOPE(s)" "BACKLOG(b)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
-
-  (setq org-log-done 'time)
-  (setq org-log-done-with-time nil)
-  (setq org-log-into-drawer t)
 
 #+end_src
 
@@ -477,20 +482,11 @@ Tasks can be in one of the following states:
 	  "meetings.org"
 	  "actions.org"))
 
-  ;; Allow hadlines to be refiled to top level in a file, rather than under another headline
-  (setq org-refile-use-outline-path 'file)
-  ;; Show file and headline paths in the refile completion buffer
-  (setq org-outline-path-complete-in-steps nil)
-  ;; Refile targets to the top of files and headlines, rather than the end
-  (setq org-reverse-note-order t)
-
   (setq org-refile-targets
 	'(("actions.org" :maxlevel . 3)
 	  ("rar.org" :maxlevel . 1)
 	  ("media.org" :maxlevel . 1)
 	  ("meetings.org" :maxlevel . 1)))
-
-  (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
 #+end_src
 
@@ -512,19 +508,11 @@ To quickly jump to the last captured entry, call `bookmark-jump org-capture-last
 
 ** Agenda configuration
 
-- Start org agenda with log-mode, so done items are displayed along with their completion times.
-- Set custom agenda commands to:
-  - Show my schedule and next actions;
-  - Show tasks organised by workflow status.
+Create custom agenda commands to:
+- Show my schedule and next actions;
+- Show tasks organised by workflow status.
 
 #+begin_src emacs-lisp
-  ;; Agenda configuration
-  (setq org-agenda-start-with-log-mode t)
-  (setq org-agenda-log-mode-items '(closed clock state))
-  (setq org-agenda-window-setup "current-window")
-  ;; If an entry has a TODO label, don't check its children
-  (setq org-agenda-todo-list-sublevels nil)
-
   (setq org-agenda-custom-commands
 	'(("d" "Dashboard"
 	   ((agenda "" ((org-deadline-warning-days 7)))

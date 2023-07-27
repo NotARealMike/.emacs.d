@@ -225,8 +225,27 @@
   ("\C-cl" . org-store-link)
   ("s-a" . org-agenda)
   ("s-c" . org-capture)
+  :custom
+  (org-ellipsis " ▾")
+  (org-todo-keywords '((sequence "SCOPE(s)" "BACKLOG(b)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
+  ;; Record the date but not the time of day when a todo item is done
+  (org-log-done 'time)
+  (org-log-done-with-time nil)
+  (org-log-into-drawer t)
+  ;; Allow items to be refiled to the top level in a file, rather than under another headline
+  (org-refile-use-outline-path 'file)
+  ;; Show file and headline paths in the refile completion buffer
+  (org-outline-path-complete-in-steps nil)
+  ;; Refile targets to the top of files and headlines, rather than the end
+  (org-reverse-note-order t)
+  ;; Display done items with their completion date
+  (org-agenda-start-with-log-mode t)
+  (org-agenda-log-mode-items '(closed clock state))
+  (org-agenda-window-setup "current-window")
+  ;; If an entry has a TODO label, don't check its children
+  (org-agenda-todo-list-sublevels nil)
   :config
-  (setq org-ellipsis " ▾"))
+  (advice-add 'org-refile :after 'org-save-all-org-buffers))
 
 (use-package org-bullets
   :after org
@@ -242,8 +261,7 @@
 (defun nrm/org-babel-tangle-config ()
   (when (string-equal (buffer-file-name)
 		      (expand-file-name "~/.emacs.d/README.org"))
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
+    (org-babel-tangle)))
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'nrm/org-babel-tangle-config)))
 
@@ -254,14 +272,6 @@
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 
-;; Workflow states
-(setq org-todo-keywords
-      '((sequence "SCOPE(s)" "BACKLOG(b)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
-
-(setq org-log-done 'time)
-(setq org-log-done-with-time nil)
-(setq org-log-into-drawer t)
-
 ;; File structure
 (setq org-directory "~/gtd")
 (set-register ?g (cons 'file (concat org-directory "/actions.org")))
@@ -271,33 +281,17 @@
 	"meetings.org"
 	"actions.org"))
 
-;; Allow hadlines to be refiled to top level in a file, rather than under another headline
-(setq org-refile-use-outline-path 'file)
-;; Show file and headline paths in the refile completion buffer
-(setq org-outline-path-complete-in-steps nil)
-;; Refile targets to the top of files and headlines, rather than the end
-(setq org-reverse-note-order t)
-
 (setq org-refile-targets
       '(("actions.org" :maxlevel . 3)
 	("rar.org" :maxlevel . 1)
 	("media.org" :maxlevel . 1)
 	("meetings.org" :maxlevel . 1)))
 
-(advice-add 'org-refile :after 'org-save-all-org-buffers)
-
 (setq org-capture-templates
     `(("t" "Task" entry (file "inbox.org")
        "* SCOPE %?\n%U\n%a" :prepend t)
       ("m" "Meeting notes" entry (file "meetings.org")
        "* REVIEW %?\n%t" :prepend t)))
-
-;; Agenda configuration
-(setq org-agenda-start-with-log-mode t)
-(setq org-agenda-log-mode-items '(closed clock state))
-(setq org-agenda-window-setup "current-window")
-;; If an entry has a TODO label, don't check its children
-(setq org-agenda-todo-list-sublevels nil)
 
 (setq org-agenda-custom-commands
       '(("d" "Dashboard"
