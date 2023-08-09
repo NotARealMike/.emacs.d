@@ -282,26 +282,28 @@
   :custom
   (org-roam-directory "~/brain")
   (org-roam-capture-templates
-   '(("t" "Topic" plain
-      "%?"
-      :target (file+head "roam-${slug}.org" "#+title: ${title}\n#+filetags: Topic\n#+date: %U")
-      :unnarrowed t)
-     ("a" "Action" plain
-      "* Goals\n%?\n* Actions\n"
-      :target (file+head "roam-${slug}.org" "#+title: ${title}\n#+filetags: Actions AgendaSource\n#+date: %U")
-      :unnarrowed t)
-     ("p" "Person" plain
-      "%?"
-      :target (file+head "roam-${slug}.org" "#+title: ${title}\n#+filetags: Person\n#+date: %U")
-      :unnarrowed t)
-     ("b" "Book" plain
-      "- Author: %?\n- Notes: \n\n* Summary\n\n* Chapters\n\n* Comments\n"
-      :target (file+head "roam-${slug}.org" "#+title: ${title}\n#+filetags: Book\n#+date: %U")
-      :unnarrowed t)
-     ("l" "Location" plain
-      "* Comments\n%?\n* Visits\n\n* Ice cream\n\n* Restaurants\n\n* Points of interest\n"
-      :target (file+head "roam-${slug}.org" "#+title: ${title}\n#+filetags: Location\n#+date: %U")
-      :unnarrowed t)))
+   (let ((default-file "roam-${slug}.org")
+	 (default-header "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: "))
+     `(("t" "Topic" plain
+	"%?"
+	:target (file+head ,default-file ,(concat default-header "Topic"))
+	:unnarrowed t)
+       ("a" "Action" plain
+	"* Goals\n%?\n* Actions\n"
+	:target (file+head ,default-file ,(concat default-header "Actions AgendaSource"))
+	:unnarrowed t)
+       ("p" "Person" plain
+	"%?"
+	:target (file+head ,default-file ,(concat default-header "Person"))
+	:unnarrowed t)
+       ("b" "Book" plain
+	"- Author: %?\n- Notes: \n\n* Summary\n\n* Chapters\n\n* Comments\n"
+	:target (file+head ,default-file ,(concat default-header "Book"))
+	:unnarrowed t)
+       ("l" "Location" plain
+	"* Comments\n%?\n* Visits\n\n* Ice cream\n\n* Restaurants\n\n* Points of interest\n"
+	:target (file+head ,default-file ,(concat default-header "Location"))
+	:unnarrowed t))))
   :bind (("s-r" . org-roam-node-find)
 	 :map org-mode-map
 	 ("C-c i" . org-roam-node-insert)
