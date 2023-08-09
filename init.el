@@ -224,7 +224,6 @@
   :bind
   ("\C-cl" . org-store-link)
   ("s-a" . org-agenda)
-  ("s-c" . org-capture)
   :custom
   (org-ellipsis " ▾")
   (org-todo-keywords '((sequence "SCOPE(s)" "BACKLOG(b)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
@@ -341,11 +340,13 @@
 	("media.org" :maxlevel . 1)
 	("meetings.org" :maxlevel . 1)))
 
-(setq org-capture-templates
-    `(("t" "Task" entry (file "inbox.org")
-       "* SCOPE %?\n%U\n%a" :prepend t)
-      ("m" "Meeting notes" entry (file "meetings.org")
-       "* REVIEW %?\n%t" :prepend t)))
+(defun nrm/roam-capture ()
+  (interactive)
+  (org-roam-capture- :node (org-roam-node-create)
+		     :templates '(("i" "Inbox" plain "* SCOPE %?\n%U\n%a"
+				   :if-new (file+head "Inbox.org" "#+title: Inbox\n#+category: Inbox\n#+filetags: AgendaSource")))))
+
+(global-set-key (kbd "s-c") 'nrm/roam-capture)
 
 (setq org-agenda-custom-commands
       '(("d" "Dashboard"

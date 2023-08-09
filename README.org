@@ -402,7 +402,6 @@ Actions can be in one of the following states, according to the GTD method:
     :bind
     ("\C-cl" . org-store-link)
     ("s-a" . org-agenda)
-    ("s-c" . org-capture)
     :custom
     (org-ellipsis " ▾")
     (org-todo-keywords '((sequence "SCOPE(s)" "BACKLOG(b)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
@@ -551,18 +550,18 @@ To make a header in a file into its own node, run `org-id-get-create`.
 
 ** Capture templates
 
-- As mentioned above, quickly capture ideas into the inbox file, to be processed later.
-- Also, quickly start taking meeting notes, organised in a file sorted by date.
+Quickly capture ideas into the inbox file, to be processed later.
 
 To quickly jump to the last captured entry, call `bookmark-jump org-capture-last-stored`, which is bound to "C-x r b".
 
 #+begin_src emacs-lisp
-  (setq org-capture-templates
-      `(("t" "Task" entry (file "inbox.org")
-	 "* SCOPE %?\n%U\n%a" :prepend t)
-	("m" "Meeting notes" entry (file "meetings.org")
-	 "* REVIEW %?\n%t" :prepend t)))
+  (defun nrm/roam-capture ()
+    (interactive)
+    (org-roam-capture- :node (org-roam-node-create)
+		       :templates '(("i" "Inbox" plain "* SCOPE %?\n%U\n%a"
+				     :if-new (file+head "Inbox.org" "#+title: Inbox\n#+category: Inbox\n#+filetags: AgendaSource")))))
 
+  (global-set-key (kbd "s-c") 'nrm/roam-capture)
 #+end_src
 
 ** Agenda configuration
