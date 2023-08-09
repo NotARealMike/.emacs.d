@@ -334,11 +334,20 @@
 (nrm/generate-org-agenda-files)
 (add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-agenda-files)
 
-(setq org-refile-targets
-      '(("actions.org" :maxlevel . 3)
-	("rar.org" :maxlevel . 1)
-	("media.org" :maxlevel . 1)
-	("meetings.org" :maxlevel . 1)))
+(defun nrm/generate-org-refile-targets ()
+  (interactive)
+  ;; Only this variable needs to be regenerated
+  (setq roam-files (directory-files org-roam-directory t "org$"))
+  (setq org-refile-targets
+	'((roam-files :maxlevel . 3)
+	  ("actions.org" :maxlevel . 3)
+	  ("rar.org" :maxlevel . 1)
+	  ("media.org" :maxlevel . 1)
+	  ("meetings.org" :maxlevel . 1))))
+
+;; Generate the refile target list when Emacs starts and also whenever a new Roam file is created (aprox)
+(nrm/generate-org-refile-targets)
+(add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-refile-targets)
 
 (defun nrm/roam-capture ()
   (interactive)
