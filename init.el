@@ -245,6 +245,7 @@
   ;; If an entry has a TODO label, don't check its children
   (org-agenda-todo-list-sublevels nil)
   :config
+  ;; Save all org buffers after refiling, to prevent entries being lost if Emacs crashes
   (advice-add 'org-refile :after 'org-save-all-org-buffers))
 
 (use-package org-bullets
@@ -308,21 +309,29 @@
   :config
   (org-roam-db-autosync-enable))
 
+;; _____________________________________________________________________________
+;; Org file structure
+;; _____________________________________________________________________________
+
+(setq org-directory "~/gtd")
+(set-register ?g (cons 'file (concat org-directory "/actions.org")))
+
 (defun nrm/roam-list-files-with-tag (tag-name)
   (mapcar #'org-roam-node-file
 	  (seq-filter
 	   (lambda (elt) (member tag-name (org-roam-node-tags elt)))
 	   (org-roam-node-list))))
 
-(setq org-agenda-files (nrm/roam-list-files-with-tag "Test"))
+(defun nrm/generate-org-agenda-files ()
+  (interactive)
+  (setq org-agenda-files (nrm/roam-list-files-with-tag "AgendaSource"))
+  (add-to-list 'org-agenda-files "inbox.org")
+  (add-to-list 'org-agenda-files "meetings.org")
+  (add-to-list 'org-agenda-files "actions.org"))
 
-;; File structure
-(setq org-directory "~/gtd")
-(set-register ?g (cons 'file (concat org-directory "/actions.org")))
-
-(add-to-list 'org-agenda-files "inbox.org")
-(add-to-list 'org-agenda-files "meetings.org")
-(add-to-list 'org-agenda-files "actions.org")
+;; Generate the agenda file list when Emacs starts and also whenever a new Roam file is created (aprox)
+(nrm/generate-org-agenda-files)
+(add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-agenda-files)
 
 (setq org-refile-targets
       '(("actions.org" :maxlevel . 3)
