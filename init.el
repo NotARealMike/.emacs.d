@@ -314,6 +314,7 @@
 	:target (file+head ,default-file ,default-header)))))
   :bind (("s-r" . org-roam-node-find)
 	 ("s-c" . nil)
+	 ("s-c i" . nrm/roam-inbox-capture)
 	 ("s-c t" . org-roam-dailies-capture-today)
 	 ("s-c d" . org-roam-dailies-capture-date)
 	 ("s-g" . nil)
@@ -326,7 +327,13 @@
 	 ("C-c i" . org-roam-node-insert)
 	 ("C-c b" . org-roam-buffer-toggle))
   :config
-  (org-roam-db-autosync-enable))
+  (org-roam-db-autosync-enable)
+  (defun nrm/roam-inbox-capture ()
+    (interactive)
+    (org-roam-capture-
+     :node (org-roam-node-create)
+     :templates '(("i" "Inbox" plain "* SCOPE %?\n%U\n%a"
+		   :target (file+head "Inbox.org" "#+title: Inbox\n#+category: Inbox\n#+filetags: AgendaSource"))))))
 
 ;; _____________________________________________________________________________
 ;; Org file structure
@@ -366,14 +373,6 @@
 ;; Generate the refile target list when Emacs starts and also whenever a new Roam file is created (aprox)
 (nrm/generate-org-refile-targets)
 (add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-refile-targets)
-
-(defun nrm/roam-capture ()
-  (interactive)
-  (org-roam-capture- :node (org-roam-node-create)
-		     :templates '(("i" "Inbox" plain "* SCOPE %?\n%U\n%a"
-				   :if-new (file+head "Inbox.org" "#+title: Inbox\n#+category: Inbox\n#+filetags: AgendaSource")))))
-
-(global-set-key (kbd "s-c i") 'nrm/roam-capture)
 
 (setq org-agenda-custom-commands
       '(("d" "Dashboard"
