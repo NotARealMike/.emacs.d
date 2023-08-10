@@ -421,6 +421,8 @@ Actions can be in one of the following states, according to the GTD method:
     (org-agenda-window-setup "current-window")
     ;; If an entry has a TODO label, don't check its children
     (org-agenda-todo-list-sublevels nil)
+    :hook
+    (org-agenda-mode . (lambda () (display-line-numbers-mode -1)))
     :config
     ;; Save all org buffers after refiling, to prevent entries being lost if Emacs crashes
     (advice-add 'org-refile :after 'org-save-all-org-buffers))
