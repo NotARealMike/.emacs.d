@@ -224,7 +224,6 @@
   :bind
   ("\C-cl" . org-store-link)
   ("s-a" . org-agenda)
-  ("s-c" . org-capture)
   :custom
   (org-ellipsis " ▾")
   (org-todo-keywords '((sequence "SCOPE(s)" "BACKLOG(b)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
@@ -245,6 +244,7 @@
   ;; If an entry has a TODO label, don't check its children
   (org-agenda-todo-list-sublevels nil)
   :config
+  ;; Save all org buffers after refiling, to prevent entries being lost if Emacs crashes
   (advice-add 'org-refile :after 'org-save-all-org-buffers))
 
 (use-package org-bullets
@@ -272,26 +272,107 @@
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 
-;; File structure
+;; _____________________________________________________________________________
+;; Roam
+;; _____________________________________________________________________________
+
+(use-package org-roam
+  :demand
+  :custom
+  (org-roam-directory "~/roam")
+  (org-roam-capture-templates
+   (let ((default-file "roam-${slug}.org")
+	 (default-header "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: "))
+     `(("t" "Topic" plain
+	"%?"
+	:target (file+head ,default-file ,(concat default-header "Topic"))
+	:unnarrowed t)
+       ("a" "Action" plain
+	"* Goals\n%?\n* Actions\n"
+	:target (file+head ,default-file ,(concat default-header "Actions AgendaSource"))
+	:unnarrowed t)
+       ("p" "Person" plain
+	"%?"
+	:target (file+head ,default-file ,(concat default-header "Person"))
+	:unnarrowed t)
+       ("b" "Book" plain
+	"- Author: %?\n- Notes: \n\n* Summary\n\n* Chapters\n\n* Comments\n"
+	:target (file+head ,default-file ,(concat default-header "Book"))
+	:unnarrowed t)
+       ("l" "Location" plain
+	"* Comments\n%?\n* Visits\n\n* Ice cream\n\n* Restaurants\n\n* Points of interest\n"
+	:target (file+head ,default-file ,(concat default-header "Location"))
+	:unnarrowed t))))
+  (org-roam-dailies-capture-templates
+   (let ((default-file "%<%Y-%m-%d>.org")
+	 (default-header "#+title: %<%Y-%m-%d>\n\n* Tasks [/]\n\n* Notes\n"))
+     `(("t" "Task" checkitem ""
+	:target (file+head+olp ,default-file ,default-header ("Tasks")))
+       ("n" "Note" entry "** %?"
+	:target (file+head+olp ,default-file ,default-header ("Notes")))
+       ("d" "Direct" plain "%?"
+	:target (file+head ,default-file ,default-header)))))
+  :bind (("s-r" . org-roam-node-find)
+	 ("s-c" . nil)
+	 ("s-c i" . nrm/roam-inbox-capture)
+	 ("s-c t" . org-roam-dailies-capture-today)
+	 ("s-c d" . org-roam-dailies-capture-date)
+	 ("s-g" . nil)
+	 ;; Go to the file directly, skipping the capture prompt
+	 ("s-g t" . (lambda () (interactive) (org-roam-dailies-goto-today "d")))
+	 ("s-g d" . (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
+	 ("s-g n" . org-roam-dailies-goto-next-note)
+	 ("s-g p" . org-roam-dailies-goto-previous-note)
+	 :map org-mode-map
+	 ("C-c i" . org-roam-node-insert)
+	 ("C-c b" . org-roam-buffer-toggle))
+  :config
+  (org-roam-db-autosync-enable)
+  (defun nrm/roam-inbox-capture ()
+    (interactive)
+    (org-roam-capture-
+     :node (org-roam-node-create)
+     :templates '(("i" "Inbox" plain "* SCOPE %?\n%U\n%a"
+		   :target (file+head "Inbox.org" "#+title: Inbox\n#+category: Inbox\n#+filetags: AgendaSource"))))))
+
+;; _____________________________________________________________________________
+;; Org file structure
+;; _____________________________________________________________________________
+
 (setq org-directory "~/gtd")
 (set-register ?g (cons 'file (concat org-directory "/actions.org")))
 
-(setq org-agenda-files
-      '("inbox.org"
-	"meetings.org"
-	"actions.org"))
+(defun nrm/roam-list-files-with-tag (tag-name)
+  (mapcar #'org-roam-node-file
+	  (seq-filter
+	   (lambda (elt) (member tag-name (org-roam-node-tags elt)))
+	   (org-roam-node-list))))
 
-(setq org-refile-targets
-      '(("actions.org" :maxlevel . 3)
-	("rar.org" :maxlevel . 1)
-	("media.org" :maxlevel . 1)
-	("meetings.org" :maxlevel . 1)))
+(defun nrm/generate-org-agenda-files ()
+  (interactive)
+  (setq org-agenda-files (nrm/roam-list-files-with-tag "AgendaSource"))
+  (add-to-list 'org-agenda-files "inbox.org")
+  (add-to-list 'org-agenda-files "meetings.org")
+  (add-to-list 'org-agenda-files "actions.org"))
 
-(setq org-capture-templates
-    `(("t" "Task" entry (file "inbox.org")
-       "* SCOPE %?\n%U\n%a" :prepend t)
-      ("m" "Meeting notes" entry (file "meetings.org")
-       "* REVIEW %?\n%t" :prepend t)))
+;; Generate the agenda file list when Emacs starts and also whenever a new Roam file is created (aprox)
+(nrm/generate-org-agenda-files)
+(add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-agenda-files)
+
+(defun nrm/generate-org-refile-targets ()
+  (interactive)
+  ;; Only this variable needs to be regenerated
+  (setq roam-files (directory-files org-roam-directory t "org$"))
+  (setq org-refile-targets
+	'((roam-files :maxlevel . 3)
+	  ("actions.org" :maxlevel . 3)
+	  ("rar.org" :maxlevel . 1)
+	  ("media.org" :maxlevel . 1)
+	  ("meetings.org" :maxlevel . 1))))
+
+;; Generate the refile target list when Emacs starts and also whenever a new Roam file is created (aprox)
+(nrm/generate-org-refile-targets)
+(add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-refile-targets)
 
 (setq org-agenda-custom-commands
       '(("d" "Dashboard"
