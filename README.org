@@ -501,7 +501,25 @@ To make a header in a file into its own node, run `org-id-get-create`.
 	  "* Comments\n%?\n* Visits\n\n* Ice cream\n\n* Restaurants\n\n* Points of interest\n"
 	  :target (file+head ,default-file ,(concat default-header "Location"))
 	  :unnarrowed t))))
+    (org-roam-dailies-capture-templates
+     (let ((default-file "%<%Y-%m-%d>.org")
+	   (default-header "#+title: %<%Y-%m-%d>\n\n* Tasks [/]\n\n* Notes\n"))
+       `(("t" "Task" checkitem ""
+	  :target (file+head+olp ,default-file ,default-header ("Tasks")))
+	 ("n" "Note" entry "** %?"
+	  :target (file+head+olp ,default-file ,default-header ("Notes")))
+	 ("d" "Direct" plain "%?"
+	  :target (file+head ,default-file ,default-header)))))
     :bind (("s-r" . org-roam-node-find)
+	   ("s-c" . nil)
+	   ("s-c t" . org-roam-dailies-capture-today)
+	   ("s-c d" . org-roam-dailies-capture-date)
+	   ("s-g" . nil)
+	   ;; Go to the file directly, skipping the capture prompt
+	   ("s-g t" . (lambda () (interactive) (org-roam-dailies-goto-today "d")))
+	   ("s-g d" . (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
+	   ("s-g n" . org-roam-dailies-goto-next-note)
+	   ("s-g p" . org-roam-dailies-goto-previous-note)
 	   :map org-mode-map
 	   ("C-c i" . org-roam-node-insert)
 	   ("C-c b" . org-roam-buffer-toggle))
@@ -570,7 +588,7 @@ To quickly jump to the last captured entry, call `bookmark-jump org-capture-last
 		       :templates '(("i" "Inbox" plain "* SCOPE %?\n%U\n%a"
 				     :if-new (file+head "Inbox.org" "#+title: Inbox\n#+category: Inbox\n#+filetags: AgendaSource")))))
 
-  (global-set-key (kbd "s-c") 'nrm/roam-capture)
+  (global-set-key (kbd "s-c i") 'nrm/roam-capture)
 #+end_src
 
 ** Agenda configuration
