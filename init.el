@@ -279,7 +279,7 @@
 (use-package org-roam
   :demand
   :custom
-  (org-roam-directory "~/brain")
+  (org-roam-directory "~/roam")
   (org-roam-capture-templates
    (let ((default-file "roam-${slug}.org")
 	 (default-header "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: "))
