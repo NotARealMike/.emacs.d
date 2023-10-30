@@ -323,11 +323,11 @@
 	 ;; Go to the file directly, skipping the capture prompt
 	 ("s-g t" . (lambda () (interactive) (org-roam-dailies-goto-today "d")))
 	 ("s-g d" . (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
-	 ("s-g n" . org-roam-dailies-goto-next-note)
-	 ("s-g p" . org-roam-dailies-goto-previous-note)
 	 :map org-mode-map
 	 ("C-c i" . org-roam-node-insert)
-	 ("C-c b" . org-roam-buffer-toggle))
+	 ("C-c b" . org-roam-buffer-toggle)
+	 ("s-n" . org-roam-dailies-goto-next-note)
+	 ("s-p" . org-roam-dailies-goto-previous-note))
   :config
   (org-roam-db-autosync-enable)
   (defun nrm/roam-inbox-capture ()
