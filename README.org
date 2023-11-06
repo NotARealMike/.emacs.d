@@ -790,6 +790,23 @@ For this to work, add GOROOT and GOPATH to PATH in ~/.profile (or equivalent).
 
 #+end_src
 
+* File formats
+
+** CSV
+
+Toggle `csv-align-mode` to display columns aligned, without changing the underlying file.
+
+#+begin_src emacs-lisp
+    ;; _____________________________________________________________________________
+    ;; csv-mode
+    ;; _____________________________________________________________________________
+
+    (use-package csv-mode
+      :mode ("\\.csv\\'" . csv-mode)
+      :custom (csv-invisibility-default nil))
+
+#+end_src
+
 * Beancount
 
 Beancount isn't available through ELPA, so I cloned the repo into my emacs config. For it to be accessible through `use-package`, run `M-x package-install-file ~/.emacs.d/beancount-mode/beancount`.
