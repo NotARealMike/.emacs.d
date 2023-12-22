@@ -16,6 +16,10 @@ SessionDesktop.el
 auto-save-list
 bookmarks
 
+# Local org ROAM database
+\.org-id-locations
+org-roam\.db
+
 # Ignore downloaded packages for now
 elpa
 
