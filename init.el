@@ -353,8 +353,6 @@
 (defun nrm/generate-org-agenda-files ()
   (interactive)
   (setq org-agenda-files (nrm/roam-list-files-with-tag "AgendaSource"))
-  (add-to-list 'org-agenda-files "inbox.org")
-  (add-to-list 'org-agenda-files "meetings.org")
   (add-to-list 'org-agenda-files "actions.org"))
 
 ;; Generate the agenda file list when Emacs starts and also whenever a new Roam file is created (aprox)
@@ -367,10 +365,7 @@
   (setq roam-files (directory-files org-roam-directory t "org$"))
   (setq org-refile-targets
 	'((roam-files :maxlevel . 3)
-	  ("actions.org" :maxlevel . 3)
-	  ("rar.org" :maxlevel . 1)
-	  ("media.org" :maxlevel . 1)
-	  ("meetings.org" :maxlevel . 1))))
+	  ("actions.org" :maxlevel . 3))))
 
 ;; Generate the refile target list when Emacs starts and also whenever a new Roam file is created (aprox)
 (nrm/generate-org-refile-targets)
