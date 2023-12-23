@@ -306,7 +306,7 @@
 	:target (file+head ,default-file ,(concat default-header "Company AgendaSource"))
 	:unnarrowed t)
        ("j" "Trip" plain
-	"* Flights/travel\n\n* Accomodation\n\n* Comments\n"
+	"* Flights/travel\n\n* Accommodation\n\n* Comments\n"
 	:target (file+head ,default-file ,(concat default-header "Trip AgendaSource"))
 	:unnarrowed t)
        ("l" "Location" plain
