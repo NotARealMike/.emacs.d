@@ -5,9 +5,29 @@
 
 My very own Emacs configuration. Inspired by [[https://github.com/daviwil/emacs-from-scratch][Emacs from scratch]], customised to what I actually need.
 
-I keep some comments in the Emacs Lisp snippets, as well as comments in the org file, so that the init.el file is easier to navigate.
+* Setup
 
-Instructions on how to set Caps Lock to act as Control are [[https://support.apple.com/en-gb/guide/mac-help/mchlp1011/mac][here]]. Remember to do this for each machine and each connected keyboard!
+This configuration is designed to bootstrap itself, but there are a few dependencies that need to be installed first.
+
+Before starting Emacs, install Homebrew (on MacOS), and use it to install:
+- `ispell`, for spell checking
+- `coreutils`, for the `gls` CLI command, which is an alternative to `ls` that can be used by dired
+- `cmake` and `libtool`, to compile dependencies of vterm and Roam
+- `gopls`, which is an LSP for Go, and will install `go` as a dependency
+
+#+begin_src shell
+brew install ispell coreutils cmake libtool gopls
+#+end_src
+
+Instructions on how to set Caps Lock to act as Control are [[https://support.apple.com/en-gb/guide/mac-help/mchlp1011/mac][here]]. Remember to do this for each machine and keyboard combination.
+
+Run `M-x all-the-icons-install-fonts` to download and install icons used by the `all-the-icons` package.
+
+Beancount mode isn't available through ELPA/MELPA, so it must be cloned from Github. To make it accessible to use-package, run `M-x package-install-file ~/beancount-mode/beancount.el`.
+
+#+begin_src shell
+git clone git@github.com:beancount/beancount-mode.git
+#+end_src
 
 * Start
 
@@ -51,8 +71,6 @@ Instructions on how to set Caps Lock to act as Control are [[https://support.app
 #+end_src
 
 * Global configuration
-
-Run `M-x all-the-icons-install-fonts` to actually install icons.
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
@@ -232,8 +250,7 @@ The functions to describe functions and variables are passed through the counsel
 
 ** Dired
 
-- Run `brew install coreutils` on MacOS to get gls, which supports the `--group-directories-first` option.
-- Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files such as backup and dot files. This is better than hiding files through options passed to the ls command because it lets me quickly toggle the mode when I need to look at dot files, for example.
+Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files such as backup and dot files. This is better than hiding files through options passed to the ls command because it lets me quickly toggle the mode when I need to look at dot files, for example.
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
@@ -426,8 +443,6 @@ How meta!
 
 ** Roam
 
-Roam needs a C/C++ compiler to generate the required database.
-
 To make a header in a file into its own node, run `org-id-get-create`.
 
 #+begin_src emacs-lisp
@@ -590,13 +605,6 @@ Create custom agenda commands to:
 ** vterm
 
 I choose to use [[https://github.com/akermu/emacs-libvterm/][vterm]] because it is fast, compatible with my usual terminal setup, and it supports interactive commands.
-
-To get vterm to run on OSX machines, run
-
-#+begin_src shell
-  brew install cmake
-  brew install libtool
-#+end_src
 
 The command `M-x multi-vterm` lets me easily create multiple terminals.
 
@@ -770,8 +778,6 @@ Toggle `csv-align-mode` to display columns aligned, without changing the underly
 #+end_src
 
 * Beancount
-
-Beancount isn't available through ELPA, so I cloned the repo into my emacs config. For it to be accessible through `use-package`, run `M-x package-install-file ~/.emacs.d/beancount-mode/beancount`.
 
 Follow the instructions in my beans repo to install all the needed Python packages.
 
