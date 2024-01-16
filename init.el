@@ -142,13 +142,18 @@
 ;; _____________________________________________________________________________
 
 (use-package dired
+  ;; dired is not a -package.el package, so don't attempt to install it.
   :ensure nil
   :hook (dired-mode . dired-omit-mode)
-  :custom ((dired-listing-switches "-lah --group-directories-first"))
+  :custom
+  (dired-listing-switches "-lah --group-directories-first")
+  (insert-directory-program "gls"))
+
+(use-package dired-x
+  ;; Also not a proper -package.el.
+  :ensure nil
   :config
-  (require 'dired-x)
-  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
-  (setq insert-directory-program "gls"))
+  (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")))
 
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
@@ -157,49 +162,50 @@
 ;; IBuffer
 ;; _____________________________________________________________________________
 
-(require 'ibuffer)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(setq ibuffer-saved-filter-groups
-      (quote (("default"
-	       ("Side effects" (or
-				(derived-mode . helpful-mode)
-				(and
-				 (name . "^\\*")
-				 (size-lt . 1))))
-	       ("Dired" (mode . dired-mode))
-	       ("Org" (mode . org-mode))
-	       ("Source code" (or
-			       (derived-mode . prog-mode)
-			       (derived-mode . protobuf-mode)))
-	       ("Version control" (derived-mode . magit-section-mode))))))
-
-(add-hook 'ibuffer-mode-hook
-	  (lambda () (ibuffer-switch-to-saved-filter-groups "default")))
-
-(setq ibuffer-default-sorting-mode 'filename/process)
-
-(setq ibuffer-fontification-alist
-      '((100 (eq major-mode 'java-mode) magit-process-ng)
-	(10 buffer-read-only font-lock-constant-face)
-	(15 (and buffer-file-name
-		 (string-match ibuffer-compressed-file-name-regexp
-			       buffer-file-name))
-	    font-lock-doc-face)
-	(20 (string-match "^\\*" (buffer-name)) font-lock-keyword-face)
-	(25 (and (string-match "^ " (buffer-name))
-		 (null buffer-file-name))
-	    italic)
-	(30 (memq major-mode ibuffer-help-buffer-modes) font-lock-comment-face)
-	(35 (derived-mode-p 'dired-mode) font-lock-function-name-face)
-	(40 (and (boundp 'emacs-lock-mode) emacs-lock-mode) ibuffer-locked-buffer)))
-
-(defun nrm/ibuffer-toggle-current-group()
-  (interactive)
-  (ibuffer-forward-filter-group)
-  (ibuffer-backward-filter-group)
-  (ibuffer-toggle-filter-group))
-
-(define-key ibuffer-mode-map (kbd "<tab>") 'nrm/ibuffer-toggle-current-group)
+(use-package ibuffer
+  ;; ibuffer is not a -package.el package, so don't attempt to install it.
+  :ensure nil
+  :custom
+  (ibuffer-default-sorting-mode 'filename/process)
+  (ibuffer-saved-filter-groups
+   (quote (("default"
+	    ("Side effects" (or
+			     (derived-mode . helpful-mode)
+			     (and
+			      (name . "^\\*")
+			      (size-lt . 1))))
+	    ("Dired" (mode . dired-mode))
+	    ("Org" (mode . org-mode))
+	    ("Source code" (or
+			    (derived-mode . prog-mode)
+			    (derived-mode . protobuf-mode)))
+	    ("Version control" (derived-mode . magit-section-mode))))))
+  (ibuffer-fontification-alist
+   '((100 (eq major-mode 'java-mode) magit-process-ng)
+     (10 buffer-read-only font-lock-constant-face)
+     (15 (and buffer-file-name
+	      (string-match ibuffer-compressed-file-name-regexp
+			    buffer-file-name))
+	 font-lock-doc-face)
+     (20 (string-match "^\\*" (buffer-name)) font-lock-keyword-face)
+     (25 (and (string-match "^ " (buffer-name))
+	      (null buffer-file-name))
+	 italic)
+     (30 (memq major-mode ibuffer-help-buffer-modes) font-lock-comment-face)
+     (35 (derived-mode-p 'dired-mode) font-lock-function-name-face)
+     (40 (and (boundp 'emacs-lock-mode) emacs-lock-mode) ibuffer-locked-buffer)))
+  :hook
+  (ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "default")))
+  :config
+  (defun nrm/ibuffer-toggle-current-group()
+    (interactive)
+    (ibuffer-forward-filter-group)
+    (ibuffer-backward-filter-group)
+    (ibuffer-toggle-filter-group))
+  :bind
+  (("C-x C-b" . ibuffer)
+   :map ibuffer-mode-map
+   ("<tab>" . nrm/ibuffer-toggle-current-group)))
 
 ;; _____________________________________________________________________________
 ;; IBuffer
@@ -269,10 +275,11 @@
 
 (setq org-confirm-babel-evaluate nil)
 
-(require 'org-tempo)
-
-(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+(use-package org-tempo
+  :ensure nil
+  :config
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell")))
 
 ;; _____________________________________________________________________________
 ;; Roam
