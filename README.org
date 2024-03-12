@@ -38,6 +38,8 @@ git clone git@github.com:beancount/beancount-mode.git
 
   (toggle-debug-on-error)
 
+  (setq inhibit-startup-message t)
+
   (switch-to-buffer "*Messages*")
   (message "Started loading config at %s" (format-time-string "%T"))
 
@@ -70,14 +72,14 @@ git clone git@github.com:beancount/beancount-mode.git
 
 #+end_src
 
-* Global configuration
+* Shortcuts
+
+Settings and key bindings that make common actions faster.
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
   ;; Global configuration
   ;; _____________________________________________________________________________
-
-  (setq inhibit-startup-message t)
 
   ;; Make it easier to access emacs config
   (set-register ?e (cons 'file "~/.emacs.d/README.org"))
@@ -90,17 +92,28 @@ git clone git@github.com:beancount/beancount-mode.git
   (global-set-key (kbd "s-<right>") 'next-buffer)
 
   ;; Cycle through windows easily
-  (global-set-key (kbd "C-<tab>") 'other-window)
-  (defun switch-to-prev-window ()
+  (defun nrm/switch-to-prev-window ()
     (interactive)
     (other-window -1))
-  (global-set-key (kbd "C-S-<tab>") 'switch-to-prev-window)
+  (global-set-key (kbd "C-<tab>") 'other-window)
+  (global-set-key (kbd "C-S-<tab>") 'nrm/switch-to-prev-window)
 
   ;; Simplify yes-or-no prompts
   (defalias 'yes-or-no-p 'y-or-n-p)
 
-  ;; Make the right option key not act as meta, to let me type characters that need option
+  ;; On MacOS, make the right option key not act as meta, to let me type characters that need option
   (setq ns-right-alternate-modifier 'none)
+
+#+end_src
+
+* Appearance
+
+Make Emacs look fabulous :sparkles:
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Appearance
+  ;; _____________________________________________________________________________
 
   ;; Theme and display configuration
   (load-theme 'tango-dark t)
@@ -116,6 +129,17 @@ git clone git@github.com:beancount/beancount-mode.git
     :custom
     (doom-modeline-buffer-encoding nil)
     (doom-modeline-minor-modes t))
+
+#+end_src
+
+* Writing
+
+Utilities for writing in natural languages.
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Writing
+  ;; _____________________________________________________________________________
 
   ;; Natural language formatting and spelling
   (setq sentence-end-double-space nil)

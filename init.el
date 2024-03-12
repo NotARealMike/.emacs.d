@@ -4,6 +4,8 @@
 
 (toggle-debug-on-error)
 
+(setq inhibit-startup-message t)
+
 (switch-to-buffer "*Messages*")
 (message "Started loading config at %s" (format-time-string "%T"))
 
@@ -29,8 +31,6 @@
 ;; Global configuration
 ;; _____________________________________________________________________________
 
-(setq inhibit-startup-message t)
-
 ;; Make it easier to access emacs config
 (set-register ?e (cons 'file "~/.emacs.d/README.org"))
 
@@ -42,17 +42,21 @@
 (global-set-key (kbd "s-<right>") 'next-buffer)
 
 ;; Cycle through windows easily
-(global-set-key (kbd "C-<tab>") 'other-window)
-(defun switch-to-prev-window ()
+(defun nrm/switch-to-prev-window ()
   (interactive)
   (other-window -1))
-(global-set-key (kbd "C-S-<tab>") 'switch-to-prev-window)
+(global-set-key (kbd "C-<tab>") 'other-window)
+(global-set-key (kbd "C-S-<tab>") 'nrm/switch-to-prev-window)
 
 ;; Simplify yes-or-no prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Make the right option key not act as meta, to let me type characters that need option
+;; On MacOS, make the right option key not act as meta, to let me type characters that need option
 (setq ns-right-alternate-modifier 'none)
+
+;; _____________________________________________________________________________
+;; Appearance
+;; _____________________________________________________________________________
 
 ;; Theme and display configuration
 (load-theme 'tango-dark t)
@@ -68,6 +72,10 @@
   :custom
   (doom-modeline-buffer-encoding nil)
   (doom-modeline-minor-modes t))
+
+;; _____________________________________________________________________________
+;; Writing
+;; _____________________________________________________________________________
 
 ;; Natural language formatting and spelling
 (setq sentence-end-double-space nil)
