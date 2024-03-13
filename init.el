@@ -62,6 +62,15 @@
   :config
   (load-theme 'ef-duo-dark t))
 
+(use-package fontaine
+  :custom
+  (fontaine-presets
+   '((regular
+      :default-family "Menlo"
+      :default-height 135)))
+  :config
+  (fontaine-set-preset 'regular))
+
 (column-number-mode)
 (global-display-line-numbers-mode)
 (global-visual-line-mode)
