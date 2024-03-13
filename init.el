@@ -293,9 +293,12 @@
 ;; Roam
 ;; _____________________________________________________________________________
 
+(use-package emacsql-sqlite-builtin)
+
 (use-package org-roam
   :demand
   :custom
+  (org-roam-database-connector 'sqlite-builtin)
   (org-roam-directory "~/roam")
   (org-roam-capture-templates
    (let ((default-file "roam-${slug}.org")
