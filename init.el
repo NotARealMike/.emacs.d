@@ -58,8 +58,10 @@
 ;; Appearance
 ;; _____________________________________________________________________________
 
-;; Theme and display configuration
-(load-theme 'tango-dark t)
+(use-package ef-themes
+  :config
+  (load-theme 'ef-duo-dark t))
+
 (column-number-mode)
 (global-display-line-numbers-mode)
 (global-visual-line-mode)
