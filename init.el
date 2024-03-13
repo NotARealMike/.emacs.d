@@ -75,6 +75,15 @@
 (global-display-line-numbers-mode)
 (global-visual-line-mode)
 
+(use-package visual-fill-column
+  :hook (org-mode . visual-fill-column-mode)
+  :custom
+  (visual-fill-column-width 120)
+  (visual-fill-column-center-text nil)
+  (visual-fill-column-enable-sensible-window-split t)
+  :config
+  (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
+
 ;; Icons that can be used by several packages
 (use-package all-the-icons)
 
