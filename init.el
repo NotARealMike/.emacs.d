@@ -380,7 +380,7 @@
     (interactive)
     (org-roam-capture-
      :node (org-roam-node-create)
-     :templates '(("i" "Inbox" plain "* SCOPE %?\n%U\n%a"
+     :templates '(("i" "Inbox" entry "* SCOPE %?\n%U\n%a"
 		   :target (file+head "Inbox.org" "#+title: Inbox\n#+category: Inbox\n#+filetags: AgendaSource"))))))
 
 ;; _____________________________________________________________________________
