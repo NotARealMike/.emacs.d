@@ -85,7 +85,19 @@
   (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
 
 ;; Icons that can be used by several packages
-(use-package all-the-icons)
+(use-package nerd-icons)
+
+(use-package nerd-icons-dired
+  :hook (dired-mode . nerd-icons-dired-mode))
+
+(use-package nerd-icons-ibuffer
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
+
+(use-package nerd-icons-completion
+  :config
+  (nerd-icons-completion-mode))
+
+(use-package nerd-icons-corfu)
 
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
@@ -179,6 +191,7 @@
   (global-corfu-mode 1)
   (corfu-history-mode 1)
   (corfu-popupinfo-mode 1)
+  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
   :custom
   (corfu-auto t)
   (corfu-cycle t)
@@ -214,9 +227,6 @@
   :config
   (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")))
 
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
-
 ;; _____________________________________________________________________________
 ;; IBuffer
 ;; _____________________________________________________________________________
@@ -239,20 +249,6 @@
 			    (derived-mode . prog-mode)
 			    (derived-mode . protobuf-mode)))
 	    ("Version control" (derived-mode . magit-section-mode))))))
-  (ibuffer-fontification-alist
-   '((100 (eq major-mode 'java-mode) magit-process-ng)
-     (10 buffer-read-only font-lock-constant-face)
-     (15 (and buffer-file-name
-	      (string-match ibuffer-compressed-file-name-regexp
-			    buffer-file-name))
-	 font-lock-doc-face)
-     (20 (string-match "^\\*" (buffer-name)) font-lock-keyword-face)
-     (25 (and (string-match "^ " (buffer-name))
-	      (null buffer-file-name))
-	 italic)
-     (30 (memq major-mode ibuffer-help-buffer-modes) font-lock-comment-face)
-     (35 (derived-mode-p 'dired-mode) font-lock-function-name-face)
-     (40 (and (boundp 'emacs-lock-mode) emacs-lock-mode) ibuffer-locked-buffer)))
   :hook
   (ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "default")))
   :config
@@ -267,7 +263,7 @@
    ("<tab>" . nrm/ibuffer-toggle-current-group)))
 
 ;; _____________________________________________________________________________
-;; IBuffer
+;; Wgrep
 ;; _____________________________________________________________________________
 
 (use-package wgrep)
