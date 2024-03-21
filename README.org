@@ -86,9 +86,6 @@ Settings and key bindings that make common actions faster.
   ;; Make it easier to access emacs config
   (set-register ?e (cons 'file "~/.emacs.d/README.org"))
 
-  ;; Easy commenting
-  (global-set-key (kbd "M-/") 'comment-or-uncomment-region)
-
   ;; Cycle through buffers easily
   (global-set-key (kbd "s-<left>") 'previous-buffer)
   (global-set-key (kbd "s-<right>") 'next-buffer)
@@ -725,21 +722,6 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
     (set-face-foreground 'rainbow-delimiters-depth-7-face "#4363d8")
     (set-face-foreground 'rainbow-delimiters-depth-8-face "#911eb4")
     (set-face-foreground 'rainbow-delimiters-depth-9-face "#f032e6"))
-
-#+end_src
-
-** imenu-list
-
-Show a side buffer with a structured overview of the tags in the current buffer.
-
-#+begin_src emacs-lisp
-  ;; _____________________________________________________________________________
-  ;; imenu-list
-  ;; _____________________________________________________________________________
-
-  (use-package imenu-list
-    :bind ("s-i" . imenu-list-smart-toggle)
-    :custom (imenu-list-focus-after-activation t))
 
 #+end_src
 

@@ -34,9 +34,6 @@
 ;; Make it easier to access emacs config
 (set-register ?e (cons 'file "~/.emacs.d/README.org"))
 
-;; Easy commenting
-(global-set-key (kbd "M-/") 'comment-or-uncomment-region)
-
 ;; Cycle through buffers easily
 (global-set-key (kbd "s-<left>") 'previous-buffer)
 (global-set-key (kbd "s-<right>") 'next-buffer)
@@ -525,14 +522,6 @@
   (set-face-foreground 'rainbow-delimiters-depth-7-face "#4363d8")
   (set-face-foreground 'rainbow-delimiters-depth-8-face "#911eb4")
   (set-face-foreground 'rainbow-delimiters-depth-9-face "#f032e6"))
-
-;; _____________________________________________________________________________
-;; imenu-list
-;; _____________________________________________________________________________
-
-(use-package imenu-list
-  :bind ("s-i" . imenu-list-smart-toggle)
-  :custom (imenu-list-focus-after-activation t))
 
 ;; _____________________________________________________________________________
 ;; Compilation
