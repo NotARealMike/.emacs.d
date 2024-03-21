@@ -27,4 +27,6 @@ elpa
 eshell
 transient
 var
+history
+recentf
 tramp

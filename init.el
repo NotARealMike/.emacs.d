@@ -108,62 +108,93 @@
 
 (use-package dad-joke)
 
+;; _____________________________________________________________________________
+;; Completion
+;; _____________________________________________________________________________
+
+;; VERTical Interactive COmpletion - update the minibuffer completions while typing
+(use-package vertico
+  :config
+  (vertico-mode 1)
+  :custom
+  (vertico-count 20)
+  (vertico-cycle t))
+
+;; Order minibuffer completions by recency
+(savehist-mode 1)
+
+;; Rich annotations in the minibuffer
+(use-package marginalia
+  :config
+  (marginalia-mode 1))
+
+;; Out of order pattern matching completion
+;; Style dispatchers note: affix ! to invert match; affix & to match annotation instead of candidate
+(use-package orderless
+  :custom
+  (completion-styles '(orderless basic)))
+
+;; Enhanced versions of builtin search and navigation commands
+(use-package consult
+  :custom
+  (consult-line-start-from-top t)
+  :bind (;; Prefix mnemonic: "alt search"
+	 ;; Recursive grep
+	 ("M-s M-g" . consult-grep)
+	 ;; Search for file names recursively
+	 ("M-s M-f" . consult-find)
+	 ;; Search through the outline (headings) of the buffer
+	 ("M-s M-o" . consult-outline)
+	 ;; Search through the imenu items of the buffer
+	 ("M-s M-i" . consult-imenu)
+	 ;; Search the current buffer
+	 ("C-s" . consult-line)
+	 ;; Switch to another buffer, bookmark, or recently opened file
+	 ;; Filters: b buffers; SPC hidden buffers; * modified buffers; f recent files; r registers; m bookmarks
+	 ("C-x b" . consult-buffer)
+	 ;; Interactively select item to yank from kill-ring
+	 ("C-M-y" . consult-yank-from-kill-ring)
+	 ;; Goto position at line:column
+	 ("s-l" . consult-goto-line)))
+
+;; Enable recent files as a virtual buffer source for consult-buffer
+(recentf-mode 1)
+
+;; Actions based on context
+(use-package embark
+  :bind
+  ("C-." . embark-act)
+  ("s-." . embark-dwim)
+  (:map minibuffer-local-map
+	;; Retains minibuffer behaviour
+	("C-c C-c" . embark-collect)
+	;; Exports contents to a buffer in an appropriate major mode
+	("C-c C-e" . embark-export)))
+
+(use-package embark-consult)
+
+;; UI for completion at point; use M-SPC to insert a separator
+(use-package corfu
+  :config
+  (global-corfu-mode 1)
+  (corfu-history-mode 1)
+  (corfu-popupinfo-mode 1)
+  :custom
+  (corfu-auto t)
+  (corfu-cycle t)
+  (corfu-preview-current nil)
+  (corfu-popupinfo-delay (cons 1.0 0.1)))
+
+;; Extra capfs
+(use-package cape
+  :config
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  (add-to-list 'completion-at-point-functions #'cape-file))
+
 (use-package which-key
   :config
   (which-key-mode)
   (setq which-key-idle-delay 0.5))
-
-(use-package ivy
-  :demand
-  :bind (:map ivy-minibuffer-map
-	      ("TAB" . ivy-alt-done))
-  :config
-  (setq ivy-initial-inputs-alist nil)
-  (ivy-mode 1))
-
-;; Stop ./ and ../ from showing up in filepath completions
-(setq ivy-extra-directories nil)
-
-(use-package swiper
-  :demand
-  :bind ("C-s" . swiper))
-
-(use-package counsel
-  :config (counsel-mode 1)
-  :bind ("C-c i" . counsel-imenu))
-
-(use-package ivy-rich
-  :config
-  (ivy-rich-mode 1))
-
-(use-package ivy-prescient
-  :custom
-  (ivy-prescient-enable-filtering nil)
-  :config
-  (prescient-persist-mode 1)
-  (ivy-prescient-mode 1))
-
-(use-package company
-  :hook ((prog-mode text-mode) . company-mode)
-  :config
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 1))
-
-(use-package company-prescient
-  :after company
-  :config
-  (company-prescient-mode 1))
-
-(use-package helpful
-  :commands (helpful-callable helpful-variable helpful-command helpful-key)
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key))
 
 ;; _____________________________________________________________________________
 ;; Dired
