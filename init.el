@@ -84,6 +84,10 @@
   :config
   (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
 
+;; When wrapping, respect the paragraph indentation
+(use-package adaptive-wrap
+  :hook (visual-fill-column-mode . adaptive-wrap-prefix-mode))
+
 ;; Icons that can be used by several packages
 (use-package nerd-icons)
 
