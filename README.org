@@ -311,7 +311,7 @@ When typing a key bind prefix, WK mode expands the minibuffer to display command
 
 #+end_src
 
-* Better built-ins
+* Built-in mode improvements
 
 ** Dired
 
@@ -381,6 +381,22 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
 
 #+end_src
 
+** Ediff
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Ediff
+  ;; _____________________________________________________________________________
+
+  (use-package ediff
+    :custom
+    (ediff-keep-variants nil)
+    (ediff-make-buffers-readonly-at-startup t)
+    (ediff-split-window-function 'split-window-horizontally)
+    (ediff-window-setup-function 'ediff-setup-windows-plain))
+
+#+end_src
+
 ** wgrep
 
 - Writable grep results.
@@ -404,6 +420,7 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
   (use-package magit
     :custom
     (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+    (magit-diff-refine-hunk 'all)
     :bind ("C-x g" . magit-status))
 
 #+end_src

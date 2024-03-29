@@ -266,6 +266,17 @@
    ("<tab>" . nrm/ibuffer-toggle-current-group)))
 
 ;; _____________________________________________________________________________
+;; Ediff
+;; _____________________________________________________________________________
+
+(use-package ediff
+  :custom
+  (ediff-keep-variants nil)
+  (ediff-make-buffers-readonly-at-startup t)
+  (ediff-split-window-function 'split-window-horizontally)
+  (ediff-window-setup-function 'ediff-setup-windows-plain))
+
+;; _____________________________________________________________________________
 ;; Wgrep
 ;; _____________________________________________________________________________
 
@@ -278,6 +289,7 @@
 (use-package magit
   :custom
   (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+  (magit-diff-refine-hunk 'all)
   :bind ("C-x g" . magit-status))
 
 ;; _____________________________________________________________________________
