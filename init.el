@@ -55,6 +55,8 @@
 ;; Appearance
 ;; _____________________________________________________________________________
 
+(setq ring-bell-function 'ignore)
+
 (use-package ef-themes
   :config
   (load-theme 'ef-duo-dark t))
