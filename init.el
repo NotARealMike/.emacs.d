@@ -230,6 +230,10 @@
   :config
   (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")))
 
+(use-package wdired
+  :custom
+  (wdired-use-dired-vertical-movement t))
+
 ;; _____________________________________________________________________________
 ;; IBuffer
 ;; _____________________________________________________________________________

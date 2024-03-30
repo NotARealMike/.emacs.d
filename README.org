@@ -336,6 +336,10 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
     :config
     (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")))
 
+  (use-package wdired
+    :custom
+    (wdired-use-dired-vertical-movement t))
+
 #+end_src
 
 ** IBuffer
