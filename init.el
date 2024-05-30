@@ -619,8 +619,8 @@
   (add-hook 'beancount-mode-hook #'outline-minor-mode)
   :bind
   (:map beancount-mode-map
-	("C-c C-n" . outline-next-visible-heading)
-	("C-c C-p" . outline-previous-visible-heading)))
+	("C-n" . outline-next-visible-heading)
+	("C-p" . outline-previous-visible-heading)))
 
 ;; Copied from beancount-mode/etc/emacsrc
 (defun beancount-format-file ()
