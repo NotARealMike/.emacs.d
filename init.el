@@ -208,7 +208,7 @@
 ;; Extra capfs
 (use-package cape
   :config
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+  ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file))
 
 (use-package which-key
@@ -644,7 +644,7 @@
 ;; Finish loading config
 ;; _____________________________________________________________________________
 
-(toggle-debug-on-error)
+;; (toggle-debug-on-error)
 
 (message "Finished loading config at %s" (format-time-string "%T"))
 (message "Emacs loaded in %s with %d garbage collections."
