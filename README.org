@@ -875,8 +875,6 @@ Follow the instructions in my beans repo to install all the needed Python packag
       (goto-line line-no)
       (recenter)))
 
-  (set-register ?b (cons 'file "~/beans"))
-
 #+end_src
 
 * Local config
