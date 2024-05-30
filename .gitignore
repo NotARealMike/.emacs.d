@@ -15,6 +15,7 @@
 SessionDesktop.el
 auto-save-list
 bookmarks
+projects
 
 # Local org ROAM database
 \.org-id-locations
