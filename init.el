@@ -370,6 +370,9 @@
   :custom
   (org-roam-database-connector 'sqlite-builtin)
   (org-roam-directory "~/roam")
+  (org-roam-node-display-template
+   (concat "${title:*} "
+	   (propertize "${tags:*}" 'face 'org-tag)))
   (org-roam-capture-templates
    (let ((default-file "roam-${slug}.org")
 	 (default-header "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: "))
