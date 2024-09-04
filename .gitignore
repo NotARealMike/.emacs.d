@@ -23,6 +23,7 @@ org-roam\.db
 
 # Ignore downloaded packages for now
 elpa
+rust-playground
 
 # Local history
 eshell

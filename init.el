@@ -558,7 +558,7 @@
       (save-excursion
 	  (switch-to-buffer "*compilation*")))))
 
-(add-hook 'compilation-mode-hook 'nrm/compilation-hook)
+;; (add-hook 'compilation-mode-hook 'nrm/compilation-hook)
 (add-hook 'compilation-mode-hook 'goto-address-mode)
 
 (setq compilation-scroll-output t)
@@ -579,7 +579,7 @@
 
 (use-package eglot
   :init
-  (dolist (hook '(go-mode-hook python-mode-hook java-mode-hook))
+  (dolist (hook '(go-mode-hook python-mode-hook java-mode-hook rust-mode-hook))
     (add-hook hook 'eglot-ensure))
   :custom
   (eglot-autoshutdown t)
@@ -599,6 +599,19 @@
 
 ;; Configure goimports
 ;; (setq gofmt-command "<path to goimports, eg ~/bin/goimports>")
+
+;; _____________________________________________________________________________
+;; Rust
+;; _____________________________________________________________________________
+
+(use-package rustic
+  :defer t
+  :custom
+  (rustic-lsp-client 'eglot)
+  (rustic-format-display-method 'ignore)
+  (rustic-format-trigger 'on-compile))
+
+(use-package rust-playground)
 
 ;; _____________________________________________________________________________
 ;; csv-mode

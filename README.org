@@ -14,10 +14,13 @@ Before starting Emacs, install Homebrew (on MacOS), and use it to install:
 - `coreutils`, for the `gls` CLI command, which is an alternative to `ls` that can be used by dired
 - `cmake` and `libtool`, to compile dependencies of vterm and Roam
 - `gopls`, which is an LSP for Go, and will install `go` as a dependency
+- `rust`, `rustfmt`, and `rust-analyzer`, the Rust language compiler, automatic formatter and LSP, respectively
 
 #+begin_src shell
-brew install ispell coreutils cmake libtool gopls
+brew install ispell coreutils cmake libtool gopls rust rustfmt rust-analyzer
 #+end_src
+
+To run binaries compiled from Rust, add `~/.cargo/bin` to the `PATH` in `~/.zprofile`.
 
 Instructions on how to set Caps Lock to act as Control are [[https://support.apple.com/en-gb/guide/mac-help/mchlp1011/mac][here]]. Remember to do this for each machine and keyboard combination.
 
@@ -768,7 +771,7 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
 	(save-excursion
 	    (switch-to-buffer "*compilation*")))))
 
-  (add-hook 'compilation-mode-hook 'nrm/compilation-hook)
+  ;; (add-hook 'compilation-mode-hook 'nrm/compilation-hook)
   (add-hook 'compilation-mode-hook 'goto-address-mode)
 
   (setq compilation-scroll-output t)
@@ -799,7 +802,7 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
 
   (use-package eglot
     :init
-    (dolist (hook '(go-mode-hook python-mode-hook java-mode-hook))
+    (dolist (hook '(go-mode-hook python-mode-hook java-mode-hook rust-mode-hook))
       (add-hook hook 'eglot-ensure))
     :custom
     (eglot-autoshutdown t)
@@ -828,6 +831,24 @@ For this to work, add GOROOT and GOPATH to PATH in ~/.profile (or equivalent).
 
   ;; Configure goimports
   ;; (setq gofmt-command "<path to goimports, eg ~/bin/goimports>")
+
+#+end_src
+
+** Rust
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Rust
+  ;; _____________________________________________________________________________
+
+  (use-package rustic
+    :defer t
+    :custom
+    (rustic-lsp-client 'eglot)
+    (rustic-format-display-method 'ignore)
+    (rustic-format-trigger 'on-compile))
+
+  (use-package rust-playground)
 
 #+end_src
 
