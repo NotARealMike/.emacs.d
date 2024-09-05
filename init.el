@@ -310,7 +310,35 @@
   ("s-a" . org-agenda)
   :custom
   (org-ellipsis " ▾")
-  (org-todo-keywords '((sequence "SCOPE(s)" "BACKLOG(b)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
+  (org-todo-keywords '((sequence "TODO(t)" "PROG(p)" "|" "DONE(d)" "CANCELLED(c)")))
+  (org-tag-alist
+   '((:startgroup)
+     ("@low" . ?l) ("@medium" . ?m) ("@high" . ?h)
+     (:endgroup)
+     (:startgroup)
+     ("@planning" . ?p)
+     ("@research" . ?r)
+     ("@writing" . ?w)
+     ("@coding" . ?c)
+     ("@errand" . ?e)
+     ("@buy" . ?b)
+     (:endgroup)
+     (:startgroup)
+     ("@blocked" . ?z)
+     ("@waiting" . ?x)
+     (:endgroup)))
+  (org-agenda-custom-commands
+   '(("d" "Daily agenda"
+      ((agenda ""
+	       ((org-agenda-span 'day)
+		(org-deadline-warning-days 7)))
+       (todo "PROG" ((org-agenda-overriding-header "In progress")))
+       (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Urgent tasks")))))
+     ("p" "Planning"
+      ((tags-todo "+@planning" ((org-agenda-overriding-header "Planning tasks")))
+       (tags-todo "-@low-@medium-@high" ((org-agenda-overriding-header "Untagged tasks")))))
+     ("q" "Quick wins"
+      ((tags-todo "+@low-@buy")))))
   ;; Record the date but not the time of day when a todo item is done
   (org-log-done 'time)
   (org-log-done-with-time nil)
@@ -433,7 +461,7 @@
     (interactive)
     (org-roam-capture-
      :node (org-roam-node-create)
-     :templates '(("i" "Inbox" entry "* SCOPE %?\n%U\n%a"
+     :templates '(("i" "Inbox" entry "* TODO %?\n%U\n%a"
 		   :target (file+head "Inbox.org" "#+title: Inbox\n#+category: Inbox\n#+filetags: AgendaSource"))))))
 
 ;; _____________________________________________________________________________
@@ -469,36 +497,6 @@
 ;; Generate the refile target list when Emacs starts and also whenever a new Roam file is created (aprox)
 (nrm/generate-org-refile-targets)
 (add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-refile-targets)
-
-(setq org-agenda-custom-commands
-      '(("d" "Dashboard"
-	 ((agenda "" ((org-deadline-warning-days 7)))
-	  (todo "REVIEW"
-		((org-agenda-overriding-header "In Review")
-		 (org-agenda-files org-agenda-files)))
-	  (todo "TODO"
-		((org-agenda-overriding-header "Ready for Work")
-		 (org-agenda-files org-agenda-files)))
-	  (todo "SCOPE"
-		((org-agenda-overriding-header "In Scoping")
-		 (org-agenda-files org-agenda-files)))))
-
-	("w" "Workflow Status"
-	 ((todo "WAIT"
-		((org-agenda-overriding-header "Waiting")
-		 (org-agenda-files org-agenda-files)))
-	  (todo "REVIEW"
-		((org-agenda-overriding-header "In Review")
-		 (org-agenda-files org-agenda-files)))
-	  (todo "TODO"
-		((org-agenda-overriding-header "Ready for Work")
-		 (org-agenda-files org-agenda-files)))
-	  (todo "SCOPE"
-		((org-agenda-overriding-header "In Scoping")
-		 (org-agenda-files org-agenda-files)))
-	  (todo "BACKLOG"
-		((org-agenda-overriding-header "Project Backlog")
-		 (org-agenda-files org-agenda-files)))))))
 
 ;; _____________________________________________________________________________
 ;; Shell

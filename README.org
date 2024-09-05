@@ -440,16 +440,19 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
 
 ** org-mode and UI
 
-Configuration that I want to apply to every Org buffer by default.
+Configuration that I want to apply to every Org buffer by default, and my task tracking workflow.
 
-Actions can be in one of the following states, according to the GTD method:
-- SCOPE: I want to do something about this, but I haven't decided what. I need to spend some time figuring out what I need to do, if anything.
-- BACKLOG: I have identified there is something I want to do/process, but it isn't urgent. It is noted down for later.
-- TODO: I have something to do, and I know exactly what it is. This task is ready to be worked on, as soon as I decide to pick it up.
-- WAIT: This task is blocked on something, such as receiving an email response. I should check in every once in a while, but there is nothing I can currently do about it.
-- REVIEW: I have finished this task, and I should spend some time writing a mini-debrief about it with any notes I want to keep, as well as any next actions.
-- DONE: This task is done, reviewed, and archived somewhere.
-- CANCELLED: I decided not to do this task.
+My workflow has changed over the years:
+- It was originally based on the methodology from "Getting Things Done", by David Allen.
+- I decided to tag tasks after seeing the custom agenda commands in [[https://systemcrafters.net/org-mode-productivity/custom-org-agenda-views/][this post]] from System Crafters.
+- I decided to represent tasks that are blocked/waiting using tags instead of todo keywords after reading the comments in [[https://www.reddit.com/r/emacs/comments/twlmxy/open_ended_question_what_are_your_orgtodokeywords/][this Reddit post]].
+
+I organise my tasks as follows:
+- I use todo keywords to mark where in the workflow the task is: todo -> in progress -> done.
+- I tag every task with an effort level and the type of task it is.
+  - I also use tags to mark whether a task is blocked on something else I must do first, or waiting on someone else.
+- I use the built-in priority system to mark tasks that should be worked on soon, so they are more visible in my agenda views. Most tasks don't have an assigned priority.
+
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
@@ -462,7 +465,35 @@ Actions can be in one of the following states, according to the GTD method:
     ("s-a" . org-agenda)
     :custom
     (org-ellipsis " ▾")
-    (org-todo-keywords '((sequence "SCOPE(s)" "BACKLOG(b)" "TODO(t)" "WAIT(w)" "REVIEW(r)" "|" "DONE(d)" "CANCELLED(c)")))
+    (org-todo-keywords '((sequence "TODO(t)" "PROG(p)" "|" "DONE(d)" "CANCELLED(c)")))
+    (org-tag-alist
+     '((:startgroup)
+       ("@low" . ?l) ("@medium" . ?m) ("@high" . ?h)
+       (:endgroup)
+       (:startgroup)
+       ("@planning" . ?p)
+       ("@research" . ?r)
+       ("@writing" . ?w)
+       ("@coding" . ?c)
+       ("@errand" . ?e)
+       ("@buy" . ?b)
+       (:endgroup)
+       (:startgroup)
+       ("@blocked" . ?z)
+       ("@waiting" . ?x)
+       (:endgroup)))
+    (org-agenda-custom-commands
+     '(("d" "Daily agenda"
+	((agenda ""
+		 ((org-agenda-span 'day)
+		  (org-deadline-warning-days 7)))
+	 (todo "PROG" ((org-agenda-overriding-header "In progress")))
+	 (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Urgent tasks")))))
+       ("p" "Planning"
+	((tags-todo "+@planning" ((org-agenda-overriding-header "Planning tasks")))
+	 (tags-todo "-@low-@medium-@high" ((org-agenda-overriding-header "Untagged tasks")))))
+       ("q" "Quick wins"
+	((tags-todo "+@low-@buy")))))
     ;; Record the date but not the time of day when a todo item is done
     (org-log-done 'time)
     (org-log-done-with-time nil)
@@ -603,7 +634,7 @@ To make a header in a file into its own node, run `org-id-get-create`.
       (interactive)
       (org-roam-capture-
        :node (org-roam-node-create)
-       :templates '(("i" "Inbox" entry "* SCOPE %?\n%U\n%a"
+       :templates '(("i" "Inbox" entry "* TODO %?\n%U\n%a"
 		     :target (file+head "Inbox.org" "#+title: Inbox\n#+category: Inbox\n#+filetags: AgendaSource"))))))
 
 #+end_src
@@ -647,45 +678,6 @@ To make a header in a file into its own node, run `org-id-get-create`.
   ;; Generate the refile target list when Emacs starts and also whenever a new Roam file is created (aprox)
   (nrm/generate-org-refile-targets)
   (add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-refile-targets)
-
-#+end_src
-
-** Agenda configuration
-
-Create custom agenda commands to:
-- Show my schedule and next actions;
-- Show tasks organised by workflow status.
-
-#+begin_src emacs-lisp
-  (setq org-agenda-custom-commands
-	'(("d" "Dashboard"
-	   ((agenda "" ((org-deadline-warning-days 7)))
-	    (todo "REVIEW"
-		  ((org-agenda-overriding-header "In Review")
-		   (org-agenda-files org-agenda-files)))
-	    (todo "TODO"
-		  ((org-agenda-overriding-header "Ready for Work")
-		   (org-agenda-files org-agenda-files)))
-	    (todo "SCOPE"
-		  ((org-agenda-overriding-header "In Scoping")
-		   (org-agenda-files org-agenda-files)))))
-
-	  ("w" "Workflow Status"
-	   ((todo "WAIT"
-		  ((org-agenda-overriding-header "Waiting")
-		   (org-agenda-files org-agenda-files)))
-	    (todo "REVIEW"
-		  ((org-agenda-overriding-header "In Review")
-		   (org-agenda-files org-agenda-files)))
-	    (todo "TODO"
-		  ((org-agenda-overriding-header "Ready for Work")
-		   (org-agenda-files org-agenda-files)))
-	    (todo "SCOPE"
-		  ((org-agenda-overriding-header "In Scoping")
-		   (org-agenda-files org-agenda-files)))
-	    (todo "BACKLOG"
-		  ((org-agenda-overriding-header "Project Backlog")
-		   (org-agenda-files org-agenda-files)))))))
 
 #+end_src
 
