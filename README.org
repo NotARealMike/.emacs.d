@@ -548,31 +548,31 @@ To make a header in a file into its own node, run `org-id-get-create`.
 	   (default-header "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: "))
        `(("t" "Topic" plain
 	  "%?"
-	  :target (file+head ,default-file ,(concat default-header "Topic"))
+	  :target (file+head ,default-file ,(concat default-header ":Topic:"))
 	  :unnarrowed t)
 	 ("a" "Project" plain
 	  "* Goals\n%?\n* Actions\n"
-	  :target (file+head ,default-file ,(concat default-header "Project AgendaSource"))
+	  :target (file+head ,default-file ,(concat default-header ":Project:AgendaSource:"))
 	  :unnarrowed t)
 	 ("p" "Person" plain
 	  "%?"
-	  :target (file+head ,default-file ,(concat default-header "Person"))
+	  :target (file+head ,default-file ,(concat default-header ":Person:"))
 	  :unnarrowed t)
 	 ("b" "Book" plain
 	  "- Author: %?\n- Notes: \n\n* Summary\n\n* Chapters\n\n* Comments\n"
-	  :target (file+head ,default-file ,(concat default-header "Book"))
+	  :target (file+head ,default-file ,(concat default-header ":Book:"))
 	  :unnarrowed t)
 	 ("c" "Company" plain
 	  "- Website: %?\n- Tech stack: \n\n* Notes\n\n* Applications\n"
-	  :target (file+head ,default-file ,(concat default-header "Company AgendaSource"))
+	  :target (file+head ,default-file ,(concat default-header ":Company:"))
 	  :unnarrowed t)
 	 ("j" "Trip" plain
 	  "* Flights/travel\n\n* Accommodation\n\n* Comments\n"
-	  :target (file+head ,default-file ,(concat default-header "Trip AgendaSource"))
+	  :target (file+head ,default-file ,(concat default-header ":Trip:AgendaSource:"))
 	  :unnarrowed t)
 	 ("l" "Location" plain
 	  "* Comments\n%?\n* Visits\n\n* Ice cream\n\n* Restaurants\n\n* Points of interest\n"
-	  :target (file+head ,default-file ,(concat default-header "Location"))
+	  :target (file+head ,default-file ,(concat default-header ":Location:"))
 	  :unnarrowed t))))
     (org-roam-dailies-capture-templates
      (let ((default-file "%<%Y-%m-%d>.org")
