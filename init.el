@@ -348,7 +348,7 @@
   (org-agenda-mode . (lambda () (display-line-numbers-mode -1)))
   :config
   ;; Save all org buffers after refiling, to prevent entries being lost if Emacs crashes
-  (advice-add 'org-refile :after 'org-save-all-org-buffers))
+  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))))
 
 (use-package org-bullets
   :after org
