@@ -468,9 +468,6 @@
 ;; Org file structure
 ;; _____________________________________________________________________________
 
-(setq org-directory "~/gtd")
-(set-register ?g (cons 'file (concat org-directory "/actions.org")))
-
 (defun nrm/roam-list-files-with-tag (tag-name)
   (mapcar #'org-roam-node-file
 	  (seq-filter
@@ -479,8 +476,7 @@
 
 (defun nrm/generate-org-agenda-files ()
   (interactive)
-  (setq org-agenda-files (nrm/roam-list-files-with-tag "AgendaSource"))
-  (add-to-list 'org-agenda-files "actions.org"))
+  (setq org-agenda-files (nrm/roam-list-files-with-tag "AgendaSource")))
 
 ;; Generate the agenda file list when Emacs starts and also whenever a new Roam file is created (aprox)
 (nrm/generate-org-agenda-files)
@@ -491,8 +487,7 @@
   ;; Only this variable needs to be regenerated
   (setq roam-files (directory-files org-roam-directory t "org$"))
   (setq org-refile-targets
-	'((roam-files :maxlevel . 3)
-	  ("actions.org" :maxlevel . 3))))
+	'((roam-files :maxlevel . 3))))
 
 ;; Generate the refile target list when Emacs starts and also whenever a new Roam file is created (aprox)
 (nrm/generate-org-refile-targets)
