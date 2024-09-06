@@ -308,6 +308,7 @@
   :bind
   ("\C-cl" . org-store-link)
   ("s-a" . org-agenda)
+  ("s-c" . org-capture)
   :custom
   (org-ellipsis " ▾")
   (org-todo-keywords '((sequence "TODO(t)" "PROG(p)" "|" "DONE(d)" "CANCELLED(c)")))
@@ -387,8 +388,7 @@
   (org-roam-database-connector 'sqlite-builtin)
   (org-roam-directory "~/roam")
   (org-roam-node-display-template
-   (concat "${title:*} "
-	   (propertize "${tags:*}" 'face 'org-tag)))
+   (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
   (org-roam-capture-templates
    (let ((default-file "roam-${slug}.org")
 	 (default-header "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: "))
@@ -420,18 +420,9 @@
 	"* Comments\n%?\n* Visits\n\n* Ice cream\n\n* Restaurants\n\n* Points of interest\n"
 	:target (file+head ,default-file ,(concat default-header ":Location:"))
 	:unnarrowed t))))
-  (org-roam-dailies-capture-templates
-   (let ((default-file "%<%Y-%m-%d>.org")
-	 (default-header "#+title: %<%Y-%m-%d>\n\n* Tasks [/]\n\n* Notes\n"))
-     `(("t" "Task" checkitem ""
-	:target (file+head+olp ,default-file ,default-header ("Tasks")))
-       ("n" "Note" entry "** %?"
-	:target (file+head+olp ,default-file ,default-header ("Notes")))
-       ("d" "Direct" plain "%?"
-	:target (file+head ,default-file ,default-header)))))
   :bind (("s-r" . org-roam-node-find)
-	 ("s-g" . nil)
 	 ;; Go to the file directly, skipping the capture prompt
+	 ("s-g" . nil)
 	 ("s-g t" . (lambda () (interactive) (org-roam-dailies-goto-today "d")))
 	 ("s-g d" . (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
 	 :map org-mode-map
@@ -521,11 +512,6 @@
 	("w" "Work")
 	("wi" "Inbox" entry (file "~/roam/Workbox.org") "* TODO %?\n%U")
 	("wc" "Context" entry (file "~/roam/Workbox.org") "* TODO %?\n%U\n%a")))
-
-(global-set-key (kbd "s-c") nil)
-(global-set-key (kbd "s-c c") 'org-capture)
-(global-set-key (kbd "s-c t") 'org-roam-dailies-capture-today)
-(global-set-key (kbd "s-c d") 'org-roam-dailies-capture-date)
 
 ;; _____________________________________________________________________________
 ;; Shell
