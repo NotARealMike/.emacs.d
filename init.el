@@ -430,10 +430,6 @@
        ("d" "Direct" plain "%?"
 	:target (file+head ,default-file ,default-header)))))
   :bind (("s-r" . org-roam-node-find)
-	 ("s-c" . nil)
-	 ("s-c i" . nrm/roam-inbox-capture)
-	 ("s-c t" . org-roam-dailies-capture-today)
-	 ("s-c d" . org-roam-dailies-capture-date)
 	 ("s-g" . nil)
 	 ;; Go to the file directly, skipping the capture prompt
 	 ("s-g t" . (lambda () (interactive) (org-roam-dailies-goto-today "d")))
@@ -444,13 +440,7 @@
 	 ("s-n" . org-roam-dailies-goto-next-note)
 	 ("s-p" . org-roam-dailies-goto-previous-note))
   :config
-  (org-roam-db-autosync-enable)
-  (defun nrm/roam-inbox-capture ()
-    (interactive)
-    (org-roam-capture-
-     :node (org-roam-node-create)
-     :templates '(("i" "Inbox" entry "* TODO %?\n%U\n%a"
-		   :target (file+head "Inbox.org" "#+title: Inbox\n#+category: Inbox\n#+filetags: AgendaSource"))))))
+  (org-roam-db-autosync-enable))
 
 ;; _____________________________________________________________________________
 ;; Org file structure
@@ -466,6 +456,12 @@
 ;; Generate the refile target list when Emacs starts and also whenever a new Roam file is created (aprox)
 (nrm/generate-org-refile-targets)
 (add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-refile-targets)
+
+
+;; _____________________________________________________________________________
+;; Org agenda
+;; _____________________________________________________________________________
+
 
 (defun nrm/roam-list-files-with-tag (tag-name)
   (mapcar #'org-roam-node-file
@@ -508,6 +504,22 @@
 	("wq" "Quick wins"
 	 ((tags-todo "+@low-@buy"))
 	 ((org-agenda-files (nrm/roam-list-files-with-tag "Work"))))))
+
+;; _____________________________________________________________________________
+;; Org capture
+;; _____________________________________________________________________________
+
+(setq org-capture-templates
+      '(("i" "Inbox" entry (file "~/roam/Inbox.org") "* TODO %?\n%U")
+	("c" "Context" entry (file "~/roam/Inbox.org") "* TODO %?\n%U\n%a")
+	("w" "Work")
+	("wi" "Inbox" entry (file "~/roam/Workbox.org") "* TODO %?\n%U")
+	("wc" "Context" entry (file "~/roam/Workbox.org") "* TODO %?\n%U\n%a")))
+
+(global-set-key (kbd "s-c") nil)
+(global-set-key (kbd "s-c c") 'org-capture)
+(global-set-key (kbd "s-c t") 'org-roam-dailies-capture-today)
+(global-set-key (kbd "s-c d") 'org-roam-dailies-capture-date)
 
 ;; _____________________________________________________________________________
 ;; Shell
