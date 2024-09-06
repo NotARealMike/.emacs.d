@@ -490,6 +490,9 @@
 	("q" "Quick wins"
 	 ((tags-todo "+@low-@buy")))
 	("w" . "Work")
+	("wa" "Weekly review"
+	 ((agenda ""))
+	 ((org-agenda-files (nrm/roam-list-files-with-tag "Work"))))
 	("wd" "Daily agenda"
 	 ((agenda ""
 		  ((org-agenda-span 'day)
@@ -503,6 +506,9 @@
 	 ((org-agenda-files (nrm/roam-list-files-with-tag "Work"))))
 	("wq" "Quick wins"
 	 ((tags-todo "+@low-@buy"))
+	 ((org-agenda-files (nrm/roam-list-files-with-tag "Work"))))
+	("wt" "All TODOs"
+	 ((todo ""))
 	 ((org-agenda-files (nrm/roam-list-files-with-tag "Work"))))))
 
 ;; _____________________________________________________________________________
