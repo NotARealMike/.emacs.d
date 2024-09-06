@@ -327,18 +327,6 @@
      ("@blocked" . ?z)
      ("@waiting" . ?x)
      (:endgroup)))
-  (org-agenda-custom-commands
-   '(("d" "Daily agenda"
-      ((agenda ""
-	       ((org-agenda-span 'day)
-		(org-deadline-warning-days 7)))
-       (todo "PROG" ((org-agenda-overriding-header "In progress")))
-       (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Urgent tasks")))))
-     ("p" "Planning"
-      ((tags-todo "+@planning" ((org-agenda-overriding-header "Planning tasks")))
-       (tags-todo "-@low-@medium-@high" ((org-agenda-overriding-header "Untagged tasks")))))
-     ("q" "Quick wins"
-      ((tags-todo "+@low-@buy")))))
   ;; Record the date but not the time of day when a todo item is done
   (org-log-done 'time)
   (org-log-done-with-time nil)
@@ -468,6 +456,17 @@
 ;; Org file structure
 ;; _____________________________________________________________________________
 
+(defun nrm/generate-org-refile-targets ()
+  (interactive)
+  ;; Only this variable needs to be regenerated
+  (setq roam-files (directory-files org-roam-directory t "org$"))
+  (setq org-refile-targets
+	'((roam-files :maxlevel . 3))))
+
+;; Generate the refile target list when Emacs starts and also whenever a new Roam file is created (aprox)
+(nrm/generate-org-refile-targets)
+(add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-refile-targets)
+
 (defun nrm/roam-list-files-with-tag (tag-name)
   (mapcar #'org-roam-node-file
 	  (seq-filter
@@ -482,16 +481,33 @@
 (nrm/generate-org-agenda-files)
 (add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-agenda-files)
 
-(defun nrm/generate-org-refile-targets ()
-  (interactive)
-  ;; Only this variable needs to be regenerated
-  (setq roam-files (directory-files org-roam-directory t "org$"))
-  (setq org-refile-targets
-	'((roam-files :maxlevel . 3))))
-
-;; Generate the refile target list when Emacs starts and also whenever a new Roam file is created (aprox)
-(nrm/generate-org-refile-targets)
-(add-hook 'org-capture-after-finalize-hook #'nrm/generate-org-refile-targets)
+(setq org-agenda-custom-commands
+      '(("d" "Daily agenda"
+	 ((agenda ""
+		  ((org-agenda-span 'day)
+		   (org-deadline-warning-days 7)))
+	  (todo "PROG" ((org-agenda-overriding-header "In progress")))
+	  (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Urgent tasks")))))
+	("p" "Planning"
+	 ((tags-todo "+@planning" ((org-agenda-overriding-header "Planning tasks")))
+	  (tags-todo "-@low-@medium-@high" ((org-agenda-overriding-header "Untagged tasks")))))
+	("q" "Quick wins"
+	 ((tags-todo "+@low-@buy")))
+	("w" . "Work")
+	("wd" "Daily agenda"
+	 ((agenda ""
+		  ((org-agenda-span 'day)
+		   (org-deadline-warning-days 7)))
+	  (todo "PROG" ((org-agenda-overriding-header "In progress")))
+	  (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Urgent tasks"))))
+	 ((org-agenda-files (nrm/roam-list-files-with-tag "Work"))))
+	("wp" "Planning"
+	 ((tags-todo "+@planning" ((org-agenda-overriding-header "Planning tasks")))
+	  (tags-todo "-@low-@medium-@high" ((org-agenda-overriding-header "Untagged tasks"))))
+	 ((org-agenda-files (nrm/roam-list-files-with-tag "Work"))))
+	("wq" "Quick wins"
+	 ((tags-todo "+@low-@buy"))
+	 ((org-agenda-files (nrm/roam-list-files-with-tag "Work"))))))
 
 ;; _____________________________________________________________________________
 ;; Shell
