@@ -15,9 +15,10 @@ Before starting Emacs, install Homebrew (on MacOS), and use it to install:
 - `cmake` and `libtool`, to compile dependencies of vterm and Roam
 - `gopls`, which is an LSP for Go, and will install `go` as a dependency
 - `rust`, `rustfmt`, and `rust-analyzer`, the Rust language compiler, automatic formatter and LSP, respectively
+- `kotlin-language-server`; does what it says on the tin
 
 #+begin_src shell
-brew install ispell coreutils cmake libtool gopls rust rustfmt rust-analyzer
+brew install ispell coreutils cmake libtool gopls rust rustfmt rust-analyzer kotlin-language-server
 #+end_src
 
 To run binaries compiled from Rust, add `~/.cargo/bin` to the `PATH` in `~/.zprofile`.
@@ -794,7 +795,7 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
 
   (use-package eglot
     :init
-    (dolist (hook '(go-mode-hook python-mode-hook java-mode-hook rust-mode-hook))
+    (dolist (hook '(go-mode-hook java-mode-hook kotlin-mode-hook python-mode-hook rust-mode-hook))
       (add-hook hook 'eglot-ensure))
     :custom
     (eglot-autoshutdown t)
@@ -810,7 +811,7 @@ For this to work, add GOROOT and GOPATH to PATH in ~/.profile (or equivalent).
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
-  ;; go-mode
+  ;; Go
   ;; _____________________________________________________________________________
 
   (use-package go-mode
@@ -823,6 +824,17 @@ For this to work, add GOROOT and GOPATH to PATH in ~/.profile (or equivalent).
 
   ;; Configure goimports
   ;; (setq gofmt-command "<path to goimports, eg ~/bin/goimports>")
+
+#+end_src
+
+** Kotlin
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Kotlin
+  ;; _____________________________________________________________________________
+
+  (use-package kotlin-mode)
 
 #+end_src
 

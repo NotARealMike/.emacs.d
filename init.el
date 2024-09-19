@@ -576,14 +576,14 @@
 
 (use-package eglot
   :init
-  (dolist (hook '(go-mode-hook python-mode-hook java-mode-hook rust-mode-hook))
+  (dolist (hook '(go-mode-hook java-mode-hook kotlin-mode-hook python-mode-hook rust-mode-hook))
     (add-hook hook 'eglot-ensure))
   :custom
   (eglot-autoshutdown t)
   (eglot-sync-connect nil))
 
 ;; _____________________________________________________________________________
-;; go-mode
+;; Go
 ;; _____________________________________________________________________________
 
 (use-package go-mode
@@ -596,6 +596,12 @@
 
 ;; Configure goimports
 ;; (setq gofmt-command "<path to goimports, eg ~/bin/goimports>")
+
+;; _____________________________________________________________________________
+;; Kotlin
+;; _____________________________________________________________________________
+
+(use-package kotlin-mode)
 
 ;; _____________________________________________________________________________
 ;; Rust
