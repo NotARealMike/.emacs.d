@@ -333,6 +333,8 @@
       ((agenda "" ((org-agenda-span 'day)))
        (todo "PROG" ((org-agenda-overriding-header "In progress")))
        (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Urgent tasks")))))
+     ("n" "Non-blocked"
+      ((tags-todo "-@blocked")))
      ("p" "Planning"
       ((tags-todo "+@planning" ((org-agenda-overriding-header "Planning tasks")))
        (tags-todo "-@low-@medium-@high" ((org-agenda-overriding-header "Untagged tasks")))))
