@@ -108,9 +108,7 @@
   (doom-modeline-buffer-encoding nil)
   (doom-modeline-minor-modes t))
 
-(use-package golden-ratio
-  :config
-  (golden-ratio-mode 1))
+(use-package golden-ratio)
 
 ;; _____________________________________________________________________________
 ;; Writing
