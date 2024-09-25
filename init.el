@@ -326,6 +326,32 @@
      ("@blocked" . ?z)
      ("@waiting" . ?x)
      (:endgroup)))
+  ;; Record the date but not the time of day when a todo item is done
+  (org-log-done 'time)
+  (org-log-done-with-time nil)
+  (org-log-into-drawer t)
+  ;; Allow items to be refiled to the top level in a file, rather than under another headline
+  (org-refile-use-outline-path 'file)
+  ;; Show file and headline paths in the refile completion buffer
+  (org-outline-path-complete-in-steps nil)
+  ;; Refile targets to the top of files and headlines, rather than the end
+  (org-reverse-note-order t)
+  :config
+  ;; Save all org buffers after refiling, to prevent entries being lost if Emacs crashes
+  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))))
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+(use-package org-agenda
+  :ensure org
+  :bind
+  (:map org-agenda-mode-map
+	("<return>" . nrm/org-agenda-switch-and-narrow))
+  :custom
   (org-agenda-custom-commands
    '(("d" "Daily agenda"
       ((agenda "" ((org-agenda-span 'day)))
@@ -338,16 +364,6 @@
        (tags-todo "-@low-@medium-@high" ((org-agenda-overriding-header "Untagged tasks")))))
      ("q" "Quick wins"
       ((tags-todo "+@low-@buy")))))
-  ;; Record the date but not the time of day when a todo item is done
-  (org-log-done 'time)
-  (org-log-done-with-time nil)
-  (org-log-into-drawer t)
-  ;; Allow items to be refiled to the top level in a file, rather than under another headline
-  (org-refile-use-outline-path 'file)
-  ;; Show file and headline paths in the refile completion buffer
-  (org-outline-path-complete-in-steps nil)
-  ;; Refile targets to the top of files and headlines, rather than the end
-  (org-reverse-note-order t)
   ;; Display done items with their completion date
   (org-agenda-start-with-log-mode t)
   (org-agenda-log-mode-items '(closed clock state))
@@ -357,14 +373,10 @@
   :hook
   (org-agenda-mode . (lambda () (display-line-numbers-mode -1)))
   :config
-  ;; Save all org buffers after refiling, to prevent entries being lost if Emacs crashes
-  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))))
-
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  (defun nrm/org-agenda-switch-and-narrow ()
+    (interactive)
+    (org-agenda-switch-to)
+    (org-narrow-to-subtree)))
 
 ;; _____________________________________________________________________________
 ;; Babel
