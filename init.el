@@ -402,12 +402,9 @@
 ;; Roam
 ;; _____________________________________________________________________________
 
-(use-package emacsql-sqlite-builtin)
-
 (use-package org-roam
   :demand
   :custom
-  (org-roam-database-connector 'sqlite-builtin)
   (org-roam-directory "~/roam")
   (org-roam-node-display-template
    (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
