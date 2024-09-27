@@ -558,13 +558,11 @@
 ;; Compilation
 ;; _____________________________________________________________________________
 
-(defun nrm/compilation-hook ()
-  (when (not (get-buffer-window "*compilation*"))
-    (save-selected-window
-      (save-excursion
-	  (switch-to-buffer "*compilation*")))))
+(defun nrm/switch-to-compilation-buffer-hook (buffer status)
+  (switch-to-buffer buffer)
+  (delete-other-windows))
 
-;; (add-hook 'compilation-mode-hook 'nrm/compilation-hook)
+(add-hook 'compilation-finish-functions 'nrm/switch-to-compilation-buffer-hook)
 (add-hook 'compilation-mode-hook 'goto-address-mode)
 
 (setq compilation-scroll-output t)
