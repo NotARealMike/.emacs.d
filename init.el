@@ -114,6 +114,34 @@
 
 (use-package golden-ratio)
 
+(use-package olivetti
+  :custom
+  (olivetti-body-width 0.7)
+  (olivetti-minimum-body width 80))
+
+(use-package logos
+  :hook (logos-focus-mode . nrm/present-funs)
+  :custom
+  (logos-outlines-are-pages t)
+  :config
+  (setq-default logos-hide-cursor t
+		logos-hide-mode-line t
+		logos-hide-buffer-boundaries t
+		logos-hide-fringe t
+		logos-variable-pitch nil
+		logos-buffer-read-only t
+		logos-olivetti t)
+  (defun nrm/present-funs ()
+    (visual-fill-column-mode 0)
+    (display-line-numbers-mode 0))
+  :bind
+  ("C-x n n" . logos-narrow-dwim)
+  ("C-x ]" . logos-forward-page-dwim)
+  ("C-x [" . logos-backward-page-dwim)
+  (:map logos-focus-mode-map
+	("<right>" . logos-forward-page-dwim)
+	("<left>" . logos-backward-page-dwim)))
+
 ;; _____________________________________________________________________________
 ;; Writing
 ;; _____________________________________________________________________________
