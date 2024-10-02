@@ -110,8 +110,7 @@
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
   :custom
-  (doom-modeline-buffer-encoding nil)
-  (doom-modeline-minor-modes t))
+  (doom-modeline-buffer-encoding nil))
 
 (use-package golden-ratio)
 
