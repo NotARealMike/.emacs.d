@@ -48,7 +48,6 @@ git clone git@github.com:beancount/beancount-mode.git
 
   (switch-to-buffer "*Messages*")
   (message "Started loading config at %s" (format-time-string "%T"))
-
 #+end_src
 
 * Package management
@@ -75,7 +74,6 @@ git clone git@github.com:beancount/beancount-mode.git
 
   (require 'use-package)
   (setq use-package-always-ensure t)
-
 #+end_src
 
 * Shortcuts
@@ -84,7 +82,7 @@ Settings and key bindings that make common actions faster.
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
-  ;; Global configuration
+  ;; Shortcuts
   ;; _____________________________________________________________________________
 
   ;; Make it easier to access emacs config
@@ -106,12 +104,13 @@ Settings and key bindings that make common actions faster.
 
   ;; On MacOS, make the right option key not act as meta, to let me type characters that need option
   (setq ns-right-alternate-modifier 'none)
-
 #+end_src
 
 * Appearance
 
 Make Emacs look fabulous :sparkles:
+
+** Vanilla Emacs config
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
@@ -120,6 +119,21 @@ Make Emacs look fabulous :sparkles:
 
   (setq ring-bell-function 'ignore)
 
+  (tool-bar-mode -1)
+  (column-number-mode)
+  (global-display-line-numbers-mode)
+  (global-visual-line-mode)
+
+  (add-to-list 'default-frame-alist '(alpha . (95 . 80)))
+  (add-to-list 'default-frame-alist '(fullscreen . fullheight))
+  (add-to-list 'default-frame-alist '(width . 160))
+#+end_src
+
+** Themes and fonts
+
+I spent more time than I'd like to admit tinkering with these.
+
+#+begin_src emacs-lisp
   (use-package ef-themes
     :config
     (load-theme 'ef-duo-dark t))
@@ -132,16 +146,13 @@ Make Emacs look fabulous :sparkles:
 	:default-height 135)))
     :config
     (fontaine-set-preset 'regular))
+#+end_src
 
-  (tool-bar-mode -1)
-  (column-number-mode)
-  (global-display-line-numbers-mode)
-  (global-visual-line-mode)
+** Wrapping
 
-  (add-to-list 'default-frame-alist '(alpha . (95 . 80)))
-  (add-to-list 'default-frame-alist '(fullscreen . fullheight))
-  (add-to-list 'default-frame-alist '(width . 160))
+Make buffers easier to read by visually wrapping lines early – without actually changing the contents.
 
+#+begin_src emacs-lisp
   (use-package visual-fill-column
     :hook (org-mode . visual-fill-column-mode)
     :custom
@@ -154,8 +165,13 @@ Make Emacs look fabulous :sparkles:
   ;; When wrapping, respect the paragraph indentation
   (use-package adaptive-wrap
     :hook (visual-fill-column-mode . adaptive-wrap-prefix-mode))
+#+end_src
 
-  ;; Icons that can be used by several packages
+** Icons
+
+Icons that make several modes prettier, but don't change functionality.
+
+#+begin_src emacs-lisp
   (use-package nerd-icons)
 
   (use-package nerd-icons-dired
@@ -169,14 +185,43 @@ Make Emacs look fabulous :sparkles:
     (nerd-icons-completion-mode))
 
   (use-package nerd-icons-corfu)
+#+end_src
 
+** Extras
+
+The Doom modeline displays some useful information without much configuration.
+
+Having Nyan cat tell me where I am in the buffer ensures I don't miss "more modern IDEs".
+
+Golden ratio is sometimes useful to resize windows when quickly switching between them – but I find it annoying as a default on a wide screen.
+
+#+begin_src emacs-lisp
   (use-package doom-modeline
     :init (doom-modeline-mode 1)
     :custom
     (doom-modeline-buffer-encoding nil))
 
-  (use-package golden-ratio)
+  (use-package nyan-mode
+    :config (nyan-mode 1))
 
+  (use-package golden-ratio)
+#+end_src
+
+** Presentations
+
+Olivetti is used to centre a buffer's contents in a window.
+
+Logos does two things:
+- makes it easier to navigate files according to a logical outline structure; and
+- provides a "focus mode" that strips down a lot of the UI.
+
+Combining the two is a simple way of presenting the contents of a buffer.
+
+Olivetti doesn't play well with `visual-fill-column-mode`, so I disable it automatically when I go into the focus mode. Technically I should disable it when going into `olivetti` instead, but I never use `olivetti` on its own, so I'm happy with this for now.
+
+Doing a presentation messes up a bunch of the minor modes I use, so the simpler way to get out of it is to run the `revert-buffer` command.
+
+#+begin_src emacs-lisp
   (use-package olivetti
     :custom
     (olivetti-body-width 0.7)
@@ -220,19 +265,6 @@ Utilities for writing in natural languages.
   (setq ispell-program-name "/opt/homebrew/bin/ispell")
   (dolist (hook '(text-mode-hook))
     (add-hook hook (lambda () (flyspell-mode 1))))
-
-#+end_src
-
-* Silly things
-
-Everything else in this configuration serves a purpose. The packages in this section are just for fun. They'll be the first to be sacrificed when Emacs inevitable devours all my memory.
-
-#+begin_src emacs-lisp
-  (use-package nyan-mode
-    :config (nyan-mode 1))
-
-  (use-package dad-joke)
-
 #+end_src
 
 * Completion
@@ -306,7 +338,6 @@ A set of complementary packages that provide minibuffer completion. I saw this s
 	  ("C-c C-e" . embark-export)))
 
   (use-package embark-consult)
-
 #+end_src
 
 ** Completion at point
@@ -333,7 +364,6 @@ Text completion for source code and natural language.
     :config
     ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
     (add-to-list 'completion-at-point-functions #'cape-file))
-
 #+end_src
 
 ** which-key
@@ -345,7 +375,6 @@ When typing a key bind prefix, WK mode expands the minibuffer to display command
     :config
     (which-key-mode)
     (setq which-key-idle-delay 0.5))
-
 #+end_src
 
 * Built-in mode improvements
@@ -376,12 +405,11 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
   (use-package wdired
     :custom
     (wdired-use-dired-vertical-movement t))
-
 #+end_src
 
 ** IBuffer
 
-- Replace `list-buffers` the more powerful built-in `ibuffer`.
+- Replace `list-buffers` with the more powerful built-in `ibuffer`.
 - Group buffers by type, and make it easier to collapse groups.
 
 #+begin_src emacs-lisp
@@ -419,7 +447,6 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
     (("C-x C-b" . ibuffer)
      :map ibuffer-mode-map
      ("<tab>" . nrm/ibuffer-toggle-current-group)))
-
 #+end_src
 
 ** Ediff
@@ -435,7 +462,6 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
     (ediff-make-buffers-readonly-at-startup t)
     (ediff-split-window-function 'split-window-horizontally)
     (ediff-window-setup-function 'ediff-setup-windows-plain))
-
 #+end_src
 
 ** wgrep
@@ -448,7 +474,6 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
   ;; _____________________________________________________________________________
 
   (use-package wgrep)
-
 #+end_src
 
 * Magit
@@ -463,7 +488,6 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
     (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
     (magit-diff-refine-hunk 'all)
     :bind ("C-x g" . magit-status))
-
 #+end_src
 
 * Org
@@ -532,7 +556,6 @@ I organise my tasks as follows:
     :hook (org-mode . org-bullets-mode)
     :custom
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
-
 #+end_src
 
 ** Org agenda
@@ -599,7 +622,6 @@ How meta!
     :config
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
     (add-to-list 'org-structure-template-alist '("sh" . "src shell")))
-
 #+end_src
 
 ** Roam
@@ -723,7 +745,6 @@ To make a header in a file into its own node, run `org-id-get-create`.
 	  ("w" "Work")
 	  ("wi" "Inbox" entry (file "~/roam/Workbox.org") "* TODO %?\n%U")
 	  ("wc" "Context" entry (file "~/roam/Workbox.org") "* TODO %?\n%U\n%a")))
-
 #+end_src
 
 * Shell
@@ -792,7 +813,6 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
     (set-face-foreground 'rainbow-delimiters-depth-7-face "#4363d8")
     (set-face-foreground 'rainbow-delimiters-depth-8-face "#911eb4")
     (set-face-foreground 'rainbow-delimiters-depth-9-face "#f032e6"))
-
 #+end_src
 
 ** Compilation
@@ -810,7 +830,6 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
   (add-hook 'compilation-mode-hook 'goto-address-mode)
 
   (setq compilation-scroll-output t)
-
 #+end_src
 
 ** Flymake
@@ -825,7 +844,6 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
     (:map flymake-mode-map
 	   ("M-n" . flymake-goto-next-error)
 	   ("M-p" . flymake-goto-prev-error)))
-
 #+end_src
 
 ** Eglot
@@ -866,7 +884,6 @@ For this to work, add GOROOT and GOPATH to PATH in ~/.profile (or equivalent).
 
   ;; Configure goimports
   ;; (setq gofmt-command "<path to goimports, eg ~/bin/goimports>")
-
 #+end_src
 
 ** Kotlin
@@ -877,7 +894,6 @@ For this to work, add GOROOT and GOPATH to PATH in ~/.profile (or equivalent).
   ;; _____________________________________________________________________________
 
   (use-package kotlin-mode)
-
 #+end_src
 
 ** Rust
@@ -895,7 +911,6 @@ For this to work, add GOROOT and GOPATH to PATH in ~/.profile (or equivalent).
     (rustic-format-trigger 'on-compile))
 
   (use-package rust-playground)
-
 #+end_src
 
 * File formats
@@ -912,7 +927,6 @@ Toggle `csv-align-mode` to display columns aligned, without changing the underly
     (use-package csv-mode
       :mode ("\\.csv\\'" . csv-mode)
       :custom (csv-invisibility-default nil))
-
 #+end_src
 
 * Beancount
@@ -941,7 +955,6 @@ Follow the instructions in my beans repo to install all the needed Python packag
       (call-process-region (point-min) (point-max) "bean-format" t (current-buffer))
       (goto-line line-no)
       (recenter)))
-
 #+end_src
 
 * Local config
@@ -956,7 +969,6 @@ Load configuration that is specific to the local machine. For example, functions
   (let ((local-config "~/local-config.el"))
    (when (file-exists-p local-config)
      (load-file local-config)))
-
 #+end_src
 
 * End

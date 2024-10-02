@@ -28,7 +28,7 @@
 (setq use-package-always-ensure t)
 
 ;; _____________________________________________________________________________
-;; Global configuration
+;; Shortcuts
 ;; _____________________________________________________________________________
 
 ;; Make it easier to access emacs config
@@ -57,6 +57,15 @@
 
 (setq ring-bell-function 'ignore)
 
+(tool-bar-mode -1)
+(column-number-mode)
+(global-display-line-numbers-mode)
+(global-visual-line-mode)
+
+(add-to-list 'default-frame-alist '(alpha . (95 . 80)))
+(add-to-list 'default-frame-alist '(fullscreen . fullheight))
+(add-to-list 'default-frame-alist '(width . 160))
+
 (use-package ef-themes
   :config
   (load-theme 'ef-duo-dark t))
@@ -69,15 +78,6 @@
       :default-height 135)))
   :config
   (fontaine-set-preset 'regular))
-
-(tool-bar-mode -1)
-(column-number-mode)
-(global-display-line-numbers-mode)
-(global-visual-line-mode)
-
-(add-to-list 'default-frame-alist '(alpha . (95 . 80)))
-(add-to-list 'default-frame-alist '(fullscreen . fullheight))
-(add-to-list 'default-frame-alist '(width . 160))
 
 (use-package visual-fill-column
   :hook (org-mode . visual-fill-column-mode)
@@ -92,7 +92,6 @@
 (use-package adaptive-wrap
   :hook (visual-fill-column-mode . adaptive-wrap-prefix-mode))
 
-;; Icons that can be used by several packages
 (use-package nerd-icons)
 
 (use-package nerd-icons-dired
@@ -111,6 +110,9 @@
   :init (doom-modeline-mode 1)
   :custom
   (doom-modeline-buffer-encoding nil))
+
+(use-package nyan-mode
+  :config (nyan-mode 1))
 
 (use-package golden-ratio)
 
@@ -151,11 +153,6 @@
 (setq ispell-program-name "/opt/homebrew/bin/ispell")
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda () (flyspell-mode 1))))
-
-(use-package nyan-mode
-  :config (nyan-mode 1))
-
-(use-package dad-joke)
 
 ;; _____________________________________________________________________________
 ;; Completion
