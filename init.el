@@ -184,9 +184,15 @@
 (use-package consult
   :custom
   (consult-line-start-from-top t)
+  :config
+  (defun nrm/consult-grep-dwim ()
+    (interactive)
+    (if (vc-root-dir)
+	(consult-git-grep)
+      (consult-grep)))
   :bind (;; Prefix mnemonic: "alt search"
 	 ;; Recursive grep
-	 ("M-s M-g" . consult-grep)
+	 ("M-s M-g" . nrm/consult-grep-dwim)
 	 ;; Search for file names recursively
 	 ("M-s M-f" . consult-find)
 	 ;; Search through the outline (headings) of the buffer
