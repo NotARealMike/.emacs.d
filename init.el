@@ -507,10 +507,10 @@
 ;; _____________________________________________________________________________
 
 (defun nrm/roam-list-files-with-tag (tag-name)
-  (mapcar #'org-roam-node-file
-	  (seq-filter
-	   (lambda (elt) (member tag-name (org-roam-node-tags elt)))
-	   (org-roam-node-list))))
+  (delete-dups (mapcar #'org-roam-node-file
+		       (seq-filter
+			(lambda (elt) (member tag-name (org-roam-node-tags elt)))
+			(org-roam-node-list)))))
 
 (setq nrm/org-agenda-generating-tag "AgendaSource")
 
