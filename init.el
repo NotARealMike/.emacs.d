@@ -651,6 +651,8 @@
 
 (use-package rustic
   :defer t
+  :hook
+  (rustic-mode . (lambda () (setq-local compile-command "cargo check && cargo fmt && cargo test && cargo clippy")))
   :custom
   (rustic-lsp-client 'eglot)
   (rustic-format-display-method 'ignore)
