@@ -187,7 +187,8 @@
   :config
   (defun nrm/consult-grep-dwim ()
     (interactive)
-    (if (vc-root-dir)
+    (if (or (vc-root-dir)
+	    (derived-mode-p 'magit-section-mode))
 	(consult-git-grep)
       (consult-grep)))
   :bind (;; Prefix mnemonic: "alt search"
