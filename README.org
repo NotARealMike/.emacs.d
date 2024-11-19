@@ -14,11 +14,11 @@ Before starting Emacs, install Homebrew (on MacOS), and use it to install:
 - `coreutils`, for the `gls` CLI command, which is an alternative to `ls` that can be used by dired
 - `cmake` and `libtool`, to compile dependencies of vterm and Roam
 - `gopls`, which is an LSP for Go, and will install `go` as a dependency
-- `rust`, `rustfmt`, and `rust-analyzer`, the Rust language compiler, automatic formatter and LSP, respectively
+- `rust`and `rust-analyzer`, the Rust language toolchain and LSP, respectively
 - `kotlin-language-server`; does what it says on the tin
 
 #+begin_src shell
-brew install ispell coreutils cmake libtool gopls rust rustfmt rust-analyzer kotlin-language-server
+brew install ispell coreutils cmake libtool gopls rust rust-analyzer kotlin-language-server
 #+end_src
 
 To run binaries compiled from Rust, add `~/.cargo/bin` to the `PATH` in `~/.zprofile`.
