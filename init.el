@@ -442,6 +442,7 @@
   :demand
   :custom
   (org-roam-directory "~/roam")
+  (org-roam-dailies-directory "daily-work")
   (org-roam-node-display-template
    (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
   (org-roam-capture-templates
