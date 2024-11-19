@@ -653,7 +653,7 @@
 (use-package rustic
   :defer t
   :hook
-  (rustic-mode . (lambda () (setq-local compile-command "cargo check && cargo fmt && cargo test && cargo clippy")))
+  (rustic-mode . (lambda () (setq-local compile-command "echo Formatting... && cargo fmt -- --config imports_granularity=\"Crate\" && echo Linting... && cargo clippy --benches --tests --all-features -- -D warnings && echo Testing... && cargo test")))
   :custom
   (rustic-lsp-client 'eglot)
   (rustic-format-display-method 'ignore)
