@@ -32,3 +32,4 @@ var
 history
 recentf
 tramp
+org-persist
