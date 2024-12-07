@@ -162,9 +162,6 @@ Make buffers easier to read by visually wrapping lines early – without actuall
     :config
     (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
 
-  ;; When wrapping, respect the paragraph indentation
-  (use-package adaptive-wrap
-    :hook (visual-fill-column-mode . adaptive-wrap-prefix-mode))
 #+end_src
 
 ** Icons
@@ -525,8 +522,10 @@ I organise my tasks as follows:
     ("\C-cl" . org-store-link)
     ("s-a" . org-agenda)
     ("s-c" . org-capture)
+    :hook (org-mode . org-indent-mode)
     :custom
     (org-ellipsis " ▾")
+    (org-startup-folded 'content)
     (org-todo-keywords '((sequence "TODO(t)" "PROG(p)" "|" "DONE(d)" "CANCELLED(c)")))
     (org-tag-alist
      '((:startgroup)

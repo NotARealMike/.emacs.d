@@ -88,10 +88,6 @@
   :config
   (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
 
-;; When wrapping, respect the paragraph indentation
-(use-package adaptive-wrap
-  :hook (visual-fill-column-mode . adaptive-wrap-prefix-mode))
-
 (use-package nerd-icons)
 
 (use-package nerd-icons-dired
@@ -343,8 +339,10 @@
   ("\C-cl" . org-store-link)
   ("s-a" . org-agenda)
   ("s-c" . org-capture)
+  :hook (org-mode . org-indent-mode)
   :custom
   (org-ellipsis " ▾")
+  (org-startup-folded 'content)
   (org-todo-keywords '((sequence "TODO(t)" "PROG(p)" "|" "DONE(d)" "CANCELLED(c)")))
   (org-tag-alist
    '((:startgroup)
