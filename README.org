@@ -396,9 +396,13 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
     ;; dired is not a -package.el package, so don't attempt to install it.
     :ensure nil
     :hook (dired-mode . dired-omit-mode)
+    :bind
+    (:map dired-mode-map
+          ("b" . dired-up-directory))
     :custom
+    (insert-directory-program "gls")
     (dired-listing-switches "-lah --group-directories-first")
-    (insert-directory-program "gls"))
+    (dired-kill-when-opening-new-dired-buffer t))
 
   (use-package dired-x
     ;; Also not a proper -package.el.
