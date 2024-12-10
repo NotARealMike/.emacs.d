@@ -51,6 +51,9 @@
 ;; On MacOS, make the right option key not act as meta, to let me type characters that need option
 (setq ns-right-alternate-modifier 'none)
 
+;; Tweak recentering to be more comfortable
+(setq recenter-positions '(middle 0.1 0.9))
+
 ;; _____________________________________________________________________________
 ;; Appearance
 ;; _____________________________________________________________________________
