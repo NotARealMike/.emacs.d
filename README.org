@@ -754,11 +754,11 @@ To make a header in a file into its own node, run `org-id-get-create`.
   ;; _____________________________________________________________________________
 
   (setq org-capture-templates
-	'(("i" "Inbox" entry (file "~/roam/Inbox.org") "* TODO %?\n%U")
-	  ("c" "Context" entry (file "~/roam/Inbox.org") "* TODO %?\n%U\n%a")
+	'(("i" "Inbox" entry (file "~/roam/Inbox.org") "* TODO %?\n%U" :empty-lines 1)
+	  ("c" "Context" entry (file "~/roam/Inbox.org") "* TODO %?\n%U\n%a" :empty-lines 1)
 	  ("w" "Work")
-	  ("wi" "Inbox" entry (file "~/roam/Workbox.org") "* TODO %?\n%U")
-	  ("wc" "Context" entry (file "~/roam/Workbox.org") "* TODO %?\n%U\n%a")))
+	  ("wi" "Inbox" entry (file "~/roam/Workbox.org") "* TODO %?\n%U" :empty-lines 1)
+	  ("wc" "Context" entry (file "~/roam/Workbox.org") "* TODO %?\n%U\n%a" :empty-lines 1)))
 #+end_src
 
 * Shell
