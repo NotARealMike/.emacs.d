@@ -554,6 +554,8 @@ I organise my tasks as follows:
     (org-log-done 'time)
     (org-log-done-with-time nil)
     (org-log-into-drawer t)
+    ;; Always add blank lines before inserted headings, never before list items
+    (org-blank-before-new-entry '((heading . t) (plain-list-item . nil)))
     ;; Allow items to be refiled to the top level in a file, rather than under another headline
     (org-refile-use-outline-path 'file)
     ;; Show file and headline paths in the refile completion buffer
