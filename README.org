@@ -10,26 +10,26 @@ My very own Emacs configuration. Inspired by [[https://github.com/daviwil/emacs-
 This configuration is designed to bootstrap itself, but there are a few dependencies that need to be installed first.
 
 Before starting Emacs, install Homebrew (on MacOS), and use it to install:
-- `ispell`, for spell checking
-- `coreutils`, for the `gls` CLI command, which is an alternative to `ls` that can be used by dired
-- `cmake` and `libtool`, to compile dependencies of vterm and Roam
-- `gopls`, which is an LSP for Go, and will install `go` as a dependency
-- `rust`and `rust-analyzer`, the Rust language toolchain and LSP, respectively
-- `kotlin-language-server`; does what it says on the tin
+- ~ispell~, for spell checking
+- ~coreutils~, for the ~gls~ CLI command, which is an alternative to ~ls~ that can be used by dired
+- ~cmake~ and ~libtool~, to compile dependencies of vterm and Roam
+- ~gopls~, which is an LSP for Go, and will install ~go~ as a dependency
+- ~rust~ and ~rust-analyzer~, the Rust language toolchain and LSP, respectively
+- ~kotlin-language-server~; does what it says on the tin
 
 #+begin_src shell
 brew install ispell coreutils cmake libtool gopls rust rust-analyzer kotlin-language-server
 #+end_src
 
-To run binaries compiled from Rust, add `~/.cargo/bin` to the `PATH` in `~/.zprofile`.
+To run binaries compiled from Rust, add ~~/.cargo/bin~ to the ~PATH~ in ~~/.zprofile~.
 
 Instructions on how to set Caps Lock to act as Control are [[https://support.apple.com/en-gb/guide/mac-help/mchlp1011/mac][here]]. Remember to do this for each machine and keyboard combination.
 
-Run `M-x nerd-icons-install-fonts` to download and install icons used by the `nerd-icons` package.
+Run ~M-x nerd-icons-install-fonts~ to download and install icons used by the ~nerd-icons~ package.
 
-The `multi-vterm` package seems to cause problems when bootstrapping the configuration. I'm not sure why, but manually deleting and reinstalling the package (through `list-packages`) seems to fix it.
+The ~multi-vterm~ package seems to cause problems when bootstrapping the configuration. I'm not sure why, but manually deleting and reinstalling the package (through ~list-packages~) seems to fix it.
 
-Beancount mode isn't available through ELPA/MELPA, so it must be cloned from Github. To make it accessible to use-package, run `M-x package-install-file ~/beancount-mode/beancount.el`.
+Beancount mode isn't available through ELPA/MELPA, so it must be cloned from Github. To make it accessible to use-package, run ~M-x package-install-file ~/beancount-mode/beancount.el~.
 
 #+begin_src shell
 git clone git@github.com:beancount/beancount-mode.git
@@ -217,9 +217,9 @@ Logos does two things:
 
 Combining the two is a simple way of presenting the contents of a buffer.
 
-Olivetti doesn't play well with `visual-fill-column-mode`, so I disable it automatically when I go into the focus mode. Technically I should disable it when going into `olivetti` instead, but I never use `olivetti` on its own, so I'm happy with this for now.
+Olivetti doesn't play well with ~visual-fill-column-mode~, so I disable it automatically when I go into the focus mode. Technically I should disable it when going into ~olivetti~ instead, but I never use ~olivetti~ on its own, so I'm happy with this for now.
 
-Doing a presentation messes up a bunch of the minor modes I use, so the simpler way to get out of it is to run the `revert-buffer` command.
+Doing a presentation messes up a bunch of the minor modes I use, so the simpler way to get out of it is to run the ~revert-buffer~ command.
 
 #+begin_src emacs-lisp
   (use-package olivetti
@@ -420,7 +420,7 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
 
 ** IBuffer
 
-- Replace `list-buffers` with the more powerful built-in `ibuffer`.
+- Replace ~list-buffers~ with the more powerful built-in ~ibuffer~.
 - Group buffers by type, and make it easier to collapse groups.
 
 #+begin_src emacs-lisp
@@ -615,7 +615,7 @@ How meta!
 
 - Automatically tangle this file on save to generate init.el.
 - Don't ask for permission to run code in org babel.
-- `org-tempo` enables expanding snippets into structures, such as code blocks for specific languages.
+- ~org-tempo~ enables expanding snippets into structures, such as code blocks for specific languages.
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
@@ -641,7 +641,7 @@ How meta!
 
 ** Roam
 
-To make a header in a file into its own node, run `org-id-get-create`.
+To make a header in a file into its own node, run ~org-id-get-create~.
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
@@ -703,7 +703,7 @@ To make a header in a file into its own node, run `org-id-get-create`.
 ** File structure
 
 - Define refiling targets as all Roam files.
-- Generate default `org-agenda-files` based on the Roam files with a specific tag:
+- Generate default ~org-agenda-files~ based on the Roam files with a specific tag:
   - 'AgendaSource' for personal files.
   - 'Work' for work files.
 
@@ -769,7 +769,7 @@ To make a header in a file into its own node, run `org-id-get-create`.
 
 I choose to use [[https://github.com/akermu/emacs-libvterm/][vterm]] because it is fast, compatible with my usual terminal setup, and it supports interactive commands.
 
-The command `M-x multi-vterm` lets me easily create multiple terminals.
+The command ~M-x multi-vterm~ lets me easily create multiple terminals.
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
@@ -947,7 +947,7 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
 
 ** CSV
 
-Toggle `csv-align-mode` to display columns aligned, without changing the underlying file.
+Toggle ~csv-align-mode~ to display columns aligned, without changing the underlying file.
 
 #+begin_src emacs-lisp
     (use-package csv-mode
