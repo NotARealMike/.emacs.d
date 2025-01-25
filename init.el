@@ -651,7 +651,9 @@
 ;; _____________________________________________________________________________
 
 (use-package kotlin-mode
-  :hook (kotlin-mode . (lambda () (setq-local compile-command "./gradlew build"))))
+  :hook (kotlin-mode . (lambda ()
+                         (setq-local compile-command "./gradlew build")
+                         (indent-tabs-mode -1))))
 
 ;; _____________________________________________________________________________
 ;; Rust
