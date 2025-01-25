@@ -19,10 +19,10 @@
 (package-initialize)
 
 (unless package-archive-contents
- (package-refresh-contents))
+  (package-refresh-contents))
 
 (unless (package-installed-p 'use-package)
-   (package-install 'use-package))
+  (package-install 'use-package))
 
 (require 'use-package)
 (setq use-package-always-ensure t)
@@ -126,12 +126,12 @@
   (logos-outlines-are-pages t)
   :config
   (setq-default logos-hide-cursor t
-		logos-hide-mode-line t
-		logos-hide-buffer-boundaries t
-		logos-hide-fringe t
-		logos-variable-pitch nil
-		logos-buffer-read-only t
-		logos-olivetti t)
+                logos-hide-mode-line t
+                logos-hide-buffer-boundaries t
+                logos-hide-fringe t
+                logos-variable-pitch nil
+                logos-buffer-read-only t
+                logos-olivetti t)
   (defun nrm/present-funs ()
     (visual-fill-column-mode 0)
     (display-line-numbers-mode 0))
@@ -140,8 +140,8 @@
   ("C-x ]" . logos-forward-page-dwim)
   ("C-x [" . logos-backward-page-dwim)
   (:map logos-focus-mode-map
-	("<right>" . logos-forward-page-dwim)
-	("<left>" . logos-backward-page-dwim)))
+        ("<right>" . logos-forward-page-dwim)
+        ("<left>" . logos-backward-page-dwim)))
 
 ;; _____________________________________________________________________________
 ;; Writing
@@ -187,27 +187,27 @@
   (defun nrm/consult-grep-dwim ()
     (interactive)
     (if (or (vc-root-dir)
-	    (derived-mode-p 'magit-section-mode))
-	(consult-git-grep)
+            (derived-mode-p 'magit-section-mode))
+        (consult-git-grep)
       (consult-grep)))
   :bind (;; Prefix mnemonic: "alt search"
-	 ;; Recursive grep
-	 ("M-s M-g" . nrm/consult-grep-dwim)
-	 ;; Search for file names recursively
-	 ("M-s M-f" . consult-find)
-	 ;; Search through the outline (headings) of the buffer
-	 ("M-s M-o" . consult-outline)
-	 ;; Search through the imenu items of the buffer
-	 ("M-s M-i" . consult-imenu)
-	 ;; Search the current buffer
-	 ("C-s" . consult-line)
-	 ;; Switch to another buffer, bookmark, or recently opened file
-	 ;; Filters: b buffers; SPC hidden buffers; * modified buffers; f recent files; r registers; m bookmarks
-	 ("C-x b" . consult-buffer)
-	 ;; Interactively select item to yank from kill-ring
-	 ("C-M-y" . consult-yank-from-kill-ring)
-	 ;; Goto position at line:column
-	 ("s-l" . consult-goto-line)))
+         ;; Recursive grep
+         ("M-s M-g" . nrm/consult-grep-dwim)
+         ;; Search for file names recursively
+         ("M-s M-f" . consult-find)
+         ;; Search through the outline (headings) of the buffer
+         ("M-s M-o" . consult-outline)
+         ;; Search through the imenu items of the buffer
+         ("M-s M-i" . consult-imenu)
+         ;; Search the current buffer
+         ("C-s" . consult-line)
+         ;; Switch to another buffer, bookmark, or recently opened file
+         ;; Filters: b buffers; SPC hidden buffers; * modified buffers; f recent files; r registers; m bookmarks
+         ("C-x b" . consult-buffer)
+         ;; Interactively select item to yank from kill-ring
+         ("C-M-y" . consult-yank-from-kill-ring)
+         ;; Goto position at line:column
+         ("s-l" . consult-goto-line)))
 
 ;; Enable recent files as a virtual buffer source for consult-buffer
 (recentf-mode 1)
@@ -218,10 +218,10 @@
   ("C-." . embark-act)
   ("s-." . embark-dwim)
   (:map minibuffer-local-map
-	;; Retains minibuffer behaviour
-	("C-c C-c" . embark-collect)
-	;; Exports contents to a buffer in an appropriate major mode
-	("C-c C-e" . embark-export)))
+        ;; Retains minibuffer behaviour
+        ("C-c C-c" . embark-collect)
+        ;; Exports contents to a buffer in an appropriate major mode
+        ("C-c C-e" . embark-export)))
 
 (use-package embark-consult)
 
@@ -286,17 +286,17 @@
   (ibuffer-default-sorting-mode 'filename/process)
   (ibuffer-saved-filter-groups
    (quote (("default"
-	    ("Side effects" (or
-			     (derived-mode . helpful-mode)
-			     (and
-			      (name . "^\\*")
-			      (size-lt . 1))))
-	    ("Dired" (mode . dired-mode))
-	    ("Org" (mode . org-mode))
-	    ("Source code" (or
-			    (derived-mode . prog-mode)
-			    (derived-mode . protobuf-mode)))
-	    ("Version control" (derived-mode . magit-section-mode))))))
+            ("Side effects" (or
+                             (derived-mode . helpful-mode)
+                             (and
+                              (name . "^\\*")
+                              (size-lt . 1))))
+            ("Dired" (mode . dired-mode))
+            ("Org" (mode . org-mode))
+            ("Source code" (or
+                            (derived-mode . prog-mode)
+                            (derived-mode . protobuf-mode)))
+            ("Version control" (derived-mode . magit-section-mode))))))
   :hook
   (ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "default")))
   :config
@@ -393,7 +393,7 @@
   :ensure org
   :bind
   (:map org-agenda-mode-map
-	("<return>" . nrm/org-agenda-switch-and-narrow))
+        ("<return>" . nrm/org-agenda-switch-and-narrow))
   :custom
   (org-agenda-custom-commands
    '(("d" "Daily agenda"
@@ -428,7 +428,7 @@
 ;; Automatically tangle the README.org file on save
 (defun nrm/org-babel-tangle-config ()
   (when (string-equal (buffer-file-name)
-		      (expand-file-name "~/.emacs.d/README.org"))
+                      (expand-file-name "~/.emacs.d/README.org"))
     (org-babel-tangle)))
 
 (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'nrm/org-babel-tangle-config)))
@@ -454,45 +454,45 @@
    (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
   (org-roam-capture-templates
    (let ((default-file "roam-${slug}.org")
-	 (default-header "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: "))
+         (default-header "#+title: ${title}\n#+category: ${title}\n#+date: %U\n#+filetags: "))
      `(("t" "Topic" plain
-	"%?"
-	:target (file+head ,default-file ,(concat default-header ":Topic:"))
-	:unnarrowed t)
+        "%?"
+        :target (file+head ,default-file ,(concat default-header ":Topic:"))
+        :unnarrowed t)
        ("a" "Project" plain
-	"* Goals\n%?\n* Actions\n"
-	:target (file+head ,default-file ,(concat default-header ":Project:AgendaSource:"))
-	:unnarrowed t)
+        "* Goals\n%?\n* Actions\n"
+        :target (file+head ,default-file ,(concat default-header ":Project:AgendaSource:"))
+        :unnarrowed t)
        ("p" "Person" plain
-	"%?"
-	:target (file+head ,default-file ,(concat default-header ":Person:"))
-	:unnarrowed t)
+        "%?"
+        :target (file+head ,default-file ,(concat default-header ":Person:"))
+        :unnarrowed t)
        ("b" "Book" plain
-	"- Author: %?\n- Notes: \n\n* Summary\n\n* Chapters\n\n* Comments\n"
-	:target (file+head ,default-file ,(concat default-header ":Book:"))
-	:unnarrowed t)
+        "- Author: %?\n- Notes: \n\n* Summary\n\n* Chapters\n\n* Comments\n"
+        :target (file+head ,default-file ,(concat default-header ":Book:"))
+        :unnarrowed t)
        ("c" "Company" plain
-	"- Website: %?\n- Tech stack: \n\n* Notes\n\n* Applications\n"
-	:target (file+head ,default-file ,(concat default-header ":Company:"))
-	:unnarrowed t)
+        "- Website: %?\n- Tech stack: \n\n* Notes\n\n* Applications\n"
+        :target (file+head ,default-file ,(concat default-header ":Company:"))
+        :unnarrowed t)
        ("j" "Trip" plain
-	"* Flights/travel\n\n* Accommodation\n\n* Comments\n"
-	:target (file+head ,default-file ,(concat default-header ":Trip:AgendaSource:"))
-	:unnarrowed t)
+        "* Flights/travel\n\n* Accommodation\n\n* Comments\n"
+        :target (file+head ,default-file ,(concat default-header ":Trip:AgendaSource:"))
+        :unnarrowed t)
        ("l" "Location" plain
-	"* Comments\n%?\n* Visits\n\n* Ice cream\n\n* Restaurants\n\n* Points of interest\n"
-	:target (file+head ,default-file ,(concat default-header ":Location:"))
-	:unnarrowed t))))
+        "* Comments\n%?\n* Visits\n\n* Ice cream\n\n* Restaurants\n\n* Points of interest\n"
+        :target (file+head ,default-file ,(concat default-header ":Location:"))
+        :unnarrowed t))))
   :bind (("s-r" . org-roam-node-find)
-	 ;; Go to the file directly, skipping the capture prompt
-	 ("s-g" . nil)
-	 ("s-g t" . (lambda () (interactive) (org-roam-dailies-goto-today "d")))
-	 ("s-g d" . (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
-	 :map org-mode-map
-	 ("C-c i" . org-roam-node-insert)
-	 ("C-c b" . org-roam-buffer-toggle)
-	 ("s-n" . org-roam-dailies-goto-next-note)
-	 ("s-p" . org-roam-dailies-goto-previous-note))
+         ;; Go to the file directly, skipping the capture prompt
+         ("s-g" . nil)
+         ("s-g t" . (lambda () (interactive) (org-roam-dailies-goto-today "d")))
+         ("s-g d" . (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
+         :map org-mode-map
+         ("C-c i" . org-roam-node-insert)
+         ("C-c b" . org-roam-buffer-toggle)
+         ("s-n" . org-roam-dailies-goto-next-note)
+         ("s-p" . org-roam-dailies-goto-previous-note))
   :config
   (org-roam-db-autosync-enable))
 
@@ -505,7 +505,7 @@
   ;; Only this variable needs to be regenerated
   (setq roam-files (directory-files org-roam-directory t "org$"))
   (setq org-refile-targets
-	'((roam-files :maxlevel . 3))))
+        '((roam-files :maxlevel . 3))))
 
 ;; Generate the refile target list when Emacs starts and also whenever a new Roam file is created (aprox)
 (nrm/generate-org-refile-targets)
@@ -517,9 +517,9 @@
 
 (defun nrm/roam-list-files-with-tag (tag-name)
   (delete-dups (mapcar #'org-roam-node-file
-		       (seq-filter
-			(lambda (elt) (member tag-name (org-roam-node-tags elt)))
-			(org-roam-node-list)))))
+                       (seq-filter
+                        (lambda (elt) (member tag-name (org-roam-node-tags elt)))
+                        (org-roam-node-list)))))
 
 (setq nrm/org-agenda-generating-tag "AgendaSource")
 
@@ -545,10 +545,10 @@
 
 (setq org-capture-templates
       '(("i" "Inbox" entry (file "~/roam/Inbox.org") "* TODO %?\n%U" :empty-lines 1)
-	("c" "Context" entry (file "~/roam/Inbox.org") "* TODO %?\n%U\n%a" :empty-lines 1)
-	("w" "Work")
-	("wi" "Inbox" entry (file "~/roam/Workbox.org") "* TODO %?\n%U" :empty-lines 1)
-	("wc" "Context" entry (file "~/roam/Workbox.org") "* TODO %?\n%U\n%a" :empty-lines 1)))
+        ("c" "Context" entry (file "~/roam/Inbox.org") "* TODO %?\n%U\n%a" :empty-lines 1)
+        ("w" "Work")
+        ("wi" "Inbox" entry (file "~/roam/Workbox.org") "* TODO %?\n%U" :empty-lines 1)
+        ("wc" "Context" entry (file "~/roam/Workbox.org") "* TODO %?\n%U\n%a" :empty-lines 1)))
 
 ;; _____________________________________________________________________________
 ;; Shell
@@ -575,7 +575,7 @@
   (tramp-use-ssh-controlmaster-options nil)
   :config
   (add-to-list 'tramp-connection-properties
-	       (list "/ssh:" "direct-async-process" t)))
+               (list "/ssh:" "direct-async-process" t)))
 
 ;; _____________________________________________________________________________
 ;; Rainbow delimiters
@@ -615,8 +615,8 @@
 (use-package flymake
   :bind
   (:map flymake-mode-map
-	 ("M-n" . flymake-goto-next-error)
-	 ("M-p" . flymake-goto-prev-error)))
+        ("M-n" . flymake-goto-next-error)
+        ("M-p" . flymake-goto-prev-error)))
 
 ;; _____________________________________________________________________________
 ;; Eglot
@@ -701,8 +701,8 @@
   (add-hook 'beancount-mode-hook #'outline-minor-mode)
   :bind
   (:map beancount-mode-map
-	("C-n" . outline-next-visible-heading)
-	("C-p" . outline-previous-visible-heading)))
+        ("C-n" . outline-next-visible-heading)
+        ("C-p" . outline-previous-visible-heading)))
 
 ;; Copied from beancount-mode/etc/emacsrc
 (defun beancount-format-file ()
@@ -717,8 +717,8 @@
 ;; ___________________________________________________________________________
 
 (let ((local-config "~/local-config.el"))
- (when (file-exists-p local-config)
-   (load-file local-config)))
+  (when (file-exists-p local-config)
+    (load-file local-config)))
 
 ;; _____________________________________________________________________________
 ;; Finish loading config
@@ -728,7 +728,7 @@
 
 (message "Finished loading config at %s" (format-time-string "%T"))
 (message "Emacs loaded in %s with %d garbage collections."
-	 (format "%.2f seconds"
-		 (float-time
-		  (time-subtract after-init-time before-init-time)))
-	 gcs-done)
+         (format "%.2f seconds"
+                 (float-time
+                  (time-subtract after-init-time before-init-time)))
+         gcs-done)
