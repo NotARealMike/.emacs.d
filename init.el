@@ -680,12 +680,15 @@
 (use-package rust-playground)
 
 ;; _____________________________________________________________________________
-;; csv-mode
+;; File formats
 ;; _____________________________________________________________________________
 
 (use-package csv-mode
   :mode ("\\.csv\\'" . csv-mode)
   :custom (csv-invisibility-default nil))
+
+(use-package json-mode
+  :custom (js-indent-level 2))
 
 ;; ___________________________________________________________________________
 ;; Beancount

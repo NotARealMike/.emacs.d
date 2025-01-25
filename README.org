@@ -939,19 +939,29 @@ The command `M-x multi-vterm` lets me easily create multiple terminals.
 
 * File formats
 
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; File formats
+  ;; _____________________________________________________________________________
+#+end_src
+
 ** CSV
 
 Toggle `csv-align-mode` to display columns aligned, without changing the underlying file.
 
 #+begin_src emacs-lisp
-    ;; _____________________________________________________________________________
-    ;; csv-mode
-    ;; _____________________________________________________________________________
-
     (use-package csv-mode
       :mode ("\\.csv\\'" . csv-mode)
       :custom (csv-invisibility-default nil))
 #+end_src
+
+** JSON
+
+#+begin_src emacs-lisp
+  (use-package json-mode
+    :custom (js-indent-level 2))
+#+end_src
+
 
 * Beancount
 
