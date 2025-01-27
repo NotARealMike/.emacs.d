@@ -639,12 +639,14 @@
   :mode ("\\.go\\'" . go-mode)
   :hook (go-mode . (lambda ()
                      (setq-local compilation-read-command nil)
-                     (setq-local compile-command "echo Formating...
-  && go fmt
-  && echo Building...
-  && go build -v
-  && echo Testing...
-  && go test -v")))
+                     (setq-local compile-command
+                                 (concat
+                                  "echo Formating..."
+                                  "&& go fmt "
+                                  "&& echo Building... "
+                                  "&& go build -v "
+                                  "&& echo Testing... "
+                                  "&& go test -v "))))
   :init
   (add-hook 'before-save-hook 'gofmt-before-save))
 
@@ -666,12 +668,14 @@
   :hook
   (rustic-mode . (lambda ()
                    (setq-local compilation-read-command nil)
-                   (setq-local compile-command "echo Formatting...
-  && cargo fmt -- --config imports_granularity=\"Crate\"
-  && echo Linting...
-  && cargo clippy --benches --tests --all-features -- -D warnings
-  && echo Testing...
-  && cargo test")))
+                   (setq-local compile-command
+                               (concat
+                                "echo Formatting... "
+                                "&& cargo fmt -- --config imports_granularity=\"Crate\" "
+                                "&& echo Linting... "
+                                "&& cargo clippy --benches --tests --all-features -- -D warnings "
+                                "&& echo Testing... "
+                                "&& cargo test "))))
   :custom
   (rustic-lsp-client 'eglot)
   (rustic-format-display-method 'ignore)
