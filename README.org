@@ -583,8 +583,8 @@ I organise my tasks as follows:
           ("<return>" . nrm/org-agenda-switch-and-narrow))
     :custom
     (org-agenda-custom-commands
-     '(("d" "Daily agenda"
-        ((agenda "" ((org-agenda-span 'day)))
+     '(("d" "Dashboard"
+        ((agenda "" ((org-agenda-span 'week)))
          (todo "PROG" ((org-agenda-overriding-header "In progress")))
          (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Urgent tasks")))))
        ("n" "Non-blocked"
