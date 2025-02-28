@@ -284,22 +284,28 @@
   :ensure nil
   :custom
   (ibuffer-default-sorting-mode 'filename/process)
+  (ibuffer-show-empty-filter-groups nil)
   (ibuffer-saved-filter-groups
-   (quote (("default"
-            ("Side effects" (or
-                             (derived-mode . helpful-mode)
-                             (and
-                              (name . "^\\*")
-                              (size-lt . 1))))
-            ("Dired" (mode . dired-mode))
-            ("Org" (mode . org-mode))
-            ("Source code" (or
-                            (derived-mode . prog-mode)
-                            (derived-mode . protobuf-mode)))
-            ("Version control" (derived-mode . magit-section-mode))))))
+   (list
+    (cons "Projects" (nrm/ibuffer-project-filter-groups))
+    '("Types"
+      ("Dired" (mode . dired-mode))
+      ("Org" (mode . org-mode))
+      ("Version control" (derived-mode . magit-section-mode))
+      ("Source code" (derived-mode . prog-mode)))))
   :hook
-  (ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "default")))
+  (ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "Projects")))
   :config
+  (defun nrm/ibuffer-project-filter-groups ()
+    (project--read-project-list)
+    (mapcar (lambda (project)
+              (let ((root-dir (car project))
+                    (name (file-name-nondirectory (directory-file-name (car project)))))
+                ;; Some modes list their default-directory as relative paths, others as absolute paths
+                `(,name (or
+                         (directory . ,root-dir)
+                         (directory . ,(expand-file-name root-dir))))))
+            project--list))
   (defun nrm/ibuffer-toggle-current-group()
     (interactive)
     (ibuffer-forward-filter-group)
