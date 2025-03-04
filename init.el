@@ -421,6 +421,7 @@
   (org-agenda-todo-list-sublevels nil)
   :hook
   (org-agenda-mode . (lambda () (display-line-numbers-mode -1)))
+  (org-agenda-mode . hl-line-mode)
   :config
   (defun nrm/org-agenda-switch-and-narrow ()
     (interactive)
