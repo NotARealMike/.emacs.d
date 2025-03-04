@@ -637,6 +637,7 @@
   (dolist (hook '(go-mode-hook java-mode-hook kotlin-mode-hook python-mode-hook rust-mode-hook))
     (add-hook hook 'eglot-ensure))
   :custom
+  (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
   (eglot-sync-connect nil))
 
