@@ -708,6 +708,8 @@ To make a header in a file into its own node, run ~org-id-get-create~.
            ("s-n" . org-roam-dailies-goto-next-note)
            ("s-p" . org-roam-dailies-goto-previous-note))
     :config
+    (unless (file-exists-p org-roam-directory)
+      (make-directory org-roam-directory))
     (org-roam-db-autosync-enable))
 #+end_src
 

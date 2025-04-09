@@ -504,6 +504,8 @@
          ("s-n" . org-roam-dailies-goto-next-note)
          ("s-p" . org-roam-dailies-goto-previous-note))
   :config
+  (unless (file-exists-p org-roam-directory)
+    (make-directory org-roam-directory))
   (org-roam-db-autosync-enable))
 
 ;; _____________________________________________________________________________
