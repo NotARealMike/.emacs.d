@@ -419,6 +419,8 @@
   (org-agenda-window-setup "current-window")
   ;; If an entry has a TODO label, don't check its children
   (org-agenda-todo-list-sublevels nil)
+  ;; By default, tasks have the lowest possible priority
+  (org-priority-default org-priority-lowest)
   :hook
   (org-agenda-mode . (lambda () (display-line-numbers-mode -1)))
   (org-agenda-mode . hl-line-mode)
