@@ -458,10 +458,11 @@
   :demand
   :custom
   (org-roam-directory "~/roam")
-  (org-roam-dailies-directory "daily-work")
+  (org-roam-dailies-directory "daily")
   (org-roam-dailies-capture-templates
    '(("d" "default" entry "* %?" :target
-     (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n#+STARTUP: showeverything\n"))))
+      (file+head "%<%Y-%m-%d>.org"
+                 "#+title: %<%Y-%m-%d>\n#+STARTUP: showeverything\n\n* Tasks [/]\n\n- [ ]"))))
   (org-roam-node-display-template
    (concat "${title:*} " (propertize "${tags:*}" 'face 'org-tag)))
   (org-roam-capture-templates
