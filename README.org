@@ -591,9 +591,9 @@ I organise my tasks as follows:
     :custom
     (org-agenda-custom-commands
      '(("d" "Dashboard"
-        ((agenda "" ((org-agenda-span 'week)))
-         (todo "PROG" ((org-agenda-overriding-header "In progress")))
-         (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Urgent tasks")))))
+        ((todo "PROG" ((org-agenda-overriding-header "In progress")))
+         (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Urgent tasks")))
+         (agenda "" ((org-agenda-span 'week)))))
        ("r" "Ready"
         ((tags-todo "-@blocked-@waiting")))
        ("f" "Follow-up"
