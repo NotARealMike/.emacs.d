@@ -238,10 +238,16 @@
   (corfu-preview-current nil)
   (corfu-popupinfo-delay (cons 1.0 0.1)))
 
+(use-package text-mode
+  :ensure nil
+  :custom
+  ;; Recent versions of text-mode automatically add an ispell capf
+  ;; This annoys me to no end so I disable it here
+  (text-mode-ispell-word-completion nil))
+
 ;; Extra capfs
 (use-package cape
   :config
-  ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file))
 
 (use-package which-key
