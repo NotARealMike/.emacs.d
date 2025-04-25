@@ -412,16 +412,17 @@
       ((todo "PROG" ((org-agenda-overriding-header "In progress")))
        (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Urgent tasks")))
        (agenda "" ((org-agenda-span 'week)))))
-     ("r" "Ready"
-      ((tags-todo "-@blocked-@waiting")))
-     ("f" "Follow-up"
-      ((tags-todo "+@waiting" ((org-agenda-overriding-header "Waiting")))
-       (tags-todo "+@blocked" ((org-agenda-overriding-header "Blocked")))))
      ("p" "Planning"
-      ((tags-todo "+@planning" ((org-agenda-overriding-header "Planning tasks")))
-       (tags-todo "-@low-@medium-@high" ((org-agenda-overriding-header "Untagged tasks")))))
+      ((tags-todo "-@low-@medium-@high" ((org-agenda-overriding-header "Inbox: Untagged tasks")))
+       (tags-todo "+@waiting" ((org-agenda-overriding-header "Waiting for someone")))
+       (tags-todo "+@blocked" ((org-agenda-overriding-header "Blocked on another task")))
+       (tags-todo "+@planning" ((org-agenda-overriding-header "Planning tasks")))
+       (todo "PROG" ((org-agenda-overriding-header "In progress")))
+       (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Current priorities")))
+       (tags-todo "-TODO=\"PROG\"+PRIORITY=\"B\"" ((org-agenda-overriding-header "Next up")))
+       (tags-todo "-TODO=\"PROG\"-PRIORITY=\"A\"-PRIORITY=\"B\"-@waiting-@blocked" ((org-agenda-overriding-header "Everything else")))))
      ("q" "Quick wins"
-      ((tags-todo "+@low-@buy")))))
+      ((tags-todo "+@low-@buy-@waiting-@blocked")))))
   ;; Display done items with their completion date
   (org-agenda-start-with-log-mode t)
   (org-agenda-log-mode-items '(closed clock state))
