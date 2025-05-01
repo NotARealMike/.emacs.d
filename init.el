@@ -724,8 +724,7 @@
 ;; Beancount
 ;; ___________________________________________________________________________
 
-(use-package beancount-mode
-  :ensure nil
+(use-package beancount
   :mode ("\\.beancount\\'" . beancount-mode)
   :init
   (add-hook 'beancount-mode-hook #'outline-minor-mode)

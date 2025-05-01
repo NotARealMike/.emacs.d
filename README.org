@@ -29,12 +29,6 @@ Run ~M-x nerd-icons-install-fonts~ to download and install icons used by the ~ne
 
 The ~multi-vterm~ package seems to cause problems when bootstrapping the configuration. I'm not sure why, but manually deleting and reinstalling the package (through ~list-packages~) seems to fix it.
 
-Beancount mode isn't available through ELPA/MELPA, so it must be cloned from Github. To make it accessible to use-package, run ~M-x package-install-file ~/beancount-mode/beancount.el~.
-
-#+begin_src shell
-git clone git@github.com:beancount/beancount-mode.git
-#+end_src
-
 * Start
 
 #+begin_src emacs-lisp
@@ -1003,8 +997,7 @@ Follow the instructions in my beans repo to install all the needed Python packag
   ;; Beancount
   ;; ___________________________________________________________________________
 
-  (use-package beancount-mode
-    :ensure nil
+  (use-package beancount
     :mode ("\\.beancount\\'" . beancount-mode)
     :init
     (add-hook 'beancount-mode-hook #'outline-minor-mode)
