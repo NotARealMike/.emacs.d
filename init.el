@@ -697,7 +697,7 @@
                    (setq-local compile-command
                                (concat
                                 "echo Formatting... "
-                                "&& cargo fmt -- --config imports_granularity=\"Crate\" "
+                                "&& cargo fmt"
                                 "&& echo Linting... "
                                 "&& cargo clippy --benches --tests --all-features -- -D warnings "
                                 "&& echo Testing... "
