@@ -510,21 +510,12 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
 
 * Org
 
-** org-mode and UI
+How meta!
 
-Configuration that I want to apply to every Org buffer by default, and my task tracking workflow.
-
-My workflow has changed over the years:
-- It was originally based on the methodology from "Getting Things Done", by David Allen.
-- I decided to tag tasks after seeing the custom agenda commands in [[https://systemcrafters.net/org-mode-productivity/custom-org-agenda-views/][this post]] from System Crafters.
-- I decided to represent tasks that are blocked/waiting using tags instead of todo keywords after reading the comments in [[https://www.reddit.com/r/emacs/comments/twlmxy/open_ended_question_what_are_your_orgtodokeywords/][this Reddit post]].
-
-I organise my tasks as follows:
-- I use todo keywords to mark where in the workflow the task is: todo -> in progress -> done.
-- I tag every task with an effort level and the type of task it is.
-  - I also use tags to mark whether a task is blocked on something else I must do first, or waiting on someone else.
-- I use the built-in priority system to mark tasks that should be worked on soon, so they are more visible in my agenda views. Most tasks don't have an assigned priority.
-
+- Make org files look better.
+- Automatically tangle this file on save to generate init.el.
+- Don't ask for permission to run code in org babel.
+- ~org-tempo~ enables expanding snippets into structures, such as code blocks for specific languages.
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
@@ -534,51 +525,88 @@ I organise my tasks as follows:
   (use-package org
     :bind
     ("\C-cl" . org-store-link)
-    ("s-a" . org-agenda)
-    ("s-c" . org-capture)
     :hook (org-mode . org-indent-mode)
     :custom
     (org-ellipsis " ▾")
     (org-startup-folded 'content)
-    (org-todo-keywords '((sequence "TODO(t)" "PROG(p)" "|" "DONE(d)" "CANCELLED(c)")))
-    (org-tag-alist
-     '((:startgroup)
-       ("@low" . ?l) ("@medium" . ?m) ("@high" . ?h)
-       (:endgroup)
-       (:startgroup)
-       ("@planning" . ?p)
-       ("@research" . ?r)
-       ("@writing" . ?w)
-       ("@coding" . ?c)
-       ("@errand" . ?e)
-       ("@buy" . ?b)
-       (:endgroup)
-       (:startgroup)
-       ("@blocked" . ?z)
-       ("@waiting" . ?x)
-       (:endgroup)))
-    ;; Record the date but not the time of day when a todo item is done
-    (org-log-done 'time)
-    (org-log-done-with-time nil)
-    (org-log-into-drawer t)
     ;; Always add blank lines before inserted headings, never before list items
     (org-blank-before-new-entry '((heading . t) (plain-list-item . nil)))
     ;; Allow items to be refiled to the top level in a file, rather than under another headline
     (org-refile-use-outline-path 'file)
-    ;; Show file and headline paths in the refile completion buffer
+    ;; Show full file and headline paths in the refile completion buffer
     (org-outline-path-complete-in-steps nil)
     ;; Refile targets to the top of files and headlines, rather than the end
     (org-reverse-note-order t)
+    (org-confirm-babel-evaluate nil)
     :config
     ;; Save all org buffers after refiling, to prevent entries being lost if Emacs crashes
-    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))))
+    (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+    ;; Automatically tangle the literate Emacs config file on save
+    (defun nrm/org-babel-tangle-config ()
+      (when (string-equal (buffer-file-name)
+                          (expand-file-name "~/.emacs.d/README.org"))
+        (org-babel-tangle)))
+    (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'nrm/org-babel-tangle-config))))
 
   (use-package org-bullets
     :after org
     :hook (org-mode . org-bullets-mode)
     :custom
     (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+  (use-package org-tempo
+    :ensure nil
+    :config
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("sh" . "src shell")))
+
 #+end_src
+
+* Task tracking
+
+** Workflow
+
+My workflow has changed over the years:
+- It was originally based on the methodology from "Getting Things Done", by David Allen.
+- I decided to tag tasks after seeing the custom agenda commands in [[https://systemcrafters.net/org-mode-productivity/custom-org-agenda-views/][this post]] from System Crafters.
+- I decided to represent tasks that are blocked/waiting using tags instead of todo keywords after reading the comments in [[https://www.reddit.com/r/emacs/comments/twlmxy/open_ended_question_what_are_your_orgtodokeywords/][this Reddit post]].
+
+I organise my tasks as follows:
+- I use todo keywords to mark where in the workflow the task is: todo -> in progress -> done/cancelled.
+- I tag every task with an effort level and the type of task it is.
+  - I also use tags to mark whether a task is blocked on something else I must do first, or waiting on someone else.
+- I use the built-in priority system to mark tasks that should be worked on soon, so they are more visible in my agenda views. Most tasks don't have an assigned priority.
+
+  #+begin_src emacs-lisp
+    (use-package org
+      :bind
+      ("s-a" . org-agenda)
+      ("s-c" . org-capture)
+      :custom
+      (org-todo-keywords '((sequence "TODO(t)" "PROG(p)" "|" "DONE(d)" "CANCELLED(c)")))
+      (org-tag-alist
+       '((:startgroup)
+         ("@low" . ?l) ("@medium" . ?m) ("@high" . ?h)
+         (:endgroup)
+         (:startgroup)
+         ("@planning" . ?p)
+         ("@research" . ?r)
+         ("@writing" . ?w)
+         ("@coding" . ?c)
+         ("@errand" . ?e)
+         ("@buy" . ?b)
+         (:endgroup)
+         (:startgroup)
+         ("@blocked" . ?z)
+         ("@waiting" . ?x)
+         (:endgroup)))
+      ;; Record the date but not the time of day when a todo item is done
+      (org-log-done 'time)
+      (org-log-done-with-time nil)
+      (org-log-into-drawer t)
+      ;; By default, tasks have the lowest possible priority
+      (org-priority-default org-priority-lowest))
+  #+end_src
 
 ** Org agenda
 
@@ -611,8 +639,6 @@ I organise my tasks as follows:
     (org-agenda-window-setup "current-window")
     ;; If an entry has a TODO label, don't check its children
     (org-agenda-todo-list-sublevels nil)
-    ;; By default, tasks have the lowest possible priority
-    (org-priority-default org-priority-lowest)
     :hook
     (org-agenda-mode . (lambda () (display-line-numbers-mode -1)))
     (org-agenda-mode . hl-line-mode)
@@ -621,36 +647,6 @@ I organise my tasks as follows:
       (interactive)
       (org-agenda-switch-to)
       (org-narrow-to-subtree)))
-#+end_src
-
-** Babel
-
-How meta!
-
-- Automatically tangle this file on save to generate init.el.
-- Don't ask for permission to run code in org babel.
-- ~org-tempo~ enables expanding snippets into structures, such as code blocks for specific languages.
-
-#+begin_src emacs-lisp
-  ;; _____________________________________________________________________________
-  ;; Babel
-  ;; _____________________________________________________________________________
-
-  ;; Automatically tangle the README.org file on save
-  (defun nrm/org-babel-tangle-config ()
-    (when (string-equal (buffer-file-name)
-                        (expand-file-name "~/.emacs.d/README.org"))
-      (org-babel-tangle)))
-
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'nrm/org-babel-tangle-config)))
-
-  (setq org-confirm-babel-evaluate nil)
-
-  (use-package org-tempo
-    :ensure nil
-    :config
-    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-    (add-to-list 'org-structure-template-alist '("sh" . "src shell")))
 #+end_src
 
 ** Roam

@@ -356,12 +356,46 @@
 (use-package org
   :bind
   ("\C-cl" . org-store-link)
-  ("s-a" . org-agenda)
-  ("s-c" . org-capture)
   :hook (org-mode . org-indent-mode)
   :custom
   (org-ellipsis " ▾")
   (org-startup-folded 'content)
+  ;; Always add blank lines before inserted headings, never before list items
+  (org-blank-before-new-entry '((heading . t) (plain-list-item . nil)))
+  ;; Allow items to be refiled to the top level in a file, rather than under another headline
+  (org-refile-use-outline-path 'file)
+  ;; Show full file and headline paths in the refile completion buffer
+  (org-outline-path-complete-in-steps nil)
+  ;; Refile targets to the top of files and headlines, rather than the end
+  (org-reverse-note-order t)
+  (org-confirm-babel-evaluate nil)
+  :config
+  ;; Save all org buffers after refiling, to prevent entries being lost if Emacs crashes
+  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
+  ;; Automatically tangle the literate Emacs config file on save
+  (defun nrm/org-babel-tangle-config ()
+    (when (string-equal (buffer-file-name)
+                        (expand-file-name "~/.emacs.d/README.org"))
+      (org-babel-tangle)))
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'nrm/org-babel-tangle-config))))
+
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+(use-package org-tempo
+  :ensure nil
+  :config
+  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+  (add-to-list 'org-structure-template-alist '("sh" . "src shell")))
+
+(use-package org
+  :bind
+  ("s-a" . org-agenda)
+  ("s-c" . org-capture)
+  :custom
   (org-todo-keywords '((sequence "TODO(t)" "PROG(p)" "|" "DONE(d)" "CANCELLED(c)")))
   (org-tag-alist
    '((:startgroup)
@@ -383,23 +417,8 @@
   (org-log-done 'time)
   (org-log-done-with-time nil)
   (org-log-into-drawer t)
-  ;; Always add blank lines before inserted headings, never before list items
-  (org-blank-before-new-entry '((heading . t) (plain-list-item . nil)))
-  ;; Allow items to be refiled to the top level in a file, rather than under another headline
-  (org-refile-use-outline-path 'file)
-  ;; Show file and headline paths in the refile completion buffer
-  (org-outline-path-complete-in-steps nil)
-  ;; Refile targets to the top of files and headlines, rather than the end
-  (org-reverse-note-order t)
-  :config
-  ;; Save all org buffers after refiling, to prevent entries being lost if Emacs crashes
-  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))))
-
-(use-package org-bullets
-  :after org
-  :hook (org-mode . org-bullets-mode)
-  :custom
-  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  ;; By default, tasks have the lowest possible priority
+  (org-priority-default org-priority-lowest))
 
 (use-package org-agenda
   :ensure org
@@ -429,8 +448,6 @@
   (org-agenda-window-setup "current-window")
   ;; If an entry has a TODO label, don't check its children
   (org-agenda-todo-list-sublevels nil)
-  ;; By default, tasks have the lowest possible priority
-  (org-priority-default org-priority-lowest)
   :hook
   (org-agenda-mode . (lambda () (display-line-numbers-mode -1)))
   (org-agenda-mode . hl-line-mode)
@@ -439,26 +456,6 @@
     (interactive)
     (org-agenda-switch-to)
     (org-narrow-to-subtree)))
-
-;; _____________________________________________________________________________
-;; Babel
-;; _____________________________________________________________________________
-
-;; Automatically tangle the README.org file on save
-(defun nrm/org-babel-tangle-config ()
-  (when (string-equal (buffer-file-name)
-                      (expand-file-name "~/.emacs.d/README.org"))
-    (org-babel-tangle)))
-
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'nrm/org-babel-tangle-config)))
-
-(setq org-confirm-babel-evaluate nil)
-
-(use-package org-tempo
-  :ensure nil
-  :config
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("sh" . "src shell")))
 
 ;; _____________________________________________________________________________
 ;; Roam
