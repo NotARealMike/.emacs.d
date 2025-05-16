@@ -47,12 +47,13 @@
 
 ;; Simplify yes-or-no prompts
 (defalias 'yes-or-no-p 'y-or-n-p)
-
-;; On MacOS, make the right option key not act as meta, to let me type characters that need option
-(setq ns-right-alternate-modifier 'none)
-
 ;; Tweak recentering to be more comfortable
 (setq recenter-positions '(middle 0.1 0.9))
+
+(when (memq system-type '(darwin))
+  ;; Make the right option key not act as meta, to let me type characters that need the option key
+  (setq ns-right-alternate-modifier 'none)
+  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)))
 
 ;; _____________________________________________________________________________
 ;; Appearance
