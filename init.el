@@ -684,9 +684,9 @@
                    (setq-local compile-command
                                (concat
                                 "echo Formatting... "
-                                "&& cargo fmt"
+                                "&& cargo fmt "
                                 "&& echo Linting... "
-                                "&& cargo clippy --benches --tests --all-features -- -D warnings "
+                                "&& cargo clippy --benches --tests --all-features --all-targets -- -D warnings "
                                 "&& echo Testing... "
                                 "&& cargo test "))))
   :custom
