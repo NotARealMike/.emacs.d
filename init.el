@@ -61,6 +61,8 @@
 
 (setq ring-bell-function 'ignore)
 
+(setq frame-title-format nil)
+(set-scroll-bar-mode nil)
 (tool-bar-mode -1)
 (column-number-mode)
 (global-display-line-numbers-mode)
