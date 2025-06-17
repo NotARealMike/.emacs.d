@@ -283,6 +283,11 @@
   :custom
   (wdired-use-dired-vertical-movement t))
 
+(use-package dired-subtree
+  :bind
+  (:map dired-mode-map
+	("<tab>" . dired-subtree-toggle)))
+
 ;; _____________________________________________________________________________
 ;; IBuffer
 ;; _____________________________________________________________________________
