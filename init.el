@@ -377,6 +377,8 @@
   (org-reverse-note-order t)
   (org-confirm-babel-evaluate nil)
   :config
+  ;; Load the backend required to transcode org to markdown
+  (require 'ox-md)
   ;; Save all org buffers after refiling, to prevent entries being lost if Emacs crashes
   (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
   ;; Automatically tangle the literate Emacs config file on save
