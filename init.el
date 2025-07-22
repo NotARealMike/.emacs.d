@@ -576,12 +576,14 @@
 ;; _____________________________________________________________________________
 
 (use-package vterm
-  :bind ("s-t" . vterm)
   :hook (vterm-mode . goto-address-mode)
   :config
   (setq vterm-max-scrollback 10000))
 
-(use-package multi-vterm)
+(use-package multi-vterm
+  :bind
+  ("s-T" . multi-vterm)
+  ("s-t" . multi-vterm-next))
 
 ;; _____________________________________________________________________________
 ;; TRAMP
