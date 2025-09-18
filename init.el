@@ -149,11 +149,15 @@
 ;; Writing
 ;; _____________________________________________________________________________
 
-;; Natural language formatting and spelling
-(setq sentence-end-double-space nil)
-(setq ispell-program-name "/opt/homebrew/bin/ispell")
-(dolist (hook '(text-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode 1))))
+(use-package text-mode
+  :ensure nil
+  :hook (text-mode . flyspell-mode)
+  :custom
+  ;; Recent versions of text-mode automatically add an ispell capf
+  ;; This annoys me to no end so I disable it here
+  (text-mode-ispell-word-completion nil)
+  (sentence-end-double-space nil)
+  (ispell-program-name "/opt/homebrew/bin/ispell"))
 
 ;; _____________________________________________________________________________
 ;; Completion
@@ -239,13 +243,6 @@
   (corfu-cycle t)
   (corfu-preview-current nil)
   (corfu-popupinfo-delay (cons 1.0 0.1)))
-
-(use-package text-mode
-  :ensure nil
-  :custom
-  ;; Recent versions of text-mode automatically add an ispell capf
-  ;; This annoys me to no end so I disable it here
-  (text-mode-ispell-word-completion nil))
 
 ;; Extra capfs
 (use-package cape
