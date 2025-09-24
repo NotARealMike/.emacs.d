@@ -373,6 +373,7 @@
   ;; Refile targets to the top of files and headlines, rather than the end
   (org-reverse-note-order t)
   (org-confirm-babel-evaluate nil)
+  (org-babel-load-languages '((emacs-lisp . t) (shell . t)))
   :config
   ;; Load the backend required to transcode org to markdown
   (require 'ox-md)
