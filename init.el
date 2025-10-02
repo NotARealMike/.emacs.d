@@ -283,7 +283,7 @@
 (use-package dired-subtree
   :bind
   (:map dired-mode-map
-	("<tab>" . dired-subtree-toggle)))
+        ("<tab>" . dired-subtree-toggle)))
 
 ;; _____________________________________________________________________________
 ;; IBuffer

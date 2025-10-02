@@ -423,7 +423,7 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
   (use-package dired-subtree
     :bind
     (:map dired-mode-map
-  	("<tab>" . dired-subtree-toggle)))
+          ("<tab>" . dired-subtree-toggle)))
 #+end_src
 
 ** IBuffer
