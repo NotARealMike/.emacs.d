@@ -730,14 +730,6 @@
         ("C-c C-n" . outline-next-visible-heading)
         ("C-c C-p" . outline-previous-visible-heading)))
 
-;; Copied from beancount-mode/etc/emacsrc
-(defun beancount-format-file ()
-  (interactive)
-  (let ((line-no (line-number-at-pos)))
-    (call-process-region (point-min) (point-max) "bean-format" t (current-buffer))
-    (goto-line line-no)
-    (recenter)))
-
 ;; ___________________________________________________________________________
 ;; Local config
 ;; ___________________________________________________________________________
