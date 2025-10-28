@@ -694,7 +694,7 @@
                    (setq-local compile-command
                                (concat
                                 "echo Formatting... "
-                                "&& cargo fmt "
+                                "&& cargo +nightly-2025-08-04 fmt "
                                 "&& echo Linting... "
                                 "&& cargo clippy --benches --tests --all-features --all-targets -- -D warnings "
                                 "&& echo Testing... "
