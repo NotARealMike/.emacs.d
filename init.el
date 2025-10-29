@@ -648,6 +648,10 @@
   :init
   (dolist (hook '(go-mode-hook java-mode-hook kotlin-mode-hook python-mode-hook rust-mode-hook))
     (add-hook hook 'eglot-ensure))
+  :bind
+  (:map eglot-mode-map
+	("s-e a" . eglot-code-actions)
+	("s-e r" . eglot-rename))
   :custom
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
