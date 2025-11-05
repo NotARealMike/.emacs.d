@@ -435,18 +435,38 @@
   :custom
   (org-agenda-custom-commands
    '(("d" "Dashboard"
-      ((todo "PROG" ((org-agenda-overriding-header "In progress")))
-       (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Urgent tasks")))
+      ((tags-todo
+        "TODO=\"PROG\"-@waiting-@blocked"
+        ((org-agenda-overriding-header "In progress")))
+       (tags-todo
+        "-TODO=\"PROG\"+PRIORITY=\"A\"-@waiting-@blocked"
+        ((org-agenda-overriding-header "Urgent tasks")))
        (agenda "" ((org-agenda-span 'week)))))
      ("p" "Planning"
-      ((tags-todo "-@low-@medium-@high" ((org-agenda-overriding-header "Inbox: Untagged tasks")))
-       (todo "PROG" ((org-agenda-overriding-header "In progress")))
-       (tags-todo "-TODO=\"PROG\"+PRIORITY=\"A\"" ((org-agenda-overriding-header "Current priorities")))
-       (tags-todo "-TODO=\"PROG\"+PRIORITY=\"B\"" ((org-agenda-overriding-header "Next up")))
-       (tags-todo "+@planning" ((org-agenda-overriding-header "Planning tasks")))
-       (tags-todo "+@waiting" ((org-agenda-overriding-header "Waiting for someone")))
-       (tags-todo "-TODO=\"PROG\"-PRIORITY=\"A\"-PRIORITY=\"B\"-@waiting-@blocked" ((org-agenda-overriding-header "Backlog")))
-       (tags-todo "+@blocked" ((org-agenda-overriding-header "Blocked on another task")))
+      ((tags-todo
+        "-@low-@medium-@high"
+        ((org-agenda-overriding-header "Inbox: Untagged tasks")))
+       (tags-todo
+        "TODO=\"PROG\"-@waiting-@blocked"
+        ((org-agenda-overriding-header "In progress")))
+       (tags-todo
+        "-TODO=\"PROG\"+PRIORITY=\"A\"-@waiting-@blocked"
+        ((org-agenda-overriding-header "Current priorities")))
+       (tags-todo
+        "-TODO=\"PROG\"+PRIORITY=\"B\"-@waiting-@blocked"
+        ((org-agenda-overriding-header "Next up")))
+       (tags-todo
+        "+@planning-@waiting-@blocked"
+        ((org-agenda-overriding-header "Planning tasks")))
+       (tags-todo
+        "+@waiting"
+        ((org-agenda-overriding-header "Waiting for someone")))
+       (tags-todo
+        "-TODO=\"PROG\"-PRIORITY=\"A\"-PRIORITY=\"B\"-@waiting-@blocked"
+        ((org-agenda-overriding-header "Backlog")))
+       (tags-todo
+        "+@blocked"
+        ((org-agenda-overriding-header "Blocked on another task")))
        ))
      ("q" "Quick wins"
       ((tags-todo "+@low-@buy-@waiting-@blocked")))))
