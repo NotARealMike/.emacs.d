@@ -981,6 +981,23 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
   (use-package rust-playground)
 #+end_src
 
+** TypeScript
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; TypeScript
+  ;; _____________________________________________________________________________
+
+  (use-package typescript-ts-mode
+    :ensure nil
+    :mode ("\\.ts\\'" "\\.js\\'"))
+
+  (use-package tsx-ts-mode
+    :ensure nil
+    :mode ("\\.tsx\\'" "\\.jsx\\'"))
+
+#+end_src
+
 * File formats
 
 #+begin_src emacs-lisp
