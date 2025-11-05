@@ -21,6 +21,9 @@ Before starting Emacs, install Homebrew (on MacOS), and use it to install:
 brew install ispell coreutils cmake libtool gopls rust rust-analyzer kotlin-language-server
 #+end_src
 
+
+For major modes based on Tree-Sitter, also run ~M-x treesit-install-language-grammar~ for each relevant language.
+
 To run binaries compiled from Rust, add ~~/.cargo/bin~ to the ~PATH~ in ~~/.zprofile~.
 
 Instructions on how to set Caps Lock to act as Control are [[https://support.apple.com/en-gb/guide/mac-help/mchlp1011/mac][here]]. Remember to do this for each machine and keyboard combination.
@@ -896,6 +899,21 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
     (eglot-autoshutdown t)
     (eglot-sync-connect nil))
 
+#+end_src
+
+** Tree-Sitter
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Tree-Sitter
+  ;; _____________________________________________________________________________
+
+  (use-package treesit
+    :ensure nil
+    :config
+    (setq treesit-language-source-alist
+  	'((tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+  	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))))
 #+end_src
 
 ** Go

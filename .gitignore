@@ -25,6 +25,9 @@ org-roam\.db
 elpa
 rust-playground
 
+# Don't include Tree-Sitter grammars
+tree-sitter
+
 # Local history
 eshell
 transient

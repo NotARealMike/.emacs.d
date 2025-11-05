@@ -657,6 +657,17 @@
   (eglot-sync-connect nil))
 
 ;; _____________________________________________________________________________
+;; Tree-Sitter
+;; _____________________________________________________________________________
+
+(use-package treesit
+  :ensure nil
+  :config
+  (setq treesit-language-source-alist
+	'((tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))))
+
+;; _____________________________________________________________________________
 ;; Go
 ;; _____________________________________________________________________________
 
