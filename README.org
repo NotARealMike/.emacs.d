@@ -9,16 +9,27 @@ My very own Emacs configuration. Inspired by [[https://github.com/daviwil/emacs-
 
 This configuration is designed to bootstrap itself, but there are a few dependencies that need to be installed first.
 
-Before starting Emacs, install Homebrew (on MacOS), and use it to install:
+Here I use Homebrew to install dependencies because I mostly use MacOS.
+
+Core dependencies:
 - ~ispell~, for spell checking
 - ~coreutils~, for the ~gls~ CLI command, which is an alternative to ~ls~ that can be used by dired
 - ~cmake~ and ~libtool~, to compile dependencies of vterm and Roam
-- ~gopls~, which is an LSP for Go, and will install ~go~ as a dependency
-- ~rust~ and ~rust-analyzer~, the Rust language toolchain and LSP, respectively
-- ~kotlin-language-server~; does what it says on the tin
+
 
 #+begin_src shell
-brew install ispell coreutils cmake libtool gopls rust rust-analyzer kotlin-language-server
+brew install ispell coreutils cmake libtool
+#+end_src
+
+
+Language servers for different programming languages; install the relevant subset:
+- ~gopls~
+- ~rust-analyzer~
+- ~kotlin-language-server~
+- ~typescript-language-server~
+
+#+begin_src shell
+brew install gopls rust-analyzer kotlin-language-server typescript-language-server
 #+end_src
 
 
@@ -889,7 +900,13 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
 
   (use-package eglot
     :init
-    (dolist (hook '(go-mode-hook java-mode-hook kotlin-mode-hook python-mode-hook rust-mode-hook))
+    (dolist (hook
+  	   '(go-mode-hook
+  	     java-mode-hook
+  	     kotlin-mode-hook
+  	     python-mode-hook
+  	     rust-mode-hook
+  	     typescript-ts-mode-hook))
       (add-hook hook 'eglot-ensure))
     :bind
     (:map eglot-mode-map
