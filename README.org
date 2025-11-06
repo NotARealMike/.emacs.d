@@ -23,13 +23,14 @@ brew install ispell coreutils cmake libtool
 
 
 Language servers for different programming languages; install the relevant subset:
+- ~basedpyright~
 - ~gopls~
 - ~rust-analyzer~
 - ~kotlin-language-server~
 - ~typescript-language-server~
 
 #+begin_src shell
-brew install gopls rust-analyzer kotlin-language-server typescript-language-server
+brew install basedpyright gopls rust-analyzer kotlin-language-server typescript-language-server
 #+end_src
 
 
