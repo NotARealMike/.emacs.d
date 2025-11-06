@@ -711,6 +711,7 @@
   	  (kotlin "https://github.com/fwcd/tree-sitter-kotlin")
   	  (markdown "https://github.com/ikatyang/tree-sitter-markdown")
   	  (python "https://github.com/tree-sitter/tree-sitter-python" "v0.20.4")
+  	  (rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.21.2")
   	  (toml "https://github.com/tree-sitter/tree-sitter-toml")
   	  (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
    	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
@@ -740,6 +741,11 @@
 ;; Rust
 ;; _____________________________________________________________________________
 
+(use-package rust-mode
+  :ensure nil
+  :custom
+  (rust-mode-treesitter-derive t))
+
 (use-package rustic
   :defer t
   :hook
@@ -757,8 +763,6 @@
   (rustic-lsp-client 'eglot)
   (rustic-format-display-method 'ignore)
   (rustic-format-trigger 'on-compile))
-
-(use-package rust-playground)
 
 ;; _____________________________________________________________________________
 ;; TypeScript
