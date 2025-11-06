@@ -667,10 +667,10 @@
 (use-package eglot
   :init
   (dolist (hook
-	   '(go-mode-hook
-	     java-mode-hook
-	     kotlin-mode-hook
-	     python-mode-hook
+	   '(go-ts-mode-hook
+	     java-ts-mode-hook
+	     kotlin-ts-mode-hook
+	     python-ts-mode-hook
 	     rust-mode-hook
 	     typescript-ts-mode-hook))
     (add-hook hook 'eglot-ensure))
@@ -688,39 +688,36 @@
 
 (use-package treesit
   :ensure nil
+  :mode
+  ("\\.go\\'" . go-ts-mode)
+  ("\\.java\\'" . java-ts-mode)
+  ("\\.json\\'" . json-ts-mode)
+  ("\\.kts?\\'" . kotlin-ts-mode)
+  ("\\.md\\'" . markdown-ts-mode)
+  ("\\.toml\\'" . toml-ts-mode)
+  ("\\.ts\\'" . typescript-ts-mode)
+  ("\\.js\\'" . typescript-ts-mode)
+  ("\\.tsx\\'" . tsx-ts-mode)
+  ("\\.jsx\\'" . tsx-ts-mode)
+  ("\\.ya?ml\\'" . yaml-ts-mode)
   :config
   (setq treesit-language-source-alist
-	'((tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src"))))
+  	'((go "https://github.com/tree-sitter/tree-sitter-go" "v0.23.4")
+	  (java "https://github.com/tree-sitter/tree-sitter-java")
+	  (json "https://github.com/tree-sitter/tree-sitter-json")
+	  (kotlin "https://github.com/fwcd/tree-sitter-kotlin")
+	  (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+	  (python "https://github.com/tree-sitter/tree-sitter-python" "v0.20.4")
+	  (toml "https://github.com/tree-sitter/tree-sitter-toml")
+	  (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+ 	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+	  (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+  ;; Explicitly remap python-mode, because python scripts often include a shebang that overrides defaults
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode)))
 
-;; _____________________________________________________________________________
-;; Go
-;; _____________________________________________________________________________
+(use-package kotlin-ts-mode)
 
-(use-package go-mode
-  :defer t
-  :mode ("\\.go\\'" . go-mode)
-  :hook (go-mode . (lambda ()
-                     (setq-local compilation-read-command nil)
-                     (setq-local compile-command
-                                 (concat
-                                  "echo Formating..."
-                                  "&& go fmt "
-                                  "&& echo Building... "
-                                  "&& go build -v "
-                                  "&& echo Testing... "
-                                  "&& go test -v "))))
-  :init
-  (add-hook 'before-save-hook 'gofmt-before-save))
-
-;; _____________________________________________________________________________
-;; Kotlin
-;; _____________________________________________________________________________
-
-(use-package kotlin-mode
-  :hook (kotlin-mode . (lambda ()
-                         (setq-local compile-command "./gradlew build")
-                         (indent-tabs-mode -1))))
+(use-package markdown-ts-mode)
 
 ;; _____________________________________________________________________________
 ;; Rust
@@ -765,9 +762,6 @@
 (use-package csv-mode
   :mode ("\\.csv\\'" . csv-mode)
   :custom (csv-invisibility-default nil))
-
-(use-package json-mode
-  :custom (js-indent-level 2))
 
 ;; ___________________________________________________________________________
 ;; Beancount
