@@ -680,7 +680,9 @@
   :custom
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
-  (eglot-sync-connect nil))
+  (eglot-sync-connect nil)
+  :config
+  (add-to-list 'eglot-stay-out-of 'imenu))
 
 ;; _____________________________________________________________________________
 ;; Tree-Sitter

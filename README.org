@@ -935,7 +935,9 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
     :custom
     (eglot-events-buffer-size 0)
     (eglot-autoshutdown t)
-    (eglot-sync-connect nil))
+    (eglot-sync-connect nil)
+    :config
+    (add-to-list 'eglot-stay-out-of 'imenu))
 
 #+end_src
 
