@@ -681,6 +681,7 @@
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
   (eglot-sync-connect nil)
+  (eglot-ignored-server-capabilities '(:documentHighlightProvider))
   :config
   (add-to-list 'eglot-stay-out-of 'imenu))
 
