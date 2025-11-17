@@ -709,7 +709,14 @@
   	  (java "https://github.com/tree-sitter/tree-sitter-java")
   	  (json "https://github.com/tree-sitter/tree-sitter-json")
   	  (kotlin "https://github.com/fwcd/tree-sitter-kotlin")
-  	  (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+	  (markdown
+	   "https://github.com/tree-sitter-grammars/tree-sitter-markdown"
+	   "v0.4.1"
+	   "tree-sitter-markdown/src")
+	  (markdown-inline
+	   "https://github.com/tree-sitter-grammars/tree-sitter-markdown"
+	   "v0.4.1"
+	   "tree-sitter-markdown-inline/src")
   	  (python "https://github.com/tree-sitter/tree-sitter-python" "v0.20.4")
   	  (rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.21.2")
   	  (toml "https://github.com/tree-sitter/tree-sitter-toml")
