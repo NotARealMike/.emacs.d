@@ -732,18 +732,6 @@
 
 (use-package markdown-ts-mode)
 
-(use-package treesit-fold
-  :bind
-  (:map treesit-fold-mode-map
-	("S-<tab>" . treesit-fold-toggle))
-  :init
-  (global-treesit-fold-indicators-mode 1)
-  :hook
-  (treesit-fold-mode . treesit-fold-line-comment-mode)
-  :custom
-  (treesit-fold-line-count-show t)
-  (treesit-fold-line-count-format " <%d lines> "))
-
 ;; _____________________________________________________________________________
 ;; Rust
 ;; _____________________________________________________________________________
