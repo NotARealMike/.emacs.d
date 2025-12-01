@@ -750,6 +750,7 @@ To make a header in a file into its own node, run ~org-id-get-create~.
     :bind (("s-r" . org-roam-node-find)
            ;; Go to the file directly, skipping the capture prompt
            ("s-g" . nil)
+           ("s-g r" . (lambda () (interactive) (find-file org-roam-directory)))
            ("s-g t" . (lambda () (interactive) (org-roam-dailies-goto-today "d")))
            ("s-g d" . (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
            :map org-mode-map
