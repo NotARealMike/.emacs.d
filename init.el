@@ -456,9 +456,6 @@
         "-TODO=\"PROG\"+PRIORITY=\"B\"-@waiting-@blocked"
         ((org-agenda-overriding-header "Next up")))
        (tags-todo
-        "+@planning-@waiting-@blocked"
-        ((org-agenda-overriding-header "Planning tasks")))
-       (tags-todo
         "+@waiting"
         ((org-agenda-overriding-header "Waiting for someone")))
        (tags-todo
