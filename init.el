@@ -31,8 +31,10 @@
 ;; Shortcuts
 ;; _____________________________________________________________________________
 
-;; Make it easier to access emacs config
-(set-register ?e (cons 'file "~/.emacs.d/README.org"))
+;; Create shortcuts to relevant files under s-g, mnemonic GOTO
+(global-set-key (kbd "s-g") nil)
+(global-set-key (kbd "s-g e") (lambda () (interactive) (find-file "~/.emacs.d/README.org")))
+(global-set-key (kbd "s-g s") (lambda () (interactive) (find-file "/sudo::/")))
 
 ;; Cycle through buffers easily
 (global-set-key (kbd "s-<left>") 'previous-buffer)
@@ -530,7 +532,6 @@
         :unnarrowed t))))
   :bind (("s-r" . org-roam-node-find)
          ;; Go to the file directly, skipping the capture prompt
-         ("s-g" . nil)
          ("s-g r" . (lambda () (interactive) (find-file org-roam-directory)))
          ("s-g t" . (lambda () (interactive) (org-roam-dailies-goto-today "d")))
          ("s-g d" . (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
