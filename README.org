@@ -404,6 +404,21 @@ When typing a key bind prefix, WK mode expands the minibuffer to display command
     (setq which-key-idle-delay 0.5))
 #+end_src
 
+* Fast navigation
+
+Avy lets me quickly move point to an arbitrary place in the visible buffer.
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Fast navigation
+  ;; _____________________________________________________________________________
+
+  (use-package avy
+    :bind
+    ("M-s M-s" . avy-goto-char-timer)
+    ("M-s M-l" . avy-goto-line))
+#+end_src
+
 * Built-in mode improvements
 
 ** Dired
