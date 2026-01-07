@@ -198,7 +198,13 @@
             (derived-mode-p 'magit-section-mode))
         (consult-git-grep)
       (consult-grep)))
+  (setq xref-show-xrefs-function #'consult-xref
+	xref-show-definitions-function #'consult-xref)
   :bind (;; Prefix mnemonic: "alt search"
+         ;; Search over org-agenda headings
+         ("M-s M-a" . consult-org-agenda)
+         ;; Jump to flymake diagnostics; e, w, n to narrow to errors, warnings, notes
+         ("M-s M-d" . consult-flymake)
          ;; Recursive grep
          ("M-s M-g" . nrm/consult-grep-dwim)
          ;; Search for file names recursively
@@ -215,7 +221,7 @@
          ;; Interactively select item to yank from kill-ring
          ("C-M-y" . consult-yank-from-kill-ring)
          ;; Goto position at line:column
-         ("s-l" . consult-goto-line)))
+         ("M-g M-g" . consult-goto-line)))
 
 ;; Enable recent files as a virtual buffer source for consult-buffer
 (recentf-mode 1)
@@ -545,6 +551,7 @@
          ("s-g t" . (lambda () (interactive) (org-roam-dailies-goto-today "d")))
          ("s-g d" . (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
          :map org-mode-map
+         ("M-s M-o" . consult-org-heading)
          ("C-c i" . org-roam-node-insert)
          ("C-c b" . org-roam-buffer-toggle)
          ("s-n" . org-roam-dailies-goto-next-note)
