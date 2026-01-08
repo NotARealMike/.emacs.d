@@ -34,6 +34,7 @@
 (use-package emacs
   :config
   (set-scroll-bar-mode nil)
+  (setq-default indent-tabs-mode nil)
   (tool-bar-mode -1)
   (column-number-mode 1)
   (global-display-line-numbers-mode 1)
@@ -191,7 +192,7 @@
         (consult-git-grep)
       (consult-grep)))
   (setq xref-show-xrefs-function #'consult-xref
-	xref-show-definitions-function #'consult-xref)
+        xref-show-definitions-function #'consult-xref)
   :bind (;; Prefix mnemonic: "alt search"
          ;; Search over org-agenda headings
          ("M-s M-a" . consult-org-agenda)
@@ -671,16 +672,16 @@
 (use-package eglot
   :init
   (dolist (hook
-	   '(go-ts-mode-hook
-	     java-ts-mode-hook
-	     kotlin-ts-mode-hook
-	     python-ts-mode-hook
-	     rust-mode-hook
-	     typescript-ts-mode-hook))
+           '(go-ts-mode-hook
+             java-ts-mode-hook
+             kotlin-ts-mode-hook
+             python-ts-mode-hook
+             rust-mode-hook
+             typescript-ts-mode-hook))
     (add-hook hook 'eglot-ensure))
   :bind
   (:map eglot-mode-map
-	("s-e" . eglot-code-actions))
+        ("s-e" . eglot-code-actions))
   :custom
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
@@ -708,16 +709,16 @@
   ("\\.ya?ml\\'" . yaml-ts-mode)
   :config
   (setq treesit-language-source-alist
-    	'((go "https://github.com/tree-sitter/tree-sitter-go" "v0.23.4")
-  	  (java "https://github.com/tree-sitter/tree-sitter-java")
-  	  (json "https://github.com/tree-sitter/tree-sitter-json")
-  	  (kotlin "https://github.com/fwcd/tree-sitter-kotlin")
-  	  (python "https://github.com/tree-sitter/tree-sitter-python" "v0.20.4")
-  	  (rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.21.2")
-  	  (toml "https://github.com/tree-sitter/tree-sitter-toml")
-  	  (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-   	  (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-  	  (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+        '((go "https://github.com/tree-sitter/tree-sitter-go" "v0.23.4")
+          (java "https://github.com/tree-sitter/tree-sitter-java")
+          (json "https://github.com/tree-sitter/tree-sitter-json")
+          (kotlin "https://github.com/fwcd/tree-sitter-kotlin")
+          (python "https://github.com/tree-sitter/tree-sitter-python" "v0.20.4")
+          (rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.21.2")
+          (toml "https://github.com/tree-sitter/tree-sitter-toml")
+          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+          (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+          (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
   ;; Explicitly remap python-mode, because python scripts often include a shebang that overrides defaults
   (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
   :custom
