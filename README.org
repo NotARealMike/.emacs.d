@@ -157,22 +157,6 @@ I spent more time than I'd like to admit tinkering with these.
     (fontaine-set-preset 'regular))
 #+end_src
 
-** Wrapping
-
-Make buffers easier to read by visually wrapping lines early – without actually changing the contents.
-
-#+begin_src emacs-lisp
-  (use-package visual-fill-column
-    :hook (org-mode . visual-fill-column-mode)
-    :custom
-    (visual-fill-column-width 120)
-    (visual-fill-column-center-text nil)
-    (visual-fill-column-enable-sensible-window-split t)
-    :config
-    (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
-
-#+end_src
-
 ** Icons
 
 Icons that make several modes prettier, but don't change functionality.
@@ -211,70 +195,6 @@ Golden ratio is sometimes useful to resize windows when quickly switching betwee
     :config (nyan-mode 1))
 
   (use-package golden-ratio)
-#+end_src
-
-** Presentations
-
-Olivetti is used to centre a buffer's contents in a window.
-
-Logos does two things:
-- makes it easier to navigate files according to a logical outline structure; and
-- provides a "focus mode" that strips down a lot of the UI.
-
-Combining the two is a simple way of presenting the contents of a buffer.
-
-Olivetti doesn't play well with ~visual-fill-column-mode~, so I disable it automatically when I go into the focus mode. Technically I should disable it when going into ~olivetti~ instead, but I never use ~olivetti~ on its own, so I'm happy with this for now.
-
-Doing a presentation messes up a bunch of the minor modes I use, so the simpler way to get out of it is to run the ~revert-buffer~ command.
-
-#+begin_src emacs-lisp
-  (use-package olivetti
-    :custom
-    (olivetti-body-width 0.7)
-    (olivetti-minimum-body width 80))
-
-  (use-package logos
-    :hook (logos-focus-mode . nrm/present-funs)
-    :custom
-    (logos-outlines-are-pages t)
-    :config
-    (setq-default logos-hide-cursor t
-                  logos-hide-mode-line t
-                  logos-hide-buffer-boundaries t
-                  logos-hide-fringe t
-                  logos-variable-pitch nil
-                  logos-buffer-read-only t
-                  logos-olivetti t)
-    (defun nrm/present-funs ()
-      (visual-fill-column-mode 0)
-      (display-line-numbers-mode 0))
-    :bind
-    ("C-x n n" . logos-narrow-dwim)
-    ("C-x ]" . logos-forward-page-dwim)
-    ("C-x [" . logos-backward-page-dwim)
-    (:map logos-focus-mode-map
-          ("<right>" . logos-forward-page-dwim)
-          ("<left>" . logos-backward-page-dwim)))
-#+end_src
-
-* Writing
-
-Utilities for writing in natural languages.
-
-#+begin_src emacs-lisp
-  ;; _____________________________________________________________________________
-  ;; Writing
-  ;; _____________________________________________________________________________
-
-  (use-package text-mode
-    :ensure nil
-    :hook (text-mode . flyspell-mode)
-    :custom
-    ;; Recent versions of text-mode automatically add an ispell capf
-    ;; This annoys me to no end so I disable it here
-    (text-mode-ispell-word-completion nil)
-    (sentence-end-double-space nil)
-    (ispell-program-name "/opt/homebrew/bin/ispell"))
 #+end_src
 
 * Completion
@@ -382,33 +302,22 @@ Text completion for source code and natural language.
     (add-to-list 'completion-at-point-functions #'cape-file))
 #+end_src
 
-** which-key
+* Built-in mode improvements
 
-When typing a key bind prefix, WK mode expands the minibuffer to display commands under that prefix.
+** Key binding completion
+
+When typing a key bind prefix, ~which-key-mode~ expands the minibuffer to display commands under that prefix.
 
 #+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Key binding completion
+  ;; _____________________________________________________________________________
+
   (use-package which-key
     :config
     (which-key-mode)
     (setq which-key-idle-delay 0.5))
 #+end_src
-
-* Fast navigation
-
-Avy lets me quickly move point to an arbitrary place in the visible buffer.
-
-#+begin_src emacs-lisp
-  ;; _____________________________________________________________________________
-  ;; Fast navigation
-  ;; _____________________________________________________________________________
-
-  (use-package avy
-    :bind
-    ("M-s M-s" . avy-goto-char-timer)
-    ("M-s M-l" . avy-goto-line))
-#+end_src
-
-* Built-in mode improvements
 
 ** Dired
 
@@ -521,6 +430,53 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
   ;; _____________________________________________________________________________
 
   (use-package wgrep)
+#+end_src
+
+** Fast navigation
+
+Avy lets me quickly move point to an arbitrary place in the visible buffer.
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Fast navigation
+  ;; _____________________________________________________________________________
+
+  (use-package avy
+    :bind
+    ("M-s M-s" . avy-goto-char-timer)
+    ("M-s M-l" . avy-goto-line))
+#+end_src
+
+* Text
+
+Utilities for writing in natural languages:
+- Spell check
+- Make buffers easier to read by visually wrapping lines early – without actually changing the contents.
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Text
+  ;; _____________________________________________________________________________
+
+  (use-package text-mode
+    :ensure nil
+    :hook (text-mode . flyspell-mode)
+    :custom
+    ;; Recent versions of text-mode automatically add an ispell capf
+    ;; This annoys me to no end so I disable it here
+    (text-mode-ispell-word-completion nil)
+    (sentence-end-double-space nil)
+    (ispell-program-name "/opt/homebrew/bin/ispell"))
+
+  (use-package visual-fill-column
+    :hook (text-mode . visual-fill-column-mode)
+    :custom
+    (visual-fill-column-width 120)
+    (visual-fill-column-center-text nil)
+    (visual-fill-column-enable-sensible-window-split t)
+    :config
+    (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
+
 #+end_src
 
 * Magit
@@ -818,11 +774,57 @@ To make a header in a file into its own node, run ~org-id-get-create~.
           ("c" "Context" entry (file "~/roam/Inbox.org") "* TODO %?\n%U\n%a" :empty-lines 1)))
 #+end_src
 
+* Presenting
+
+Olivetti is used to centre a buffer's contents in a window.
+
+Logos does two things:
+- makes it easier to navigate files according to a logical outline structure; and
+- provides a "focus mode" that strips down a lot of the UI.
+
+Combining the two is a simple way of presenting the contents of a buffer.
+
+Olivetti doesn't play well with ~visual-fill-column-mode~, so I disable it automatically when I go into the focus mode. Technically I should disable it when going into ~olivetti~ instead, but I never use ~olivetti~ on its own, so I'm happy with this for now.
+
+Doing a presentation messes up a bunch of the minor modes I use, so the simpler way to get out of it is to run the ~revert-buffer~ command.
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Presenting
+  ;; _____________________________________________________________________________
+
+  (use-package olivetti
+    :custom
+    (olivetti-body-width 0.7)
+    (olivetti-minimum-body width 80))
+
+  (use-package logos
+    :hook (logos-focus-mode . nrm/present-funs)
+    :custom
+    (logos-outlines-are-pages t)
+    :config
+    (setq-default logos-hide-cursor t
+                  logos-hide-mode-line t
+                  logos-hide-buffer-boundaries t
+                  logos-hide-fringe t
+                  logos-variable-pitch nil
+                  logos-buffer-read-only t
+                  logos-olivetti t)
+    (defun nrm/present-funs ()
+      (visual-fill-column-mode 0)
+      (display-line-numbers-mode 0))
+    :bind
+    ("C-x n n" . logos-narrow-dwim)
+    ("C-x ]" . logos-forward-page-dwim)
+    ("C-x [" . logos-backward-page-dwim)
+    (:map logos-focus-mode-map
+          ("<right>" . logos-forward-page-dwim)
+          ("<left>" . logos-backward-page-dwim)))
+#+end_src
+
 * Shell
 
-** vterm
-
-I choose to use [[https://github.com/akermu/emacs-libvterm/][vterm]] because it is fast, compatible with my usual terminal setup, and it supports interactive commands.
+I choose to use [[https://github.com/akermu/emacs-libvterm/][vterm]] because it is fast, compatible with my usual terminal setup, and supports interactive commands.
 
 The command ~M-x multi-vterm~ lets me easily create multiple terminals.
 
@@ -983,15 +985,13 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
     :custom
     (treesit-font-lock-level 4))
 
-  (use-package kotlin-ts-mode)
-
 #+end_src
 
-** Rust
+** Language-specific
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
-  ;; Rust
+  ;; Language-specific
   ;; _____________________________________________________________________________
 
   (use-package rust-mode
@@ -1016,14 +1016,8 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
     (rustic-lsp-client 'eglot)
     (rustic-format-display-method 'ignore)
     (rustic-format-trigger 'on-compile))
-#+end_src
 
-** TypeScript
-
-#+begin_src emacs-lisp
-  ;; _____________________________________________________________________________
-  ;; TypeScript
-  ;; _____________________________________________________________________________
+  (use-package kotlin-ts-mode)
 
   (use-package typescript-ts-mode
     :ensure nil

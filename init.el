@@ -82,15 +82,6 @@
   :config
   (fontaine-set-preset 'regular))
 
-(use-package visual-fill-column
-  :hook (org-mode . visual-fill-column-mode)
-  :custom
-  (visual-fill-column-width 120)
-  (visual-fill-column-center-text nil)
-  (visual-fill-column-enable-sensible-window-split t)
-  :config
-  (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
-
 (use-package nerd-icons)
 
 (use-package nerd-icons-dired
@@ -114,48 +105,6 @@
   :config (nyan-mode 1))
 
 (use-package golden-ratio)
-
-(use-package olivetti
-  :custom
-  (olivetti-body-width 0.7)
-  (olivetti-minimum-body width 80))
-
-(use-package logos
-  :hook (logos-focus-mode . nrm/present-funs)
-  :custom
-  (logos-outlines-are-pages t)
-  :config
-  (setq-default logos-hide-cursor t
-                logos-hide-mode-line t
-                logos-hide-buffer-boundaries t
-                logos-hide-fringe t
-                logos-variable-pitch nil
-                logos-buffer-read-only t
-                logos-olivetti t)
-  (defun nrm/present-funs ()
-    (visual-fill-column-mode 0)
-    (display-line-numbers-mode 0))
-  :bind
-  ("C-x n n" . logos-narrow-dwim)
-  ("C-x ]" . logos-forward-page-dwim)
-  ("C-x [" . logos-backward-page-dwim)
-  (:map logos-focus-mode-map
-        ("<right>" . logos-forward-page-dwim)
-        ("<left>" . logos-backward-page-dwim)))
-
-;; _____________________________________________________________________________
-;; Writing
-;; _____________________________________________________________________________
-
-(use-package text-mode
-  :ensure nil
-  :hook (text-mode . flyspell-mode)
-  :custom
-  ;; Recent versions of text-mode automatically add an ispell capf
-  ;; This annoys me to no end so I disable it here
-  (text-mode-ispell-word-completion nil)
-  (sentence-end-double-space nil)
-  (ispell-program-name "/opt/homebrew/bin/ispell"))
 
 ;; _____________________________________________________________________________
 ;; Completion
@@ -247,19 +196,14 @@
   :config
   (add-to-list 'completion-at-point-functions #'cape-file))
 
+;; _____________________________________________________________________________
+;; Key binding completion
+;; _____________________________________________________________________________
+
 (use-package which-key
   :config
   (which-key-mode)
   (setq which-key-idle-delay 0.5))
-
-;; _____________________________________________________________________________
-;; Fast navigation
-;; _____________________________________________________________________________
-
-(use-package avy
-  :bind
-  ("M-s M-s" . avy-goto-char-timer)
-  ("M-s M-l" . avy-goto-line))
 
 ;; _____________________________________________________________________________
 ;; Dired
@@ -349,6 +293,38 @@
 ;; _____________________________________________________________________________
 
 (use-package wgrep)
+
+;; _____________________________________________________________________________
+;; Fast navigation
+;; _____________________________________________________________________________
+
+(use-package avy
+  :bind
+  ("M-s M-s" . avy-goto-char-timer)
+  ("M-s M-l" . avy-goto-line))
+
+;; _____________________________________________________________________________
+;; Text
+;; _____________________________________________________________________________
+
+(use-package text-mode
+  :ensure nil
+  :hook (text-mode . flyspell-mode)
+  :custom
+  ;; Recent versions of text-mode automatically add an ispell capf
+  ;; This annoys me to no end so I disable it here
+  (text-mode-ispell-word-completion nil)
+  (sentence-end-double-space nil)
+  (ispell-program-name "/opt/homebrew/bin/ispell"))
+
+(use-package visual-fill-column
+  :hook (text-mode . visual-fill-column-mode)
+  :custom
+  (visual-fill-column-width 120)
+  (visual-fill-column-center-text nil)
+  (visual-fill-column-enable-sensible-window-split t)
+  :config
+  (advice-add 'text-scale-adjust :after #'visual-fill-column-adjust))
 
 ;; _____________________________________________________________________________
 ;; Magit
@@ -596,6 +572,38 @@
         ("c" "Context" entry (file "~/roam/Inbox.org") "* TODO %?\n%U\n%a" :empty-lines 1)))
 
 ;; _____________________________________________________________________________
+;; Presenting
+;; _____________________________________________________________________________
+
+(use-package olivetti
+  :custom
+  (olivetti-body-width 0.7)
+  (olivetti-minimum-body width 80))
+
+(use-package logos
+  :hook (logos-focus-mode . nrm/present-funs)
+  :custom
+  (logos-outlines-are-pages t)
+  :config
+  (setq-default logos-hide-cursor t
+                logos-hide-mode-line t
+                logos-hide-buffer-boundaries t
+                logos-hide-fringe t
+                logos-variable-pitch nil
+                logos-buffer-read-only t
+                logos-olivetti t)
+  (defun nrm/present-funs ()
+    (visual-fill-column-mode 0)
+    (display-line-numbers-mode 0))
+  :bind
+  ("C-x n n" . logos-narrow-dwim)
+  ("C-x ]" . logos-forward-page-dwim)
+  ("C-x [" . logos-backward-page-dwim)
+  (:map logos-focus-mode-map
+        ("<right>" . logos-forward-page-dwim)
+        ("<left>" . logos-backward-page-dwim)))
+
+;; _____________________________________________________________________________
 ;; Shell
 ;; _____________________________________________________________________________
 
@@ -724,10 +732,8 @@
   :custom
   (treesit-font-lock-level 4))
 
-(use-package kotlin-ts-mode)
-
 ;; _____________________________________________________________________________
-;; Rust
+;; Language-specific
 ;; _____________________________________________________________________________
 
 (use-package rust-mode
@@ -753,9 +759,7 @@
   (rustic-format-display-method 'ignore)
   (rustic-format-trigger 'on-compile))
 
-;; _____________________________________________________________________________
-;; TypeScript
-;; _____________________________________________________________________________
+(use-package kotlin-ts-mode)
 
 (use-package typescript-ts-mode
   :ensure nil
