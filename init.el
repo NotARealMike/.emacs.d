@@ -28,50 +28,45 @@
 (setq use-package-always-ensure t)
 
 ;; _____________________________________________________________________________
-;; Shortcuts
+;; Base Emacs
 ;; _____________________________________________________________________________
 
-;; Create shortcuts to relevant files under s-g, mnemonic GOTO
-(global-set-key (kbd "s-g") nil)
-(global-set-key (kbd "s-g e") (lambda () (interactive) (find-file "~/.emacs.d/README.org")))
-(global-set-key (kbd "s-g s") (lambda () (interactive) (find-file "/sudo::/")))
-
-;; Cycle through buffers easily
-(global-set-key (kbd "s-<left>") 'previous-buffer)
-(global-set-key (kbd "s-<right>") 'next-buffer)
-
-;; Cycle through windows easily
-(defun nrm/switch-to-prev-window ()
-  (interactive)
-  (other-window -1))
-(global-set-key (kbd "C-<tab>") 'other-window)
-(global-set-key (kbd "C-S-<tab>") 'nrm/switch-to-prev-window)
-
-;; Simplify yes-or-no prompts
-(defalias 'yes-or-no-p 'y-or-n-p)
-;; Tweak recentering to be more comfortable
-(setq recenter-positions '(middle 0.1 0.9))
-
-(when (memq system-type '(darwin))
-  ;; Make the right option key not act as meta, to let me type characters that need the option key
-  (setq ns-right-alternate-modifier 'none)
-  (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)))
+(use-package emacs
+  :config
+  (set-scroll-bar-mode nil)
+  (tool-bar-mode -1)
+  (column-number-mode 1)
+  (global-display-line-numbers-mode 1)
+  (global-visual-line-mode 1)
+  (savehist-mode 1) ;; Order minibuffer completions by recency
+  (recentf-mode 1)  ;; Keep track of recently opened files
+  (add-to-list 'default-frame-alist '(alpha . (95 . 80)))
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  ;; MacOS-specific configuration
+  (when (memq system-type '(darwin))
+    ;; Make the right option key not act as meta, to let me type characters that need the option key
+    (setq ns-right-alternate-modifier 'none)
+    (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)))
+  :custom
+  (use-short-answers t)
+  (recenter-positions '(middle 0.1 0.9))    ;; Tweak recentering to be more comfortable
+  (ring-bell-function 'ignore)
+  (frame-title-format nil)
+  :bind
+  ;; Create shortcuts to relevant files under s-g, mnemonic GOTO
+  ("s-g" . nil)
+  ("s-g e" . (lambda () (interactive) (find-file "~/.emacs.d/README.org")))
+  ("s-g s" . (lambda () (interactive) (find-file "/sudo::/")))
+  ;; Cycle through buffers easily
+  ("s-<left>" . 'previous-buffer)
+  ("s-<right>" . 'next-buffer)
+  ;; Cycle through windows easily
+  ("C-<tab>" . 'other-window)
+  ("C-S-<tab>" . (lambda () (interactive) (other-window -1))))
 
 ;; _____________________________________________________________________________
 ;; Appearance
 ;; _____________________________________________________________________________
-
-(setq ring-bell-function 'ignore)
-
-(setq frame-title-format nil)
-(set-scroll-bar-mode nil)
-(tool-bar-mode -1)
-(column-number-mode 1)
-(global-display-line-numbers-mode 1)
-(global-visual-line-mode 1)
-
-(add-to-list 'default-frame-alist '(alpha . (95 . 80)))
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (use-package ef-themes
   :config
@@ -173,9 +168,6 @@
   (vertico-count 20)
   (vertico-cycle t))
 
-;; Order minibuffer completions by recency
-(savehist-mode 1)
-
 ;; Rich annotations in the minibuffer
 (use-package marginalia
   :config
@@ -222,9 +214,6 @@
          ("C-M-y" . consult-yank-from-kill-ring)
          ;; Goto position at line:column
          ("M-g M-g" . consult-goto-line)))
-
-;; Enable recent files as a virtual buffer source for consult-buffer
-(recentf-mode 1)
 
 ;; Actions based on context
 (use-package embark
