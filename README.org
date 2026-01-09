@@ -12,13 +12,13 @@ This configuration is designed to bootstrap itself, but there are a few dependen
 Here I use Homebrew to install dependencies because I mostly use MacOS.
 
 Core dependencies:
-- ~enchant~, for spell checking
+- ~enchant~ and ~pkgconf~, for spell checking
 - ~coreutils~, for the ~gls~ CLI command, which is an alternative to ~ls~ that can be used by dired
 - ~cmake~ and ~libtool~, to compile dependencies of vterm and Roam
 
 
 #+begin_src shell
-brew install enchant coreutils cmake libtool
+brew install enchant pkgconf coreutils cmake libtool
 #+end_src
 
 
