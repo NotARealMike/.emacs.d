@@ -309,13 +309,15 @@
 
 (use-package text-mode
   :ensure nil
-  :hook (text-mode . flyspell-mode)
   :custom
   ;; Recent versions of text-mode automatically add an ispell capf
   ;; This annoys me to no end so I disable it here
   (text-mode-ispell-word-completion nil)
-  (sentence-end-double-space nil)
-  (ispell-program-name "/opt/homebrew/bin/ispell"))
+  (sentence-end-double-space nil))
+
+(use-package jinx
+  :hook (text-mode . jinx-mode)
+  :bind (("M-$" . jinx-correct)))
 
 (use-package visual-fill-column
   :hook (text-mode . visual-fill-column-mode)

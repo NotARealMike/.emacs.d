@@ -12,13 +12,13 @@ This configuration is designed to bootstrap itself, but there are a few dependen
 Here I use Homebrew to install dependencies because I mostly use MacOS.
 
 Core dependencies:
-- ~ispell~, for spell checking
+- ~enchant~, for spell checking
 - ~coreutils~, for the ~gls~ CLI command, which is an alternative to ~ls~ that can be used by dired
 - ~cmake~ and ~libtool~, to compile dependencies of vterm and Roam
 
 
 #+begin_src shell
-brew install ispell coreutils cmake libtool
+brew install enchant coreutils cmake libtool
 #+end_src
 
 
@@ -460,13 +460,15 @@ Utilities for writing in natural languages:
 
   (use-package text-mode
     :ensure nil
-    :hook (text-mode . flyspell-mode)
     :custom
     ;; Recent versions of text-mode automatically add an ispell capf
     ;; This annoys me to no end so I disable it here
     (text-mode-ispell-word-completion nil)
-    (sentence-end-double-space nil)
-    (ispell-program-name "/opt/homebrew/bin/ispell"))
+    (sentence-end-double-space nil))
+
+  (use-package jinx
+    :hook (text-mode . jinx-mode)
+    :bind (("M-$" . jinx-correct)))
 
   (use-package visual-fill-column
     :hook (text-mode . visual-fill-column-mode)

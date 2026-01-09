@@ -37,3 +37,6 @@ recentf
 tramp
 org-persist
 url
+
+# Local variables
+.dir-locals.el
