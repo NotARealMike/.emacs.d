@@ -232,6 +232,8 @@
   (wdired-use-dired-vertical-movement t))
 
 (use-package dired-subtree
+  :config
+  (advice-add 'dired-subtree-toggle :after (lambda (&rest _) (revert-buffer)))
   :bind
   (:map dired-mode-map
         ("<tab>" . dired-subtree-toggle)))
