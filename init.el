@@ -319,6 +319,8 @@
 
 (use-package jinx
   :hook (text-mode . jinx-mode)
+  :custom
+  (jinx-languages "en_GB")
   :bind (("M-$" . jinx-correct)))
 
 (use-package visual-fill-column
