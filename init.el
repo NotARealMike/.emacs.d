@@ -733,6 +733,9 @@
           (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
           (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
           (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+  (dolist (source treesit-language-source-alist)
+    (unless (treesit-ready-p (car source))
+      (treesit-install-language-grammar (car source))))
   ;; Explicitly remap python-mode, because python scripts often include a shebang that overrides defaults
   (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
   :custom
