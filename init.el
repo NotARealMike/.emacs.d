@@ -807,7 +807,7 @@
 ;; Finish loading config
 ;; _____________________________________________________________________________
 
-;; (toggle-debug-on-error)
+(toggle-debug-on-error)
 
 (message "Finished loading config at %s" (format-time-string "%T"))
 (message "Emacs loaded in %s with %d garbage collections."
