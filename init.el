@@ -99,12 +99,8 @@
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
   :custom
+  (doom-modeline-total-line-number t)
   (doom-modeline-buffer-encoding nil))
-
-(use-package nyan-mode
-  :config (nyan-mode 1))
-
-(use-package golden-ratio)
 
 ;; _____________________________________________________________________________
 ;; Completion

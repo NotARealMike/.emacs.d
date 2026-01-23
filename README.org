@@ -177,24 +177,16 @@ Icons that make several modes prettier, but don't change functionality.
   (use-package nerd-icons-corfu)
 #+end_src
 
-** Extras
+** Modeline
 
 The Doom modeline displays some useful information without much configuration.
-
-Having Nyan cat tell me where I am in the buffer ensures I don't miss "more modern IDEs".
-
-Golden ratio is sometimes useful to resize windows when quickly switching between them – but I find it annoying as a default on a wide screen.
 
 #+begin_src emacs-lisp
   (use-package doom-modeline
     :init (doom-modeline-mode 1)
     :custom
+    (doom-modeline-total-line-number t)
     (doom-modeline-buffer-encoding nil))
-
-  (use-package nyan-mode
-    :config (nyan-mode 1))
-
-  (use-package golden-ratio)
 #+end_src
 
 * Completion
