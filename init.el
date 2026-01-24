@@ -448,10 +448,7 @@
         ((org-agenda-overriding-header "Backlog")))
        (tags-todo
         "+@blocked"
-        ((org-agenda-overriding-header "Blocked on another task")))
-       ))
-     ("q" "Quick wins"
-      ((tags-todo "+@low-@buy-@waiting-@blocked")))))
+        ((org-agenda-overriding-header "Blocked on another task")))))))
   ;; Display done items with their completion date
   (org-agenda-start-with-log-mode t)
   (org-agenda-log-mode-items '(closed clock state))
