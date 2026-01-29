@@ -738,11 +738,6 @@
 ;; Language-specific
 ;; _____________________________________________________________________________
 
-(use-package rust-mode
-  :ensure nil
-  :custom
-  (rust-mode-treesitter-derive t))
-
 (use-package rustic
   :defer t
   :hook
@@ -762,14 +757,6 @@
   (rustic-format-trigger 'on-compile))
 
 (use-package kotlin-ts-mode)
-
-(use-package typescript-ts-mode
-  :ensure nil
-  :mode ("\\.ts\\'" "\\.js\\'"))
-
-(use-package tsx-ts-mode
-  :ensure nil
-  :mode ("\\.tsx\\'" "\\.jsx\\'"))
 
 ;; _____________________________________________________________________________
 ;; File formats

@@ -992,11 +992,6 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
   ;; Language-specific
   ;; _____________________________________________________________________________
 
-  (use-package rust-mode
-    :ensure nil
-    :custom
-    (rust-mode-treesitter-derive t))
-
   (use-package rustic
     :defer t
     :hook
@@ -1016,14 +1011,6 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
     (rustic-format-trigger 'on-compile))
 
   (use-package kotlin-ts-mode)
-
-  (use-package typescript-ts-mode
-    :ensure nil
-    :mode ("\\.ts\\'" "\\.js\\'"))
-
-  (use-package tsx-ts-mode
-    :ensure nil
-    :mode ("\\.tsx\\'" "\\.jsx\\'"))
 
 #+end_src
 
