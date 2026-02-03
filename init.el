@@ -785,6 +785,7 @@
 
 (let ((local-config "~/local-config.el"))
   (when (file-exists-p local-config)
+    (global-set-key (kbd "s-g l") `(lambda () (interactive) (find-file ,local-config)))
     (load-file local-config)))
 
 ;; _____________________________________________________________________________

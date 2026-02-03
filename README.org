@@ -1062,6 +1062,7 @@ Load configuration that is specific to the local machine. For example, functions
 
   (let ((local-config "~/local-config.el"))
     (when (file-exists-p local-config)
+      (global-set-key (kbd "s-g l") `(lambda () (interactive) (find-file ,local-config)))
       (load-file local-config)))
 #+end_src
 
