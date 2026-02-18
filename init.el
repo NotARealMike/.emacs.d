@@ -517,10 +517,6 @@
        ("j" "Trip" plain
         "* Flights/travel\n\n* Accommodation\n\n* Comments\n"
         :target (file+head ,default-file ,(concat default-header ":Trip:AgendaSource:"))
-        :unnarrowed t)
-       ("l" "Location" plain
-        "* Comments\n%?\n* Visits\n\n* Ice cream\n\n* Restaurants\n\n* Points of interest\n"
-        :target (file+head ,default-file ,(concat default-header ":Location:"))
         :unnarrowed t))))
   :bind (("s-r" . org-roam-node-find)
          ;; Go to the file directly, skipping the capture prompt
