@@ -490,6 +490,16 @@ Utilities for writing in natural languages:
     :custom
     (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
     (magit-diff-refine-hunk 'all)
+    :config
+    (let ((margin-format '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18)))
+      (dolist (format-var '(magit-log-margin
+                            magit-status-margin
+                            magit-refs-margin
+                            magit-stashes-margin
+                            magit-cherry-margin
+                            magit-log-select-margin
+                            magit-reflog-margin))
+        (set format-var margin-format)))
     :bind ("C-x g" . magit-status))
 
   (use-package magit-gh)
