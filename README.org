@@ -15,10 +15,12 @@ Core dependencies:
 - ~enchant~ and ~pkgconf~, for spell checking
 - ~coreutils~, for the ~gls~ CLI command, which is an alternative to ~ls~ that can be used by dired
 - ~cmake~ and ~libtool~, to compile dependencies of vterm and Roam
+- ~gh~, the GitHub CLI tool, to let me locally list PRs on GH repositories
 
 
 #+begin_src shell
-brew install enchant pkgconf coreutils cmake libtool
+brew install enchant pkgconf coreutils cmake libtool gh
+gh auth login
 #+end_src
 
 
@@ -489,6 +491,8 @@ Utilities for writing in natural languages:
     (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
     (magit-diff-refine-hunk 'all)
     :bind ("C-x g" . magit-status))
+
+  (use-package magit-gh)
 #+end_src
 
 * Org
