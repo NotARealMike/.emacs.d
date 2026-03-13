@@ -605,7 +605,10 @@ I organise my tasks as follows:
       (org-log-done-with-time nil)
       (org-log-into-drawer t)
       ;; By default, tasks have the lowest possible priority
-      (org-priority-default org-priority-lowest))
+      (org-priority-default org-priority-lowest)
+      :config
+      ;; When a recurring task is done, log the date but not the time
+      (add-to-list 'org-log-note-headings '(state . "State %-12s from %-12S %d")))
   #+end_src
 
 ** Org agenda
