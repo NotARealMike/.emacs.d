@@ -430,9 +430,6 @@
 
 (use-package org-agenda
   :ensure org
-  :bind
-  (:map org-agenda-mode-map
-        ("<return>" . nrm/org-agenda-switch-and-narrow))
   :custom
   (org-agenda-custom-commands
    '(("d" "Dashboard"
@@ -473,13 +470,12 @@
   (org-agenda-todo-list-sublevels nil)
   (org-agenda-hide-tags-regexp "AgendaSource\\|Topic\\|Project\\|Person\\|Book\\|Company\\|Trip")
   :hook
-  (org-agenda-mode . (lambda () (display-line-numbers-mode -1)))
-  (org-agenda-mode . hl-line-mode)
+  (org-agenda-mode . nrm/org-agenda-hook)
+  (org-agenda-after-show . (lambda () (org-narrow-to-subtree)))
   :config
-  (defun nrm/org-agenda-switch-and-narrow ()
-    (interactive)
-    (org-agenda-switch-to)
-    (org-narrow-to-subtree)))
+  (defun nrm/org-agenda-hook ()
+    (display-line-numbers-mode -1)
+    (hl-line-mode 1)))
 
 ;; _____________________________________________________________________________
 ;; Roam
