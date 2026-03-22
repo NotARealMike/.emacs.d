@@ -475,7 +475,15 @@
   :config
   (defun nrm/org-agenda-hook ()
     (display-line-numbers-mode -1)
-    (hl-line-mode 1)))
+    (hl-line-mode 1))
+  (defun nrm/from-agenda-follow-p (_buffer-or-name _action)
+    (and (derived-mode-p 'org-agenda-mode)
+         org-agenda-follow-mode))
+  (add-to-list 'display-buffer-alist
+               '(nrm/from-agenda-follow-p
+                 display-buffer-in-side-window
+                 (window-width . 0.5)
+                 (side . right))))
 
 ;; _____________________________________________________________________________
 ;; Roam
