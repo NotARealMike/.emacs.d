@@ -670,14 +670,20 @@
 ;; Compilation
 ;; _____________________________________________________________________________
 
-(defun nrm/switch-to-compilation-buffer-hook (buffer status)
-  (switch-to-buffer buffer)
-  (delete-other-windows))
-
-(add-hook 'compilation-finish-functions 'nrm/switch-to-compilation-buffer-hook)
-(add-hook 'compilation-mode-hook 'goto-address-mode)
-
-(setq compilation-scroll-output t)
+(use-package compile
+  :ensure nil
+  :hook (compilation-mode . goto-address-mode)
+  :custom
+  (compilation-scroll-output t)
+  :config
+  (add-to-list 'display-buffer-alist
+               '((derived-mode . compilation-mode)
+                 display-buffer-in-side-window
+                 (window-height . 0.3)
+                 (side . bottom)
+                 (dedicated . t)
+                 (window-parameters
+                  (no-delete-other-windows . t)))))
 
 ;; _____________________________________________________________________________
 ;; Flymake
