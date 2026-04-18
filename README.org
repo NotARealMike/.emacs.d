@@ -524,6 +524,8 @@ How meta!
     ("\C-cl" . org-store-link)
     :hook (org-mode . org-indent-mode)
     :custom
+    (org-special-ctrl-a/e t)
+    (org-special-ctrl-k t)
     (org-ellipsis " ▾")
     (org-startup-folded 'content)
     ;; Always add blank lines before inserted headings, never before list items
