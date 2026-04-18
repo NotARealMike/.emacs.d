@@ -60,10 +60,12 @@
   ("s-g s" . (lambda () (interactive) (find-file "/sudo::/")))
   ;; Cycle through buffers easily
   ("s-<left>" . 'previous-buffer)
-  ("s-<right>" . 'next-buffer)
-  ;; Cycle through windows easily
-  ("C-<tab>" . 'other-window)
-  ("C-S-<tab>" . (lambda () (interactive) (other-window -1))))
+  ("s-<right>" . 'next-buffer))
+
+(use-package windmove
+  :ensure nil
+  :init
+  (windmove-default-keybindings))
 
 ;; _____________________________________________________________________________
 ;; Appearance
