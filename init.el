@@ -439,11 +439,12 @@
        (tags-todo
         "-TODO=\"PROG\"+PRIORITY=\"A\"-@waiting-@blocked"
         ((org-agenda-overriding-header "Urgent tasks")))
-       (agenda "" ((org-agenda-span 'week)))))
+       (agenda)))
      ("p" "Planning"
       ((tags-todo
         "-@low-@medium-@high"
         ((org-agenda-overriding-header "Inbox: Untagged tasks")))
+       (agenda)
        (tags-todo
         "TODO=\"PROG\"-@waiting-@blocked"
         ((org-agenda-overriding-header "In progress")))
