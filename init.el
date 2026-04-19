@@ -435,38 +435,6 @@
 (use-package org-agenda
   :ensure org
   :custom
-  (org-agenda-custom-commands
-   '(("d" "Dashboard"
-      ((tags-todo
-        "TODO=\"PROG\"-@waiting-@blocked"
-        ((org-agenda-overriding-header "In progress")))
-       (tags-todo
-        "-TODO=\"PROG\"+PRIORITY=\"A\"-@waiting-@blocked"
-        ((org-agenda-overriding-header "Urgent tasks")))
-       (agenda)))
-     ("p" "Planning"
-      ((tags-todo
-        "-@low-@medium-@high"
-        ((org-agenda-overriding-header "Inbox: Untagged tasks")))
-       (agenda)
-       (tags-todo
-        "TODO=\"PROG\"-@waiting-@blocked"
-        ((org-agenda-overriding-header "In progress")))
-       (tags-todo
-        "-TODO=\"PROG\"+PRIORITY=\"A\"-@waiting-@blocked"
-        ((org-agenda-overriding-header "Current priorities")))
-       (tags-todo
-        "-TODO=\"PROG\"+PRIORITY=\"B\"-@waiting-@blocked"
-        ((org-agenda-overriding-header "Next up")))
-       (tags-todo
-        "+@waiting"
-        ((org-agenda-overriding-header "Waiting for someone")))
-       (tags-todo
-        "-TODO=\"PROG\"-PRIORITY=\"A\"-PRIORITY=\"B\"-@waiting-@blocked"
-        ((org-agenda-overriding-header "Backlog")))
-       (tags-todo
-        "+@blocked"
-        ((org-agenda-overriding-header "Blocked on another task")))))))
   ;; Display done items with their completion date
   (org-agenda-start-with-log-mode t)
   (org-agenda-log-mode-items '(closed clock state))
@@ -489,6 +457,52 @@
                  display-buffer-in-side-window
                  (window-width . 0.5)
                  (side . right))))
+
+(use-package org-super-agenda
+  :after org-agenda
+  :config
+  (org-super-agenda-mode 1)
+  :custom
+  (org-agenda-custom-commands
+   '(("d" "Dashboard"
+      ((alltodo ""
+                ((org-agenda-overriding-header "")
+                 (org-super-agenda-groups
+                  '((:discard ;; Filter out blocked, waiting, and scheduled tasks
+                     (:tag ("@blocked" "@waiting") :scheduled t :deadline t))
+                    (:name "🧙 In progress"
+                           :todo "PROG")
+                    (:name "✨ Current priorities"
+                           :priority "A")
+                    (:discard ;; Discard everything else
+                     (:anything t))))))
+       (agenda)))
+     ("p" "Planning"
+      ((agenda)
+       (alltodo ""
+                ((org-agenda-overriding-header "")
+                 (org-super-agenda-groups
+                  '((:name "📥 Inbox: Untracked tasks"
+                           :not (:tag ("@high" "@medium" "@low")))
+                    (:name "⏳ Waiting"
+                           :tag "@waiting"
+                           :order 50)
+                    (:name "🧱 Blocked"
+                           :tag "@blocked"
+                           :order 90)
+                    (:name "📅 Scheduled"
+                           :scheduled t
+                           :deadline t
+                           :order 51)
+                    (:name "🧙 In progress"
+                           :todo "PROG")
+                    (:name "✨ Current priorities"
+                           :priority "A")
+                    (:name "🔜 Next up"
+                           :priority "B")
+                    (:name "📁 Backlog"
+                           :anything t
+                           :order 70))))))))))
 
 ;; _____________________________________________________________________________
 ;; Roam
