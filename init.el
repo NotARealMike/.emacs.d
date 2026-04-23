@@ -462,7 +462,12 @@
   (org-super-agenda-mode 1)
   :custom
   (org-agenda-custom-commands
-   '(("d" "Dashboard"
+   '(("c" "Categories"
+      ((alltodo ""
+                ((org-agenda-overriding-header "📁 Tasks by Project")
+                 (org-super-agenda-groups
+                  '((:auto-category t)))))))
+     ("d" "Dashboard"
       ((alltodo ""
                 ((org-agenda-overriding-header "")
                  (org-super-agenda-groups
