@@ -62,10 +62,8 @@
   ("s-<left>" . 'previous-buffer)
   ("s-<right>" . 'next-buffer))
 
-(use-package windmove
-  :ensure nil
-  :init
-  (windmove-default-keybindings))
+(use-package ace-window
+  :bind ("s-o" . ace-window))
 
 ;; _____________________________________________________________________________
 ;; Appearance
