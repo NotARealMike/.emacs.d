@@ -298,7 +298,7 @@
 
 (use-package avy
   :bind
-  ("M-s M-s" . avy-goto-char-timer)
+  ("s-f" . avy-goto-char-timer)
   ("M-s M-l" . avy-goto-line))
 
 ;; _____________________________________________________________________________
