@@ -63,7 +63,7 @@
   ("s-<right>" . 'next-buffer))
 
 (use-package ace-window
-  :bind ("s-o" . ace-window))
+  :bind ("C-x o" . ace-window))
 
 ;; _____________________________________________________________________________
 ;; Appearance
