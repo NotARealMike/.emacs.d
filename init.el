@@ -182,7 +182,6 @@
   (corfu-popupinfo-mode 1)
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
   :custom
-  (corfu-auto t)
   (corfu-cycle t)
   (corfu-preview-current nil)
   (corfu-popupinfo-delay (cons 1.0 0.1)))
@@ -190,6 +189,7 @@
 ;; Extra capfs
 (use-package cape
   :config
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file))
 
 ;; _____________________________________________________________________________
