@@ -40,3 +40,6 @@ url
 
 # Local variables
 .dir-locals.el
+
+# Elfeed database
+elfeed

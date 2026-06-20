@@ -859,6 +859,19 @@ Doing a presentation messes up a bunch of the minor modes I use, so the simpler 
           ("<left>" . logos-backward-page-dwim)))
 #+end_src
 
+* RSS
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; RSS
+  ;; _____________________________________________________________________________
+
+  (use-package elfeed
+    :custom
+    (elfeed-feeds
+     '(("https://xkcd.com/atom.xml" comix))))
+#+end_src
+
 * Shell
 
 I choose to use [[https://github.com/akermu/emacs-libvterm/][vterm]] because it is fast, compatible with my usual terminal setup, and supports interactive commands.
