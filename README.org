@@ -132,7 +132,9 @@ Settings and key bindings that make common actions faster.
     ("s-<right>" . 'next-buffer))
 
   (use-package ace-window
-    :bind ("C-x o" . ace-window))
+    :bind ("C-x o" . ace-window)
+    :custom
+    (aw-scope 'frame))
 
 #+end_src
 

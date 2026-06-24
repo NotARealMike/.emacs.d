@@ -67,7 +67,9 @@
   ("s-<right>" . 'next-buffer))
 
 (use-package ace-window
-  :bind ("C-x o" . ace-window))
+  :bind ("C-x o" . ace-window)
+  :custom
+  (aw-scope 'frame))
 
 ;; _____________________________________________________________________________
 ;; Appearance
