@@ -53,6 +53,10 @@
   (recenter-positions '(middle 0.1 0.9))    ;; Tweak recentering to be more comfortable
   (ring-bell-function 'ignore)
   (frame-title-format nil)
+  ;; Make help windows behave better
+  (help-window-select t)
+  (help-window-keep-selected t)
+  (save-interprogram-paste-before-kill t) ;; Keep clipboard copies from other applications longer
   :bind
   ;; Create shortcuts to relevant files under s-g, mnemonic GOTO
   ("s-g" . nil)
