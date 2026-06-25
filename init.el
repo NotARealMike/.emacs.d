@@ -42,7 +42,6 @@
   (savehist-mode 1) ;; Order minibuffer completions by recency
   (recentf-mode 1)  ;; Keep track of recently opened files
   (add-to-list 'default-frame-alist '(alpha . (95 . 80)))
-  (add-to-list 'default-frame-alist '(fullscreen . maximized))
   ;; MacOS-specific configuration
   (when (memq system-type '(darwin))
     ;; Make the right option key not act as meta, to let me type characters that need the option key
@@ -70,6 +69,117 @@
   :bind ("C-x o" . ace-window)
   :custom
   (aw-scope 'frame))
+
+;; _____________________________________________________________________________
+;; Frame layouts
+;; _____________________________________________________________________________
+
+(defvar nrm/single-frame-width 180
+  "The default width for most frames.")
+
+(defvar nrm/double-frame-width 280
+  "The default width for frames I intend to split vertically.")
+
+(add-to-list 'default-frame-alist '(fullscreen . fullheight))
+(add-to-list 'default-frame-alist `(width . ,nrm/single-frame-width))
+
+(defun nrm/align-frame-centre (&optional frame workarea)
+  "Move FRAME to the top centre of a monitor.
+If FRAME is nil, defaults to the selected frame.
+If WORKAREA is nil, defaults to the frame's current monitor."
+  (interactive)
+  (let* ((frame (or frame (selected-frame)))
+         (frame-px-width (frame-pixel-width frame))
+         (workarea (or workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
+         (mon-x (nth 0 workarea))
+         (mon-y (nth 1 workarea))
+         (mon-w (nth 2 workarea))
+         (x (+ mon-x (/ (- mon-w frame-px-width) 2)))
+         (y mon-y))
+    (set-frame-position frame x y)))
+
+(defun nrm/align-frame-left (&optional frame workarea pad)
+  "Move FRAME to the top left of a monitor, optionally PAD pixels away.
+If FRAME is nil, defaults to the selected frame.
+If WORKAREA is nil, defaults to the frame's current monitor."
+  (interactive)
+  (let* ((pad (or pad 0))
+         (frame (or frame (selected-frame)))
+         (frame-px-width (frame-pixel-width frame))
+         (workarea (or workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
+         (mon-x (nth 0 workarea))
+         (mon-y (nth 1 workarea))
+         (x (+ mon-x pad))
+         (y mon-y))
+    (set-frame-position frame x y)))
+
+(defun nrm/align-frame-right (&optional frame workarea pad)
+  "Move FRAME to the top right of a monitor, optionally PAD pixels away.
+If FRAME is nil, defaults to the selected frame.
+If WORKAREA is nil, defaults to the frame's current monitor."
+  (interactive)
+  (let* ((pad (or pad 0))
+         (frame (or frame (selected-frame)))
+         (frame-px-width (frame-pixel-width frame))
+         (workarea (or workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
+         (mon-x (nth 0 workarea))
+         (mon-y (nth 1 workarea))
+         (mon-w (nth 2 workarea))
+         (x (- (+ mon-x mon-w) frame-px-width pad))
+         (y mon-y))
+    (set-frame-position frame x y)))
+
+(defun nrm/frame-layout-centre ()
+  "Resize to single width, center horizontally, and maximize height."
+  (interactive)
+  (let* ((frame (selected-frame))
+         (workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
+    (set-frame-parameter frame 'fullscreen 'fullheight)
+    (set-frame-width frame nrm/single-frame-width)
+    (nrm/align-frame-centre frame workarea)))
+
+(defun nrm/frame-layout-left ()
+  "Resize to single width, center horizontally, and maximize height."
+  (interactive)
+  (let* ((frame (selected-frame))
+         (workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
+    (set-frame-parameter frame 'fullscreen 'fullheight)
+    (set-frame-width frame nrm/single-frame-width)
+    (nrm/align-frame-left frame workarea)))
+
+(defun nrm/frame-layout-right ()
+  "Resize to single width, center horizontally, and maximize height."
+  (interactive)
+  (let* ((frame (selected-frame))
+         (workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
+    (set-frame-parameter frame 'fullscreen 'fullheight)
+    (set-frame-width frame nrm/single-frame-width)
+    (nrm/align-frame-right frame workarea)))
+
+(defun nrm/frame-layout-double ()
+  "Resize to double width, align right, and maximize height."
+  (interactive)
+  (let* ((frame (selected-frame))
+         (workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
+    (set-frame-parameter frame 'fullscreen 'fullheight)
+    (set-frame-width frame nrm/double-frame-width)
+    (nrm/align-frame-right frame workarea)))
+
+(defun nrm/frame-layout-maximise ()
+  "Maximise the current frame in its monitor"
+  (interactive)
+  (set-frame-parameter (selected-frame) 'fullscreen 'maximized))
+
+(defvar-keymap nrm/frame-layout-map
+  :doc "Keymap for frame layout commands"
+  :prefix 'nrm/frame-layout-map
+  "c" #'nrm/frame-layout-centre
+  "l" #'nrm/frame-layout-left
+  "r" #'nrm/frame-layout-right
+  "d" #'nrm/frame-layout-double
+  "m" #'nrm/frame-layout-maximise)
+
+(global-set-key (kbd "s-l") nrm/frame-layout-map)
 
 ;; _____________________________________________________________________________
 ;; Appearance
