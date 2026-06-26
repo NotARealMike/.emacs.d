@@ -65,11 +65,6 @@
   ("s-<left>" . 'previous-buffer)
   ("s-<right>" . 'next-buffer))
 
-(use-package ace-window
-  :bind ("C-x o" . ace-window)
-  :custom
-  (aw-scope 'frame))
-
 ;; _____________________________________________________________________________
 ;; Switching and naming frames
 ;; _____________________________________________________________________________
@@ -423,6 +418,15 @@ If WORKAREA is nil, defaults to the frame's current monitor."
   :bind
   ("s-f" . avy-goto-char-timer)
   ("M-s M-l" . avy-goto-line))
+
+;; _____________________________________________________________________________
+;; ace-window
+;; _____________________________________________________________________________
+
+(use-package ace-window
+  :bind ("C-x o" . ace-window)
+  :custom
+  (aw-scope 'frame))
 
 ;; _____________________________________________________________________________
 ;; Text

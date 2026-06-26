@@ -130,11 +130,6 @@ Settings and key bindings that make common actions faster.
     ("s-<left>" . 'previous-buffer)
     ("s-<right>" . 'next-buffer))
 
-  (use-package ace-window
-    :bind ("C-x o" . ace-window)
-    :custom
-    (aw-scope 'frame))
-
 #+end_src
 
 * Frames
@@ -585,6 +580,22 @@ Avy lets me quickly move point to an arbitrary place in the visible buffer.
     :bind
     ("s-f" . avy-goto-char-timer)
     ("M-s M-l" . avy-goto-line))
+#+end_src
+
+** ace-window
+
+With this configuration, ~ace-window~ is an upgrade over the default ~other-window~ command. With two windows in a frame, it behaves identically. With more than two windows, it lets me move to the target window quicker, without repeated command calls.
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; ace-window
+  ;; _____________________________________________________________________________
+
+  (use-package ace-window
+    :bind ("C-x o" . ace-window)
+    :custom
+    (aw-scope 'frame))
+
 #+end_src
 
 * Text
