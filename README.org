@@ -48,6 +48,8 @@ The ~multi-vterm~ package seems to cause problems when bootstrapping the configu
 
 * Start
 
+Tweak the startup behaviour. Also, define a file with local-only configuration to be loaded after initialising the Emacs session.
+
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
   ;; Start loading config
@@ -58,7 +60,18 @@ The ~multi-vterm~ package seems to cause problems when bootstrapping the configu
   (setq inhibit-startup-message t)
 
   (switch-to-buffer "*Messages*")
-  (message "Started loading config at %s" (format-time-string "%T"))
+  (message "Started loading config at %s\n" (format-time-string "%T"))
+
+  (defvar nrm/local-config-file "~/local-config.el"
+    "File outside of ~/.emacs.d with configuration relevant only to the current machine.")
+
+  (defun nrm/load-local-config ()
+    (load-file nrm/local-config-file)
+    (message "Loaded local config!\n"))
+
+  (when (file-exists-p nrm/local-config-file)
+    (add-hook 'after-init-hook #'nrm/load-local-config))
+
 #+end_src
 
 * Package management
@@ -1361,21 +1374,6 @@ Elfeed does not respect the rule of using ~display-buffer~ to display its buffer
 
 #+end_src
 
-* Local config
-
-Load configuration that is specific to the local machine. For example, functions that are only useful on my work machine.
-
-#+begin_src emacs-lisp
-  ;; ___________________________________________________________________________
-  ;; Local config
-  ;; ___________________________________________________________________________
-
-  (let ((local-config "~/local-config.el"))
-    (when (file-exists-p local-config)
-      (global-set-key (kbd "s-g l") `(lambda () (interactive) (find-file ,local-config)))
-      (load-file local-config)))
-#+end_src
-
 * End
 
 #+begin_src emacs-lisp
@@ -1386,7 +1384,7 @@ Load configuration that is specific to the local machine. For example, functions
   (toggle-debug-on-error)
 
   (message "Finished loading config at %s" (format-time-string "%T"))
-  (message "Emacs loaded in %s with %d garbage collections."
+  (message "Emacs loaded in %s with %d garbage collections.\n"
            (format "%.2f seconds"
                    (float-time
                     (time-subtract after-init-time before-init-time)))

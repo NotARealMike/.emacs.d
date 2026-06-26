@@ -7,7 +7,17 @@
 (setq inhibit-startup-message t)
 
 (switch-to-buffer "*Messages*")
-(message "Started loading config at %s" (format-time-string "%T"))
+(message "Started loading config at %s\n" (format-time-string "%T"))
+
+(defvar nrm/local-config-file "~/local-config.el"
+  "File outside of ~/.emacs.d with configuration relevant only to the current machine.")
+
+(defun nrm/load-local-config ()
+  (load-file nrm/local-config-file)
+  (message "Loaded local config!\n"))
+
+(when (file-exists-p nrm/local-config-file)
+  (add-hook 'after-init-hook #'nrm/load-local-config))
 
 ;; _____________________________________________________________________________
 ;; Package management
@@ -1031,15 +1041,6 @@ and ~org-agenda-follow-mode~ is enabled."
 
 (advice-add 'elfeed :before #'nrm/switch-to-elfeed-frame)
 
-;; ___________________________________________________________________________
-;; Local config
-;; ___________________________________________________________________________
-
-(let ((local-config "~/local-config.el"))
-  (when (file-exists-p local-config)
-    (global-set-key (kbd "s-g l") `(lambda () (interactive) (find-file ,local-config)))
-    (load-file local-config)))
-
 ;; _____________________________________________________________________________
 ;; Finish loading config
 ;; _____________________________________________________________________________
@@ -1047,7 +1048,7 @@ and ~org-agenda-follow-mode~ is enabled."
 (toggle-debug-on-error)
 
 (message "Finished loading config at %s" (format-time-string "%T"))
-(message "Emacs loaded in %s with %d garbage collections."
+(message "Emacs loaded in %s with %d garbage collections.\n"
          (format "%.2f seconds"
                  (float-time
                   (time-subtract after-init-time before-init-time)))
