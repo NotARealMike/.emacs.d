@@ -257,7 +257,7 @@ If WORKAREA is nil, defaults to the frame's current monitor."
   (defun nrm/consult-grep-dwim ()
     (interactive)
     (if (or (vc-root-dir)
-            (derived-mode-p 'magit-section-mode))
+            (derived-mode-p 'magit-mode))
         (consult-git-grep)
       (consult-grep)))
   (setq xref-show-xrefs-function #'consult-xref
@@ -461,7 +461,6 @@ If WORKAREA is nil, defaults to the frame's current monitor."
 
 (use-package magit
   :custom
-  (magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (magit-diff-refine-hunk 'all)
   :config
   (let ((margin-format '(t "%Y-%m-%d %H:%M " magit-log-margin-width t 18)))
@@ -593,15 +592,7 @@ If WORKAREA is nil, defaults to the frame's current monitor."
   :config
   (defun nrm/org-agenda-hook ()
     (display-line-numbers-mode -1)
-    (hl-line-mode 1))
-  (defun nrm/from-agenda-follow-p (_buffer-or-name _action)
-    (and (derived-mode-p 'org-agenda-mode)
-         org-agenda-follow-mode))
-  (add-to-list 'display-buffer-alist
-               '(nrm/from-agenda-follow-p
-                 display-buffer-in-side-window
-                 (window-width . 0.5)
-                 (side . right))))
+    (hl-line-mode 1)))
 
 (use-package org-super-agenda
   :after org-agenda
@@ -852,16 +843,7 @@ If WORKAREA is nil, defaults to the frame's current monitor."
   :ensure nil
   :hook (compilation-mode . goto-address-mode)
   :custom
-  (compilation-scroll-output t)
-  :config
-  (add-to-list 'display-buffer-alist
-               '((derived-mode . compilation-mode)
-                 display-buffer-in-side-window
-                 (window-height . 0.3)
-                 (side . bottom)
-                 (dedicated . t)
-                 (window-parameters
-                  (no-delete-other-windows . t)))))
+  (compilation-scroll-output t))
 
 ;; _____________________________________________________________________________
 ;; Flymake
@@ -979,6 +961,75 @@ If WORKAREA is nil, defaults to the frame's current monitor."
   (:map beancount-mode-map
         ("C-c C-n" . outline-next-visible-heading)
         ("C-c C-p" . outline-previous-visible-heading)))
+
+;; _____________________________________________________________________________
+;; Buffer display rules
+;; _____________________________________________________________________________
+
+(defun nrm/from-agenda-follow-p (_buffer-or-name _action)
+  "Returns non-nil iff the current buffer is derived from ~org-agenda-mode~
+and ~org-agenda-follow-mode~ is enabled."
+  (and (derived-mode-p 'org-agenda-mode)
+       org-agenda-follow-mode))
+
+(defun nrm/display-buffer-reuse-right-window (buffer alist)
+  "Reuse the window to the right of the selected window, if possible."
+  (when-let ((win (window-in-direction 'right)))
+    (window--display-buffer buffer win 'reuse alist)))
+
+(defun nrm/get-named-frame (name)
+  "Returns a frame with the given NAME, creating it if necessary"
+  (or (cdr (assoc-string name (make-frame-names-alist)))
+      (make-frame `((name . ,name)))))
+
+(defun nrm/display-buffer-in-named-frame (buffer alist)
+  "Displays BUFFER in a frame with a given name, creating it if necessary.
+  ALIST should contain a symbol 'frame-name', whose value is either:
+  - The string name of the target frame;
+  - A function that accepts BUFFER and ALIST and returns the name of the target frame."
+  (let ((frame-name (cdr (assq 'frame-name alist))))
+    (when (functionp frame-name)
+      (setq frame-name (funcall frame-name buffer alist)))
+    (select-frame (nrm/get-named-frame frame-name))
+    (display-buffer-full-frame buffer alist)))
+
+(setq display-buffer-alist
+      '(
+        ;; When in an org-agenda buffer in follow mode, open all other buffers in a window to the right
+        (nrm/from-agenda-follow-p
+         (nrm/display-buffer-reuse-right-window display-buffer-in-direction)
+         (window-width . 0.5)
+         (direction . right))
+
+        ;; Display embark actions in a buffer below the current one that resizes to fit all actions
+        ("\\*Embark Actions\\*"
+         (display-buffer-reuse-window display-buffer-below-selected)
+         (window-height . fit-window-to-buffer)
+         (window-parameters . ((no-other-window . t)
+                               (mode-line-format . none))))
+
+        ;; Display compilation buffers in a dedicated frame
+        ("\\*compilation\\*"
+         nrm/display-buffer-in-named-frame
+         (frame-name . "Compilation"))
+
+        ;; Display magit status buffers in a dedicated window per repository
+        ((derived-mode . magit-status-mode)
+         nrm/display-buffer-in-named-frame
+         (frame-name . (lambda (buffer _alist) (buffer-name buffer))))
+
+        ;; Make some magit mode buffers take up the full frame
+        ((or . ((derived-mode . magit-log-mode)
+                (derived-mode . magit-stash-mode)
+                (derived-mode . magit-revision-mode)))
+         display-buffer-full-frame)
+
+        ))
+
+(defun nrm/switch-to-elfeed-frame ()
+  (select-frame-set-input-focus (nrm/get-named-frame "elfeed")))
+
+(advice-add 'elfeed :before #'nrm/switch-to-elfeed-frame)
 
 ;; ___________________________________________________________________________
 ;; Local config
