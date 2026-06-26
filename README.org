@@ -599,6 +599,8 @@ Utilities for writing in natural languages:
 
 * Magit
 
+** Base
+
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
   ;; Magit
@@ -621,6 +623,33 @@ Utilities for writing in natural languages:
     :bind ("C-x g" . magit-status))
 
   (use-package magit-gh)
+#+end_src
+
+** Repolist: A project dashboard
+
+The idea here is to create a dashboard with an overview of the status of my git repositories, to check if there are local changes that need to be finished/committed/pushed. I reverse sort by version by default so that the most recent projects appear first.
+
+#+begin_src emacs-lisp
+  (use-package magit
+    :custom
+    (magit-repository-directories
+     '(("~/.emacs.d/" . 0)
+       ("~/projects/" . 1)))
+    (magit-repolist-columns
+     `(("Name" 25 ,#'magit-repolist-column-ident)
+       ("Status" 8 ,#'magit-repolist-column-flags)
+       ("Stashes" 10 ,#'magit-repolist-column-stashes)
+       ("Branch" 25 ,#'magit-repolist-column-branch)
+       ("Version" 25 ,#'magit-repolist-column-version
+        ((:sort magit-repolist-version<)))
+       ("Unpulled" 10 ,#'magit-repolist-column-unpulled-from-upstream
+        ((:right-align t)
+         (:sort <)))
+       ("Unpushed" 10 ,#'magit-repolist-column-unpushed-to-upstream
+        ((:right-align t)
+         (:sort <)))))
+    (magit-repolist-sort-key '("Version" . t)))
+
 #+end_src
 
 * Org

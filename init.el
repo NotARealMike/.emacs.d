@@ -460,6 +460,26 @@ If WORKAREA is nil, defaults to the frame's current monitor."
 
 (use-package magit-gh)
 
+(use-package magit
+  :custom
+  (magit-repository-directories
+   '(("~/.emacs.d/" . 0)
+     ("~/projects/" . 1)))
+  (magit-repolist-columns
+   `(("Name" 25 ,#'magit-repolist-column-ident)
+     ("Status" 8 ,#'magit-repolist-column-flags)
+     ("Stashes" 10 ,#'magit-repolist-column-stashes)
+     ("Branch" 25 ,#'magit-repolist-column-branch)
+     ("Version" 25 ,#'magit-repolist-column-version
+      ((:sort magit-repolist-version<)))
+     ("Unpulled" 10 ,#'magit-repolist-column-unpulled-from-upstream
+      ((:right-align t)
+       (:sort <)))
+     ("Unpushed" 10 ,#'magit-repolist-column-unpushed-to-upstream
+      ((:right-align t)
+       (:sort <)))))
+  (magit-repolist-sort-key '("Version" . t)))
+
 ;; _____________________________________________________________________________
 ;; Org
 ;; _____________________________________________________________________________
