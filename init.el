@@ -361,13 +361,7 @@ If WORKAREA is nil, defaults to the frame's current monitor."
   (ibuffer-default-sorting-mode 'filename/process)
   (ibuffer-show-empty-filter-groups nil)
   (ibuffer-saved-filter-groups
-   (list
-    (cons "Projects" (nrm/ibuffer-project-filter-groups))
-    '("Types"
-      ("Dired" (mode . dired-mode))
-      ("Org" (mode . org-mode))
-      ("Version control" (derived-mode . magit-section-mode))
-      ("Source code" (derived-mode . prog-mode)))))
+   (list (cons "Projects" (nrm/ibuffer-project-filter-groups))))
   :hook
   (ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "Projects")))
   :config
