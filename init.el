@@ -71,7 +71,20 @@
   (aw-scope 'frame))
 
 ;; _____________________________________________________________________________
-;; Frame layouts
+;; Switching and naming frames
+;; _____________________________________________________________________________
+
+(defun nrm/other-frame-dwim ()
+  (interactive)
+  (if (<= (length (visible-frame-list)) 3)
+      (call-interactively #'other-frame)
+    (call-interactively #'select-frame-by-name)))
+
+(global-set-key (kbd "s-`") #'nrm/other-frame-dwim)
+(global-set-key (kbd "s-~") #'set-frame-name)
+
+;; _____________________________________________________________________________
+;; Moving frames and frame layouts
 ;; _____________________________________________________________________________
 
 (defvar nrm/single-frame-width 180

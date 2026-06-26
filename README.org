@@ -137,7 +137,33 @@ Settings and key bindings that make common actions faster.
 
 #+end_src
 
-** Frame layouts
+* Frames
+
+** Switching and naming frames
+
+I want to use multi-frame workflows in one of two ways.
+
+With few frames, I want to switch between frames quickly with ~other-frame~.
+
+When I am juggling many things, I want to easily name frames, and navigate to frames by name.
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Switching and naming frames
+  ;; _____________________________________________________________________________
+
+  (defun nrm/other-frame-dwim ()
+    (interactive)
+    (if (<= (length (visible-frame-list)) 3)
+        (call-interactively #'other-frame)
+      (call-interactively #'select-frame-by-name)))
+
+  (global-set-key (kbd "s-`") #'nrm/other-frame-dwim)
+  (global-set-key (kbd "s-~") #'set-frame-name)
+
+#+end_src
+
+** Moving frames and frame layouts
 
 I often want to switch between a few common frame layouts. For example, a narrow centred frame when I want to focus on a single buffer. Or a wider frame to display two side by side buffers, aligned to the right of the screen, so I can display some other app on the left.
 
@@ -145,7 +171,7 @@ Ideally, this should be handled by the system window manager, but the commands I
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
-  ;; Frame layouts
+  ;; Moving frames and frame layouts
   ;; _____________________________________________________________________________
 
   (defvar nrm/single-frame-width 180
