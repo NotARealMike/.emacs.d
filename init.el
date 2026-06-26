@@ -67,10 +67,6 @@
   (help-window-keep-selected t)
   (save-interprogram-paste-before-kill t) ;; Keep clipboard copies from other applications longer
   :bind
-  ;; Create shortcuts to relevant files under s-g, mnemonic GOTO
-  ("s-g" . nil)
-  ("s-g e" . (lambda () (interactive) (find-file "~/.emacs.d/README.org")))
-  ("s-g s" . (lambda () (interactive) (find-file "/sudo::/")))
   ;; Cycle through buffers easily
   ("s-<left>" . 'previous-buffer)
   ("s-<right>" . 'next-buffer))
@@ -698,10 +694,6 @@ If WORKAREA is nil, defaults to the frame's current monitor."
         :target (file+head ,default-file ,(concat default-header ":Trip:AgendaSource:"))
         :unnarrowed t))))
   :bind (("s-r" . org-roam-node-find)
-         ;; Go to the file directly, skipping the capture prompt
-         ("s-g r" . (lambda () (interactive) (find-file org-roam-directory)))
-         ("s-g t" . (lambda () (interactive) (org-roam-dailies-goto-today "d")))
-         ("s-g d" . (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
          :map org-mode-map
          ("M-s M-o" . consult-org-heading)
          ("C-c i" . org-roam-node-insert)
@@ -1040,6 +1032,29 @@ and ~org-agenda-follow-mode~ is enabled."
   (select-frame-set-input-focus (nrm/get-named-frame "elfeed")))
 
 (advice-add 'elfeed :before #'nrm/switch-to-elfeed-frame)
+
+;; _____________________________________________________________________________
+;; Shortcuts transient
+;; _____________________________________________________________________________
+
+(transient-define-prefix nrm/shortcuts-transient nil
+  "Commands for my commonly used actions/navigation."
+  ["Shortcuts"
+   ["Daily notes"
+    ("d" "Date's daily" (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
+    ("t" "Today's daily" (lambda () (interactive) (org-roam-dailies-goto-today "d")))]
+   ["Emacs config"
+    ("e" "Emacs config file" (lambda () (interactive) (find-file "~/.emacs.d/README.org")))
+    ("l" "Local config file" (lambda () (interactive) (find-file nrm/local-config-file)))]
+   ["Misc"
+    ("f" "Elfeed" elfeed)
+    ("g" "Git repo dashboard" magit-list-repositories)
+    ("r" "Roam directory" (lambda () (interactive) (find-file org-roam-directory)))
+    ("s" "SUDO home" (lambda () (interactive) (find-file "/sudo::/")))
+    ]
+   ])
+
+(global-set-key (kbd "s-g") #'nrm/shortcuts-transient)
 
 ;; _____________________________________________________________________________
 ;; Finish loading config
