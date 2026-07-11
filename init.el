@@ -448,7 +448,7 @@ If WORKAREA is nil, defaults to the frame's current monitor."
 (use-package jinx
   :hook (text-mode . jinx-mode)
   :custom
-  (jinx-languages "en_GB")
+  (jinx-languages "en_GB pt_PT")
   :bind (("M-$" . jinx-correct)))
 
 (use-package visual-fill-column
