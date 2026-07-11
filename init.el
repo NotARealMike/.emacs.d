@@ -88,10 +88,10 @@
 ;; Moving frames and frame layouts
 ;; _____________________________________________________________________________
 
-(defvar nrm/single-frame-width 180
+(defvar nrm/single-frame-width 142
   "The default width for most frames.")
 
-(defvar nrm/double-frame-width 280
+(defvar nrm/double-frame-width 284
   "The default width for frames I intend to split vertically.")
 
 (add-to-list 'default-frame-alist '(fullscreen . fullheight))
