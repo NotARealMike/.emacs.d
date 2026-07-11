@@ -326,9 +326,7 @@ Icons that make several modes prettier, but don't change functionality.
   (use-package nerd-icons-ibuffer
     :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 
-  (use-package nerd-icons-completion
-    :config
-    (nerd-icons-completion-mode))
+  (use-package nerd-icons-completion)
 
   (use-package nerd-icons-corfu)
 #+end_src
@@ -367,6 +365,7 @@ A set of complementary packages that provide minibuffer completion. I saw this s
   ;; Rich annotations in the minibuffer
   (use-package marginalia
     :config
+    (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
     (marginalia-mode 1))
 
   ;; Out of order pattern matching completion

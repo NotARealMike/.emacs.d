@@ -220,9 +220,7 @@ If WORKAREA is nil, defaults to the frame's current monitor."
 (use-package nerd-icons-ibuffer
   :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 
-(use-package nerd-icons-completion
-  :config
-  (nerd-icons-completion-mode))
+(use-package nerd-icons-completion)
 
 (use-package nerd-icons-corfu)
 
@@ -247,6 +245,7 @@ If WORKAREA is nil, defaults to the frame's current monitor."
 ;; Rich annotations in the minibuffer
 (use-package marginalia
   :config
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)
   (marginalia-mode 1))
 
 ;; Out of order pattern matching completion
