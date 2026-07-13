@@ -1036,6 +1036,21 @@ and ~org-agenda-follow-mode~ is enabled."
 ;; Shortcuts transient
 ;; _____________________________________________________________________________
 
+(defun nrm/goto-planning-view ()
+  "Go to the planning view, or create it if necessary."
+  (interactive)
+  (let* ((frame-name "Task planning")
+         (frame (cdr (assoc-string frame-name (make-frame-names-alist)))))
+    (if frame
+        (select-frame-set-input-focus frame)
+      (progn
+        (select-frame-set-input-focus (nrm/get-named-frame frame-name))
+        (redisplay) ;; Must be done before nrm/frame-layout-double
+        (nrm/frame-layout-double)
+        (split-window-right)
+        (org-agenda nil "p")
+        (org-agenda-follow-mode)))))
+
 (transient-define-prefix nrm/shortcuts-transient nil
   "Commands for my commonly used actions/navigation."
   ["Shortcuts"
@@ -1048,6 +1063,7 @@ and ~org-agenda-follow-mode~ is enabled."
    ["Misc"
     ("f" "Elfeed" elfeed)
     ("g" "Git repo dashboard" magit-list-repositories)
+    ("p" "Task planning" nrm/goto-planning-view)
     ("r" "Roam directory" (lambda () (interactive) (find-file org-roam-directory)))
     ("s" "SUDO home" (lambda () (interactive) (find-file "/sudo::/")))
     ]
