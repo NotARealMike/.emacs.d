@@ -550,8 +550,10 @@ If WORKAREA is nil, defaults to the frame's current monitor."
 
 (use-package org
   :bind
-  ("s-a" . org-agenda)
-  ("s-c" . org-capture)
+  (("s-a" . org-agenda)
+   ("s-c" . org-capture)
+   :map org-mode-map
+   ("C-c d" . nrm/org-done-fun))
   :custom
   (org-todo-keywords '((sequence "TODO(t)" "PROG(p)" "|" "DONE(d)" "CANCELLED(c)")))
   (org-tag-alist
@@ -579,7 +581,13 @@ If WORKAREA is nil, defaults to the frame's current monitor."
   (org-priority-default org-priority-lowest)
   :config
   ;; When a recurring task is done, log the date but not the time
-  (add-to-list 'org-log-note-headings '(state . "State %-12s from %-12S %d")))
+  (add-to-list 'org-log-note-headings '(state . "State %-12s from %-12S %d"))
+  (defun nrm/org-done-fun ()
+    "Interactively runs all the commands I should remember when finishing a task."
+    (interactive)
+    (call-interactively #'org-todo)
+    (call-interactively #'org-set-tags-command)
+    (call-interactively #'org-priority)))
 
 (use-package org-agenda
   :ensure org
