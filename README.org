@@ -1383,6 +1383,14 @@ There are some actions I perform often, such as navigating to certain files/dire
   ;; Shortcuts transient
   ;; _____________________________________________________________________________
 
+  (defun nrm/org-roam-dailies-goto-latest ()
+    "Navigate to the latest existing Org-roam daily note."
+    (interactive)
+    (if-let* ((daily-files (org-roam-dailies--list-files))
+              (latest-file (car (sort daily-files #'string>))))
+        (find-file latest-file)
+      (message "No daily notes found.")))
+
   (defun nrm/goto-planning-view ()
     "Go to the planning view, or create it if necessary."
     (interactive)
@@ -1403,7 +1411,8 @@ There are some actions I perform often, such as navigating to certain files/dire
     ["Shortcuts"
      ["Daily notes"
       ("d" "Date's daily" (lambda () (interactive) (org-roam-dailies-goto-date nil "d")))
-      ("t" "Today's daily" (lambda () (interactive) (org-roam-dailies-goto-today "d")))]
+      ("t" "Today's daily" (lambda () (interactive) (org-roam-dailies-goto-today "d")))
+      ("T" "Latest daily" nrm/org-roam-dailies-goto-latest)]
      ["Emacs config"
       ("e" "Emacs config file" (lambda () (interactive) (find-file "~/.emacs.d/README.org")))
       ("l" "Local config file" (lambda () (interactive) (find-file nrm/local-config-file)))]
