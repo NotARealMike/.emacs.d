@@ -46,6 +46,13 @@ Run ~M-x nerd-icons-install-fonts~ to download and install icons used by the ~ne
 
 The ~multi-vterm~ package seems to cause problems when bootstrapping the configuration. I'm not sure why, but manually deleting and reinstalling the package (through ~list-packages~) seems to fix it.
 
+If using Org and Org-Roam for task tracking with this configuration, do the following to set up the inbox file:
+- ~org-roam-node-find~ "Inbox", to create a node file called ~roam-inbox.org~
+- Rename the file to ~Inbox.org~ (without changing its contents) to match the capture templates
+
+
+~org-roam-node-find~ needs to be run before org capturing, so that the inbox file is given an ID and recognised by Roam.
+
 * Start
 
 Tweak the startup behaviour. Also, define a file with local-only configuration to be loaded after initialising the Emacs session.
