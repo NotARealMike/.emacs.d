@@ -14,6 +14,9 @@
 (defvar nrm/local-config-file "~/local-config.el"
   "File outside of ~/.emacs.d with configuration relevant only to the current machine.")
 
+;; Write all customisation information in the local config file
+(setq custom-file nrm/local-config-file)
+
 (defun nrm/load-local-config ()
   (load-file nrm/local-config-file)
   (message "Loaded local config!\n"))
