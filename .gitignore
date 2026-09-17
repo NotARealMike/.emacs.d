@@ -1,45 +1,35 @@
-# Compiled
-*.elc
+# Local history
+auto-save-list
+bookmarks
+eshell
+history
+org-persist
+projects
+recentf
+tramp
+transient
+url
+var
 
-# Packaging
-.cask
+# Elisp packages
+elpa
+
+# Local variables
+.dir-locals.el
+
+# Byte-compiled
+*.elc
+eln-cache
 
 # Backup files
 *~
-
-# Undo-tree save-files
-*.~undo-tree
-
-# Files dependent on local file structure
-.lsp-session*
-SessionDesktop.el
-auto-save-list
-bookmarks
-projects
 
 # Local org ROAM database
 \.org-id-locations
 org-roam\.db
 
-# Ignore downloaded packages for now
-elpa
-rust-playground
-
-# Don't include Tree-Sitter grammars
+# Tree-Sitter grammars
 tree-sitter
-
-# Local history
-eshell
-transient
-var
-history
-recentf
-tramp
-org-persist
-url
-
-# Local variables
-.dir-locals.el
 
 # Elfeed database
 elfeed

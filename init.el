@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t -*-
+
 ;; _____________________________________________________________________________
 ;; Start loading config
 ;; _____________________________________________________________________________
@@ -26,14 +28,6 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-(package-initialize)
-
-(unless package-archive-contents
-  (package-refresh-contents))
-
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-
 (require 'use-package)
 (setq use-package-always-ensure t)
 
@@ -51,6 +45,13 @@
   (global-visual-line-mode 1)
   (savehist-mode 1) ;; Order minibuffer completions by recency
   (recentf-mode 1)  ;; Keep track of recently opened files
+  ;; Delete trailing whitespace by default; disable minor mode when needed
+  (define-globalized-minor-mode
+    global-delete-trailing-whitespace-mode
+    delete-trailing-whitespace-mode
+    delete-trailing-whitespace-mode)
+  (global-delete-trailing-whitespace-mode 1)
+  (which-key-mode 1)
   (add-to-list 'default-frame-alist '(alpha . (95 . 80)))
   ;; MacOS-specific configuration
   (when (memq system-type '(darwin))
@@ -80,6 +81,9 @@
   (if (<= (length (visible-frame-list)) 3)
       (call-interactively #'other-frame)
     (call-interactively #'select-frame-by-name)))
+
+;; After deleting a frame, raise the most recently used frame
+(add-to-list 'after-delete-frame-functions (lambda (_deleted-frame) (raise-frame)))
 
 (global-set-key (kbd "s-`") #'nrm/other-frame-dwim)
 (global-set-key (kbd "s-~") #'set-frame-name)
@@ -320,15 +324,6 @@ If WORKAREA is nil, defaults to the frame's current monitor."
   :config
   (add-to-list 'completion-at-point-functions #'cape-dabbrev)
   (add-to-list 'completion-at-point-functions #'cape-file))
-
-;; _____________________________________________________________________________
-;; Key binding completion
-;; _____________________________________________________________________________
-
-(use-package which-key
-  :config
-  (which-key-mode)
-  (setq which-key-idle-delay 0.5))
 
 ;; _____________________________________________________________________________
 ;; Dired
@@ -875,7 +870,7 @@ If WORKAREA is nil, defaults to the frame's current monitor."
              java-ts-mode-hook
              kotlin-ts-mode-hook
              python-ts-mode-hook
-             rust-mode-hook
+             rust-ts-mode-hook
              typescript-ts-mode-hook))
     (add-hook hook 'eglot-ensure))
   :bind
@@ -884,7 +879,10 @@ If WORKAREA is nil, defaults to the frame's current monitor."
   :custom
   (eglot-events-buffer-size 0)
   (eglot-autoshutdown t)
+  ;; Don't block when waiting for LSP connections
   (eglot-sync-connect nil)
+  ;; Don't clutter display with code actions
+  (eglot-code-action-indications nil)
   (eglot-ignored-server-capabilities '(:documentHighlightProvider))
   :config
   (add-to-list 'eglot-stay-out-of 'imenu))
@@ -895,60 +893,9 @@ If WORKAREA is nil, defaults to the frame's current monitor."
 
 (use-package treesit
   :ensure nil
-  :mode
-  ("\\.go\\'" . go-ts-mode)
-  ("\\.java\\'" . java-ts-mode)
-  ("\\.json\\'" . json-ts-mode)
-  ("\\.kts?\\'" . kotlin-ts-mode)
-  ("\\.toml\\'" . toml-ts-mode)
-  ("\\.ts\\'" . typescript-ts-mode)
-  ("\\.js\\'" . typescript-ts-mode)
-  ("\\.tsx\\'" . tsx-ts-mode)
-  ("\\.jsx\\'" . tsx-ts-mode)
-  ("\\.ya?ml\\'" . yaml-ts-mode)
-  :config
-  (setq treesit-language-source-alist
-        '((go "https://github.com/tree-sitter/tree-sitter-go" "v0.23.4")
-          (java "https://github.com/tree-sitter/tree-sitter-java")
-          (json "https://github.com/tree-sitter/tree-sitter-json")
-          (kotlin "https://github.com/fwcd/tree-sitter-kotlin")
-          (python "https://github.com/tree-sitter/tree-sitter-python" "v0.20.4")
-          (rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.21.2")
-          (toml "https://github.com/tree-sitter/tree-sitter-toml")
-          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-          (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-          (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
-  (dolist (source treesit-language-source-alist)
-    (unless (treesit-ready-p (car source))
-      (treesit-install-language-grammar (car source))))
-  ;; Explicitly remap python-mode, because python scripts often include a shebang that overrides defaults
-  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
   :custom
+  (treesit-enabled-modes t)
   (treesit-font-lock-level 4))
-
-;; _____________________________________________________________________________
-;; Language-specific
-;; _____________________________________________________________________________
-
-(use-package rustic
-  :defer t
-  :hook
-  (rustic-mode . (lambda ()
-                   (setq-local compilation-read-command nil)
-                   (setq-local compile-command
-                               (concat
-                                "echo Formatting... "
-                                "&& cargo fmt "
-                                "&& echo Linting... "
-                                "&& cargo clippy --benches --tests --all-features --all-targets -- -D warnings "
-                                "&& echo Testing... "
-                                "&& cargo test "))))
-  :custom
-  (rustic-lsp-client 'eglot)
-  (rustic-format-display-method 'ignore)
-  (rustic-format-trigger 'on-compile))
-
-(use-package kotlin-ts-mode)
 
 ;; _____________________________________________________________________________
 ;; File formats
@@ -983,7 +930,7 @@ and ~org-agenda-follow-mode~ is enabled."
 
 (defun nrm/display-buffer-reuse-right-window (buffer alist)
   "Reuse the window to the right of the selected window, if possible."
-  (when-let ((win (window-in-direction 'right)))
+  (when-let* ((win (window-in-direction 'right)))
     (window--display-buffer buffer win 'reuse alist)))
 
 (defun nrm/get-named-frame (name)

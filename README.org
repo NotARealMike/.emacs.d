@@ -1,13 +1,11 @@
 #+title: Emacs configuration
 #+PROPERTY: header-args:emacs-lisp :tangle ./init.el :results output silent
 
-* About
-
-My very own Emacs configuration. Inspired by [[https://github.com/daviwil/emacs-from-scratch][Emacs from scratch]], customised to what I actually need.
-
 * Setup
 
-This configuration is designed to bootstrap itself, but there are a few dependencies that need to be installed first.
+This is my personal Emacs configuration, tested with Emacs 31.1. Some of its features will not work on earlier Emacs versions.
+
+This configuration is designed to mostly bootstrap itself, but some dependencies need to be manually installed.
 
 Here I use Homebrew to install dependencies because I mostly use MacOS.
 
@@ -36,10 +34,6 @@ brew install basedpyright gopls rust-analyzer kotlin-language-server typescript-
 #+end_src
 
 
-For major modes based on Tree-Sitter, also run ~M-x treesit-install-language-grammar~ for each relevant language.
-
-To run binaries compiled from Rust, add ~~/.cargo/bin~ to the ~PATH~ in ~~/.zprofile~.
-
 Instructions on how to set Caps Lock to act as Control are [[https://support.apple.com/en-gb/guide/mac-help/mchlp1011/mac][here]]. Remember to do this for each machine and keyboard combination.
 
 Run ~M-x nerd-icons-install-fonts~ to download and install icons used by the ~nerd-icons~ package.
@@ -58,6 +52,8 @@ If using Org and Org-Roam for task tracking with this configuration, do the foll
 Tweak the startup behaviour. Also, define a file with local-only configuration to be loaded after initialising the Emacs session.
 
 #+begin_src emacs-lisp
+  ;;; -*- lexical-binding: t -*-
+
   ;; _____________________________________________________________________________
   ;; Start loading config
   ;; _____________________________________________________________________________
@@ -95,14 +91,6 @@ Tweak the startup behaviour. Also, define a file with local-only configuration t
   (require 'package)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 
-  (package-initialize)
-
-  (unless package-archive-contents
-    (package-refresh-contents))
-
-  (unless (package-installed-p 'use-package)
-    (package-install 'use-package))
-
   (require 'use-package)
   (setq use-package-always-ensure t)
 #+end_src
@@ -126,6 +114,13 @@ Settings and key bindings that make common actions faster.
     (global-visual-line-mode 1)
     (savehist-mode 1) ;; Order minibuffer completions by recency
     (recentf-mode 1)  ;; Keep track of recently opened files
+    ;; Delete trailing whitespace by default; disable minor mode when needed
+    (define-globalized-minor-mode
+      global-delete-trailing-whitespace-mode
+      delete-trailing-whitespace-mode
+      delete-trailing-whitespace-mode)
+    (global-delete-trailing-whitespace-mode 1)
+    (which-key-mode 1)
     (add-to-list 'default-frame-alist '(alpha . (95 . 80)))
     ;; MacOS-specific configuration
     (when (memq system-type '(darwin))
@@ -168,6 +163,9 @@ When I am juggling many things, I want to easily name frames, and navigate to fr
     (if (<= (length (visible-frame-list)) 3)
         (call-interactively #'other-frame)
       (call-interactively #'select-frame-by-name)))
+
+  ;; After deleting a frame, raise the most recently used frame
+  (add-to-list 'after-delete-frame-functions (lambda (_deleted-frame) (raise-frame)))
 
   (global-set-key (kbd "s-`") #'nrm/other-frame-dwim)
   (global-set-key (kbd "s-~") #'set-frame-name)
@@ -458,21 +456,6 @@ Text completion for source code and natural language.
 
 * Built-in mode improvements
 
-** Key binding completion
-
-When typing a key bind prefix, ~which-key-mode~ expands the minibuffer to display commands under that prefix.
-
-#+begin_src emacs-lisp
-  ;; _____________________________________________________________________________
-  ;; Key binding completion
-  ;; _____________________________________________________________________________
-
-  (use-package which-key
-    :config
-    (which-key-mode)
-    (setq which-key-idle-delay 0.5))
-#+end_src
-
 ** Dired
 
 Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files such as backup and dot files. This is better than hiding files through options passed to the ls command because it lets me quickly toggle the mode when I need to look at dot files, for example.
@@ -572,7 +555,12 @@ Toggle dired omit mode with "C-x M-o". This mode hides "uninteresting" files suc
 
 ** wgrep
 
-- Writable grep results.
+As of Emacs 31, ~grep-edit-mode~ exists. I was considering using that by default, but ~wgrep~ [[https://www.reddit.com/r/emacs/comments/1w0086c/is_wgrep_fully_now_superseded_by_grepeditmode/][still has some advantages]]:
+- Multi-line edits
+- Only actually writing changes at the end, which is cheaper and makes it easier to abort/rollback unwanted changes.
+
+
+At least for now, keep wgrep for the few cases when it's needed.
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
@@ -676,7 +664,7 @@ Utilities for writing in natural languages:
   (use-package magit-gh)
 #+end_src
 
-** Repolist: A project dashboard
+** Repository list: A project dashboard
 
 The idea here is to create a dashboard with an overview of the status of my git repositories, to check if there are local changes that need to be finished/committed/pushed. I reverse sort by version by default so that the most recent projects appear first.
 
@@ -708,7 +696,7 @@ The idea here is to create a dashboard with an overview of the status of my git 
 How meta!
 
 - Make org files look better.
-- Automatically tangle this file on save to generate init.el.
+- Automatically tangle this file on save to generate ~init.el~.
 - Don't ask for permission to run code in org babel.
 - ~org-tempo~ enables expanding snippets into structures, such as code blocks for specific languages.
 
@@ -1112,6 +1100,10 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
 
 ** Rainbow delimiters
 
+Makes delimiters, such as brackets and parentheses, stand out with depth-specific colours.
+
+Did I have to manually select colours by linearly interpolating a rainbow? Absolutely not, and the defaults from this and other packages are probably more sensible from an accessibility perspective. Did I do it anyway? Heck yeah, and now I'm so attached to these colours I don't want to switch to anything else.
+
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
   ;; Rainbow delimiters
@@ -1147,6 +1139,13 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
 
 #+end_src
 
+
+For specific projects/languages, use directory-local variables to set sensible default compilation commands. For example, for Rust:
+
+#+begin_src emacs-lisp :tangle no :eval never
+((nil . ((compile-command . "echo Formatting... && cargo fmt && echo Linting... && cargo clippy --benches --tests --all-features --all-targets -- -D warnings && echo Testing... && cargo test "))))
+#+end_src
+
 ** Flymake
 
 #+begin_src emacs-lisp
@@ -1163,6 +1162,8 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
 
 ** Eglot
 
+Enable LSP support for the languages I use most often.
+
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
   ;; Eglot
@@ -1175,7 +1176,7 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
                java-ts-mode-hook
                kotlin-ts-mode-hook
                python-ts-mode-hook
-               rust-mode-hook
+               rust-ts-mode-hook
                typescript-ts-mode-hook))
       (add-hook hook 'eglot-ensure))
     :bind
@@ -1184,7 +1185,10 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
     :custom
     (eglot-events-buffer-size 0)
     (eglot-autoshutdown t)
+    ;; Don't block when waiting for LSP connections
     (eglot-sync-connect nil)
+    ;; Don't clutter display with code actions
+    (eglot-code-action-indications nil)
     (eglot-ignored-server-capabilities '(:documentHighlightProvider))
     :config
     (add-to-list 'eglot-stay-out-of 'imenu))
@@ -1193,6 +1197,8 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
 
 ** Tree-Sitter
 
+Configure tree-sitter to automatically use available ts-modes by default. Tree-sitter will automatically ask whether to install a language grammar when first visiting a file of a language with a known ts-mode.
+
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
   ;; Tree-Sitter
@@ -1200,65 +1206,9 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
 
   (use-package treesit
     :ensure nil
-    :mode
-    ("\\.go\\'" . go-ts-mode)
-    ("\\.java\\'" . java-ts-mode)
-    ("\\.json\\'" . json-ts-mode)
-    ("\\.kts?\\'" . kotlin-ts-mode)
-    ("\\.toml\\'" . toml-ts-mode)
-    ("\\.ts\\'" . typescript-ts-mode)
-    ("\\.js\\'" . typescript-ts-mode)
-    ("\\.tsx\\'" . tsx-ts-mode)
-    ("\\.jsx\\'" . tsx-ts-mode)
-    ("\\.ya?ml\\'" . yaml-ts-mode)
-    :config
-    (setq treesit-language-source-alist
-          '((go "https://github.com/tree-sitter/tree-sitter-go" "v0.23.4")
-            (java "https://github.com/tree-sitter/tree-sitter-java")
-            (json "https://github.com/tree-sitter/tree-sitter-json")
-            (kotlin "https://github.com/fwcd/tree-sitter-kotlin")
-            (python "https://github.com/tree-sitter/tree-sitter-python" "v0.20.4")
-            (rust "https://github.com/tree-sitter/tree-sitter-rust" "v0.21.2")
-            (toml "https://github.com/tree-sitter/tree-sitter-toml")
-            (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
-            (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
-            (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
-    (dolist (source treesit-language-source-alist)
-      (unless (treesit-ready-p (car source))
-        (treesit-install-language-grammar (car source))))
-    ;; Explicitly remap python-mode, because python scripts often include a shebang that overrides defaults
-    (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
     :custom
+    (treesit-enabled-modes t)
     (treesit-font-lock-level 4))
-
-#+end_src
-
-** Language-specific
-
-#+begin_src emacs-lisp
-  ;; _____________________________________________________________________________
-  ;; Language-specific
-  ;; _____________________________________________________________________________
-
-  (use-package rustic
-    :defer t
-    :hook
-    (rustic-mode . (lambda ()
-                     (setq-local compilation-read-command nil)
-                     (setq-local compile-command
-                                 (concat
-                                  "echo Formatting... "
-                                  "&& cargo fmt "
-                                  "&& echo Linting... "
-                                  "&& cargo clippy --benches --tests --all-features --all-targets -- -D warnings "
-                                  "&& echo Testing... "
-                                  "&& cargo test "))))
-    :custom
-    (rustic-lsp-client 'eglot)
-    (rustic-format-display-method 'ignore)
-    (rustic-format-trigger 'on-compile))
-
-  (use-package kotlin-ts-mode)
 
 #+end_src
 
@@ -1316,7 +1266,7 @@ Rules on where and how to display certain buffers.
 
   (defun nrm/display-buffer-reuse-right-window (buffer alist)
     "Reuse the window to the right of the selected window, if possible."
-    (when-let ((win (window-in-direction 'right)))
+    (when-let* ((win (window-in-direction 'right)))
       (window--display-buffer buffer win 'reuse alist)))
 
   (defun nrm/get-named-frame (name)
