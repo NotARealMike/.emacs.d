@@ -523,13 +523,7 @@ If WORKAREA is nil, defaults to the frame's current monitor."
   ;; Load the backend required to transcode org to markdown
   (require 'ox-md)
   ;; Save all org buffers after refiling, to prevent entries being lost if Emacs crashes
-  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers)))
-  ;; Automatically tangle the literate Emacs config file on save
-  (defun nrm/org-babel-tangle-config ()
-    (when (string-equal (buffer-file-name)
-                        (expand-file-name "~/.emacs.d/README.org"))
-      (org-babel-tangle)))
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'nrm/org-babel-tangle-config))))
+  (advice-add 'org-refile :after (lambda (&rest _) (org-save-all-org-buffers))))
 
 (use-package org-bullets
   :after org
