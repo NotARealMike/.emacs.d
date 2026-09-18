@@ -92,115 +92,36 @@
 (global-set-key (kbd "s-~") #'set-frame-name)
 
 ;; _____________________________________________________________________________
-;; Moving frames and frame layouts
+;; Frame layouts
 ;; _____________________________________________________________________________
 
-(defvar nrm/single-frame-width 142
+(defvar nrm/single-frame-width 150
   "The default width for most frames.")
-
-(defvar nrm/double-frame-width 284
-  "The default width for frames I intend to split vertically.")
 
 (add-to-list 'default-frame-alist '(fullscreen . fullheight))
 (add-to-list 'default-frame-alist `(width . ,nrm/single-frame-width))
+(setq frame-resize-pixelwise t)
 
-(defun nrm/align-frame-centre (&optional frame workarea)
-  "Move FRAME to the top centre of a monitor.
-If FRAME is nil, defaults to the selected frame.
-If WORKAREA is nil, defaults to the frame's current monitor."
-  (interactive)
-  (let* ((frame (or frame (selected-frame)))
-         (frame-px-width (frame-pixel-width frame))
-         (workarea (or workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
-         (mon-x (nth 0 workarea))
-         (mon-y (nth 1 workarea))
-         (mon-w (nth 2 workarea))
-         (x (+ mon-x (/ (- mon-w frame-px-width) 2)))
-         (y mon-y))
-    (set-frame-position frame x y)))
+(use-package transient)
 
-(defun nrm/align-frame-left (&optional frame workarea pad)
-  "Move FRAME to the top left of a monitor, optionally PAD pixels away.
-If FRAME is nil, defaults to the selected frame.
-If WORKAREA is nil, defaults to the frame's current monitor."
-  (interactive)
-  (let* ((pad (or pad 0))
-         (frame (or frame (selected-frame)))
-         (frame-px-width (frame-pixel-width frame))
-         (workarea (or workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
-         (mon-x (nth 0 workarea))
-         (mon-y (nth 1 workarea))
-         (x (+ mon-x pad))
-         (y mon-y))
-    (set-frame-position frame x y)))
+(transient-define-prefix nrm/frame-layout-transient nil
+  "Transient menu for resizing and moving the selected frame."
+  [""
+   ["Halves"
+    ("l" "Left half" (lambda () (interactive) (set-frame-size-and-position (selected-frame) 0.5 1.0 0.0 0.0)))
+    ("r" "Right half" (lambda () (interactive) (set-frame-size-and-position (selected-frame) 0.5 1.0 0.5 0.0)))]
+   ["Thirds"
+    ("<left>" "Left third" (lambda () (interactive) (set-frame-size-and-position (selected-frame) (/ 1.0 3) 1.0 0.0 0.0)))
+    ("<up>" "Middle third" (lambda () (interactive) (set-frame-size-and-position (selected-frame) (/ 1.0 3) 1.0 (/ 1.0 3) 0.0)))
+    ("<down>" "Middle 2/3" (lambda () (interactive) (set-frame-size-and-position (selected-frame) (/ 2.0 3) 1.0 (/ 1.0 6) 0.0)))
+    ("<right>" "Right third" (lambda () (interactive) (set-frame-size-and-position (selected-frame) (/ 1.0 3) 1.0 (/ 2.0 3) 0.0)))
+    ("RET" "Maximise" (lambda () (interactive) (set-frame-size-and-position (selected-frame) 1.0 1.0 0.0 0.0)))]
+   ["Misc"
+    ("d" "Default width" (lambda () (interactive) (set-frame-size-and-position (selected-frame) nrm/single-frame-width 1.0 nil nil)))
+    ("m" "Faux maximised" (lambda () (interactive) (set-frame-size-and-position (selected-frame) 1.0 1.0 0.0 0.0)))]
+   ])
 
-(defun nrm/align-frame-right (&optional frame workarea pad)
-  "Move FRAME to the top right of a monitor, optionally PAD pixels away.
-If FRAME is nil, defaults to the selected frame.
-If WORKAREA is nil, defaults to the frame's current monitor."
-  (interactive)
-  (let* ((pad (or pad 0))
-         (frame (or frame (selected-frame)))
-         (frame-px-width (frame-pixel-width frame))
-         (workarea (or workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
-         (mon-x (nth 0 workarea))
-         (mon-y (nth 1 workarea))
-         (mon-w (nth 2 workarea))
-         (x (- (+ mon-x mon-w) frame-px-width pad))
-         (y mon-y))
-    (set-frame-position frame x y)))
-
-(defun nrm/frame-layout-centre ()
-  "Resize to single width, center horizontally, and maximize height."
-  (interactive)
-  (let* ((frame (selected-frame))
-         (workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
-    (set-frame-parameter frame 'fullscreen 'fullheight)
-    (set-frame-width frame nrm/single-frame-width)
-    (nrm/align-frame-centre frame workarea)))
-
-(defun nrm/frame-layout-left ()
-  "Resize to single width, center horizontally, and maximize height."
-  (interactive)
-  (let* ((frame (selected-frame))
-         (workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
-    (set-frame-parameter frame 'fullscreen 'fullheight)
-    (set-frame-width frame nrm/single-frame-width)
-    (nrm/align-frame-left frame workarea)))
-
-(defun nrm/frame-layout-right ()
-  "Resize to single width, center horizontally, and maximize height."
-  (interactive)
-  (let* ((frame (selected-frame))
-         (workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
-    (set-frame-parameter frame 'fullscreen 'fullheight)
-    (set-frame-width frame nrm/single-frame-width)
-    (nrm/align-frame-right frame workarea)))
-
-(defun nrm/frame-layout-double ()
-  "Resize to double width, align right, and maximize height."
-  (interactive)
-  (let* ((frame (selected-frame))
-         (workarea (cdr (assq 'workarea (frame-monitor-attributes frame)))))
-    (set-frame-parameter frame 'fullscreen 'fullheight)
-    (set-frame-width frame nrm/double-frame-width)
-    (nrm/align-frame-right frame workarea)))
-
-(defun nrm/frame-layout-maximise ()
-  "Maximise the current frame in its monitor"
-  (interactive)
-  (set-frame-parameter (selected-frame) 'fullscreen 'maximized))
-
-(defvar-keymap nrm/frame-layout-map
-  :doc "Keymap for frame layout commands"
-  :prefix 'nrm/frame-layout-map
-  "c" #'nrm/frame-layout-centre
-  "l" #'nrm/frame-layout-left
-  "r" #'nrm/frame-layout-right
-  "d" #'nrm/frame-layout-double
-  "m" #'nrm/frame-layout-maximise)
-
-(global-set-key (kbd "s-l") nrm/frame-layout-map)
+(global-set-key (kbd "s-l") #'nrm/frame-layout-transient)
 
 ;; _____________________________________________________________________________
 ;; Appearance
@@ -1005,8 +926,8 @@ and ~org-agenda-follow-mode~ is enabled."
         (select-frame-set-input-focus frame)
       (progn
         (select-frame-set-input-focus (nrm/get-named-frame frame-name))
-        (redisplay) ;; Must be done before nrm/frame-layout-double
-        (nrm/frame-layout-double)
+        (redisplay) ;; must happen before resizing
+        (set-frame-size-and-position (selected-frame) (/ 2.0 3) 1.0 (/ 1.0 6) 0.0)
         (split-window-right)
         (org-agenda nil "p")
         (org-agenda-follow-mode)))))
