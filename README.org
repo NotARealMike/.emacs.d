@@ -39,8 +39,6 @@ Instructions on how to set Caps Lock to act as Control are [[https://support.app
 
 Run ~M-x nerd-icons-install-fonts~ to download and install icons used by the ~nerd-icons~ package.
 
-The ~multi-vterm~ package seems to cause problems when bootstrapping the configuration. I'm not sure why, but manually deleting and reinstalling the package (through ~list-packages~) seems to fix it.
-
 If using Org and Org-Roam for task tracking with this configuration, do the following to set up the inbox file:
 - ~org-roam-node-find~ "Inbox", to create a node file called ~roam-inbox.org~
 - Rename the file to ~Inbox.org~ (without changing its contents) to match the capture templates
@@ -975,9 +973,9 @@ Doing a presentation messes up a bunch of the minor modes I use, so the simpler 
 
 * Shell
 
-I choose to use [[https://github.com/akermu/emacs-libvterm/][vterm]] because it is fast, compatible with my usual terminal setup, and supports interactive commands.
+I use [[https://github.com/akermu/emacs-libvterm/][vterm]] because it is fast, supports interactive shell commands, and has served me well for many years.
 
-The command ~M-x multi-vterm~ lets me easily create multiple terminals.
+The additional snippets of Elisp let me interactively create ~vterm~ buffers with arbitrary names and directories, at the root of projects, and quickly navigate to and between ~vterm~ buffers.
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
@@ -985,14 +983,54 @@ The command ~M-x multi-vterm~ lets me easily create multiple terminals.
   ;; _____________________________________________________________________________
 
   (use-package vterm
+    :demand t
     :hook (vterm-mode . goto-address-mode)
     :config
     (setq vterm-max-scrollback 10000))
 
-  (use-package multi-vterm
-    :bind
-    ("s-T" . multi-vterm)
-    ("s-t" . multi-vterm-next))
+  (defvar nrm/vterm-buffer-list nil
+    "List of all managed vterm buffers.")
+
+  (defun nrm/vterm-new-buffer (name dir)
+    "Creates a new managed vterm buffer called NAME, with DIR default directory.
+  Interactively, also switches to the new buffer."
+    (interactive "MNew vterm buffer name:\nDDefault directory:")
+    (let ((buffer (generate-new-buffer (generate-new-buffer-name (format "*vterm: %s*" name)))))
+      (setq nrm/vterm-buffer-list (nconc nrm/vterm-buffer-list (list buffer)))
+      (with-current-buffer buffer
+        (cd dir)
+        (vterm-mode)
+        (add-hook 'kill-buffer-hook #'nrm/vterm-kill-buffer-hook nil t)
+        (if (called-interactively-p 'any) (switch-to-buffer buffer))
+        buffer)))
+
+  (defun nrm/vterm-kill-buffer-hook ()
+    "Removes vterm buffer from the list of managed buffers."
+    (setq nrm/vterm-buffer-list (delq (current-buffer) nrm/vterm-buffer-list)))
+
+  (defun nrm/vterm-next ()
+    "Switches to the next managed vterm buffer, creating one if there are none."
+    (interactive)
+    (if (not nrm/vterm-buffer-list)
+        (call-interactively #'nrm/vterm-new-buffer)
+      (let ((buffer-list-len (length nrm/vterm-buffer-list))
+            (my-index (cl-position (current-buffer) nrm/vterm-buffer-list)))
+        (if my-index
+            (switch-to-buffer (nth (mod (+ 1 my-index) buffer-list-len) nrm/vterm-buffer-list))
+          (switch-to-buffer (car nrm/vterm-buffer-list))))))
+
+  (defun nrm/vterm-project ()
+    "If inside a project, creates a new managed vterm buffer at its root."
+    (interactive)
+    (if-let* ((name (project-name (project-current)))
+              (dir (project-root (project-current))))
+        (funcall-interactively #'nrm/vterm-new-buffer name dir)))
+
+
+  (keymap-global-set "s-t" #'nrm/vterm-next)
+  (keymap-global-set "s-T" #'nrm/vterm-new-buffer)
+  (keymap-set project-prefix-map "t" #'nrm/vterm-project)
+  (add-to-list 'project-switch-commands '(nrm/vterm-project "Vterm"))
 #+end_src
 
 * TRAMP

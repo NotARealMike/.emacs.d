@@ -715,14 +715,54 @@
 ;; _____________________________________________________________________________
 
 (use-package vterm
+  :demand t
   :hook (vterm-mode . goto-address-mode)
   :config
   (setq vterm-max-scrollback 10000))
 
-(use-package multi-vterm
-  :bind
-  ("s-T" . multi-vterm)
-  ("s-t" . multi-vterm-next))
+(defvar nrm/vterm-buffer-list nil
+  "List of all managed vterm buffers.")
+
+(defun nrm/vterm-new-buffer (name dir)
+  "Creates a new managed vterm buffer called NAME, with DIR default directory.
+Interactively, also switches to the new buffer."
+  (interactive "MNew vterm buffer name:\nDDefault directory:")
+  (let ((buffer (generate-new-buffer (generate-new-buffer-name (format "*vterm: %s*" name)))))
+    (setq nrm/vterm-buffer-list (nconc nrm/vterm-buffer-list (list buffer)))
+    (with-current-buffer buffer
+      (cd dir)
+      (vterm-mode)
+      (add-hook 'kill-buffer-hook #'nrm/vterm-kill-buffer-hook nil t)
+      (if (called-interactively-p 'any) (switch-to-buffer buffer))
+      buffer)))
+
+(defun nrm/vterm-kill-buffer-hook ()
+  "Removes vterm buffer from the list of managed buffers."
+  (setq nrm/vterm-buffer-list (delq (current-buffer) nrm/vterm-buffer-list)))
+
+(defun nrm/vterm-next ()
+  "Switches to the next managed vterm buffer, creating one if there are none."
+  (interactive)
+  (if (not nrm/vterm-buffer-list)
+      (call-interactively #'nrm/vterm-new-buffer)
+    (let ((buffer-list-len (length nrm/vterm-buffer-list))
+          (my-index (cl-position (current-buffer) nrm/vterm-buffer-list)))
+      (if my-index
+          (switch-to-buffer (nth (mod (+ 1 my-index) buffer-list-len) nrm/vterm-buffer-list))
+        (switch-to-buffer (car nrm/vterm-buffer-list))))))
+
+(defun nrm/vterm-project ()
+  "If inside a project, creates a new managed vterm buffer at its root."
+  (interactive)
+  (if-let* ((name (project-name (project-current)))
+            (dir (project-root (project-current))))
+      (funcall-interactively #'nrm/vterm-new-buffer name dir)))
+
+
+(keymap-global-set "s-t" #'nrm/vterm-next)
+(keymap-global-set "s-T" #'nrm/vterm-new-buffer)
+(keymap-set project-prefix-map "t" #'nrm/vterm-project)
+(add-to-list 'project-switch-commands '(nrm/vterm-project "Vterm"))
 
 ;; _____________________________________________________________________________
 ;; TRAMP
