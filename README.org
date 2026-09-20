@@ -1089,7 +1089,9 @@ Did I have to manually select colours by linearly interpolating a rainbow? Absol
 
   (use-package compile
     :ensure nil
-    :hook (compilation-mode . goto-address-mode)
+    :hook
+    (compilation-mode . goto-address-mode)
+    (compilation-mode . nrm/meta-buffer-mode)
     :custom
     (compilation-scroll-output t))
 
@@ -1207,23 +1209,61 @@ Follow the instructions in my beans repo to install all the needed Python packag
 
 * Buffer display rules
 
+** Meta buffers
+
+I often work with buffers that hold links to many other buffers. For example:
+- An ~org-agenda~ buffer, which holds links to tasks in ~org~ buffers
+- A ~dired~ buffer, which holds links to file buffers
+- A ~compilation~ buffer, which holds compilation diagnostics and links to positions in source files
+
+
+When working with these "meta" buffers, I want to keep them always open, so I can have an overview of the context, and also open the buffers they link to in a consistent way. This usually means having a frame with two side-by-side windows, displaying the meta buffer on the left window and using the right window to display all other buffers.
+
+By defining a minor mode and creating a buffer display rule for it, I can enable this behaviour consistently across different major modes.
+
+#+begin_src emacs-lisp
+  ;; _____________________________________________________________________________
+  ;; Meta buffer mode
+  ;; _____________________________________________________________________________
+
+  (define-minor-mode nrm/meta-buffer-mode
+    "Override buffer display rules to display most other buffers in window to the right.")
+
+  (defun nrm/from-meta-buffer-p (_buffer-or-name _action)
+    "Returns non-nil iff nrm/meta-buffer-mode is enabled in the current buffer.
+  This function is meant to be used as a condition in display-buffer-alist."
+    nrm/meta-buffer-mode)
+
+  (defun nrm/display-buffer-reuse-window-direction (buffer alist)
+    "Reuse the window in a given direction relative to the selected window, if possible."
+    (when-let* ((direction (cdr (assq 'direction alist)))
+                (win (window-in-direction direction)))
+      (window--display-buffer buffer win 'reuse alist)))
+#+end_src
+
+
+I want this minor mode to be enabled in ~org-agenda~ buffers iff ~org-agenda-follow-mode~ is enabled. Note that ~org-agenda-follow-mode~ is a function and not a real mode, so I have to add an advice to the function instead of to a hook.
+
+Additionally, refreshing an ~org-agenda~ buffer (~org-agenda-redo~ or ~org-agenda-redo-all~) resets many of the minor modes, so I need to re-enable ~nrm/meta-buffer-mode~ after refreshing the agenda.
+
+#+begin_src emacs-lisp
+
+  (advice-add 'org-agenda-follow-mode :after (lambda () (nrm/meta-buffer-mode 'toggle)))
+
+  (add-hook 'org-agenda-finalize-hook
+            (lambda () (if org-agenda-follow-mode
+                           (nrm/meta-buffer-mode)
+                         (nrm/meta-buffer-mode -1))))
+#+end_src
+
+** Rules
+
 Rules on where and how to display certain buffers.
 
 #+begin_src emacs-lisp
   ;; _____________________________________________________________________________
   ;; Buffer display rules
   ;; _____________________________________________________________________________
-
-  (defun nrm/from-agenda-follow-p (_buffer-or-name _action)
-    "Returns non-nil iff the current buffer is derived from ~org-agenda-mode~
-  and ~org-agenda-follow-mode~ is enabled."
-    (and (derived-mode-p 'org-agenda-mode)
-         org-agenda-follow-mode))
-
-  (defun nrm/display-buffer-reuse-right-window (buffer alist)
-    "Reuse the window to the right of the selected window, if possible."
-    (when-let* ((win (window-in-direction 'right)))
-      (window--display-buffer buffer win 'reuse alist)))
 
   (defun nrm/get-named-frame (name)
     "Returns a frame with the given NAME, creating it if necessary"
@@ -1243,14 +1283,10 @@ Rules on where and how to display certain buffers.
 
   (setq display-buffer-alist
         '(
-          ;; When in an org-agenda buffer in follow mode, open all other buffers in a window to the right
-          (nrm/from-agenda-follow-p
-           (nrm/display-buffer-reuse-right-window display-buffer-in-direction)
-           (window-width . 0.5)
-           (direction . right))
-
-          ;; Display embark actions in a buffer below the current one that resizes to fit all actions
-          ("\\*Embark Actions\\*"
+          ;; Display temporary buffers below the current window
+          ((or . ((derived-mode . calendar-mode)
+                  "\\*Embark Actions\\*"
+                  "\\*transient\\*"))
            (display-buffer-reuse-window display-buffer-below-selected)
            (window-height . fit-window-to-buffer)
            (window-parameters . ((no-other-window . t)
@@ -1260,6 +1296,16 @@ Rules on where and how to display certain buffers.
           ("\\*compilation\\*"
            nrm/display-buffer-in-named-frame
            (frame-name . "Compilation"))
+
+          ;; Display temporary org source buffers in the same window
+          ("\\*Org Src .*\\*"
+           display-buffer-same-window)
+
+          ;; When in a meta buffer, open most other buffers in a window to the right
+          (nrm/from-meta-buffer-p
+           (nrm/display-buffer-reuse-window-direction display-buffer-in-direction)
+           (window-width . 0.5)
+           (direction . right))
 
           ;; Display magit status buffers in a dedicated window per repository
           ((derived-mode . magit-status-mode)
@@ -1273,7 +1319,6 @@ Rules on where and how to display certain buffers.
            display-buffer-full-frame)
 
           ))
-
 #+end_src
 
 

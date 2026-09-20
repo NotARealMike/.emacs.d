@@ -803,7 +803,9 @@ Interactively, also switches to the new buffer."
 
 (use-package compile
   :ensure nil
-  :hook (compilation-mode . goto-address-mode)
+  :hook
+  (compilation-mode . goto-address-mode)
+  (compilation-mode . nrm/meta-buffer-mode)
   :custom
   (compilation-scroll-output t))
 
@@ -877,19 +879,33 @@ Interactively, also switches to the new buffer."
         ("C-c C-p" . outline-previous-visible-heading)))
 
 ;; _____________________________________________________________________________
-;; Buffer display rules
+;; Meta buffer mode
 ;; _____________________________________________________________________________
 
-(defun nrm/from-agenda-follow-p (_buffer-or-name _action)
-  "Returns non-nil iff the current buffer is derived from ~org-agenda-mode~
-and ~org-agenda-follow-mode~ is enabled."
-  (and (derived-mode-p 'org-agenda-mode)
-       org-agenda-follow-mode))
+(define-minor-mode nrm/meta-buffer-mode
+  "Override buffer display rules to display most other buffers in window to the right.")
 
-(defun nrm/display-buffer-reuse-right-window (buffer alist)
-  "Reuse the window to the right of the selected window, if possible."
-  (when-let* ((win (window-in-direction 'right)))
+(defun nrm/from-meta-buffer-p (_buffer-or-name _action)
+  "Returns non-nil iff nrm/meta-buffer-mode is enabled in the current buffer.
+This function is meant to be used as a condition in display-buffer-alist."
+  nrm/meta-buffer-mode)
+
+(defun nrm/display-buffer-reuse-window-direction (buffer alist)
+  "Reuse the window in a given direction relative to the selected window, if possible."
+  (when-let* ((direction (cdr (assq 'direction alist)))
+              (win (window-in-direction direction)))
     (window--display-buffer buffer win 'reuse alist)))
+
+(advice-add 'org-agenda-follow-mode :after (lambda () (nrm/meta-buffer-mode 'toggle)))
+
+(add-hook 'org-agenda-finalize-hook
+          (lambda () (if org-agenda-follow-mode
+                         (nrm/meta-buffer-mode)
+                       (nrm/meta-buffer-mode -1))))
+
+;; _____________________________________________________________________________
+;; Buffer display rules
+;; _____________________________________________________________________________
 
 (defun nrm/get-named-frame (name)
   "Returns a frame with the given NAME, creating it if necessary"
@@ -909,14 +925,10 @@ and ~org-agenda-follow-mode~ is enabled."
 
 (setq display-buffer-alist
       '(
-        ;; When in an org-agenda buffer in follow mode, open all other buffers in a window to the right
-        (nrm/from-agenda-follow-p
-         (nrm/display-buffer-reuse-right-window display-buffer-in-direction)
-         (window-width . 0.5)
-         (direction . right))
-
-        ;; Display embark actions in a buffer below the current one that resizes to fit all actions
-        ("\\*Embark Actions\\*"
+        ;; Display temporary buffers below the current window
+        ((or . ((derived-mode . calendar-mode)
+                "\\*Embark Actions\\*"
+                "\\*transient\\*"))
          (display-buffer-reuse-window display-buffer-below-selected)
          (window-height . fit-window-to-buffer)
          (window-parameters . ((no-other-window . t)
@@ -926,6 +938,16 @@ and ~org-agenda-follow-mode~ is enabled."
         ("\\*compilation\\*"
          nrm/display-buffer-in-named-frame
          (frame-name . "Compilation"))
+
+        ;; Display temporary org source buffers in the same window
+        ("\\*Org Src .*\\*"
+         display-buffer-same-window)
+
+        ;; When in a meta buffer, open most other buffers in a window to the right
+        (nrm/from-meta-buffer-p
+         (nrm/display-buffer-reuse-window-direction display-buffer-in-direction)
+         (window-width . 0.5)
+         (direction . right))
 
         ;; Display magit status buffers in a dedicated window per repository
         ((derived-mode . magit-status-mode)
