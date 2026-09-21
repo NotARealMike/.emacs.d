@@ -246,8 +246,21 @@
 ;; Extra capfs
 (use-package cape
   :config
-  (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-  (add-to-list 'completion-at-point-functions #'cape-file))
+  (setq completion-at-point-functions (list (cape-capf-super #'cape-dabbrev #'cape-dict)))
+  (defun nrm/capf-order-hook ()
+    "Set completion-at-point-functions locally in my preferred order."
+    (add-hook 'completion-at-point-functions 'cape-file -90 t)
+    (unless (derived-mode-p 'prog-mode)
+      (add-hook 'completion-at-point-functions 'cape-emoji -89 t)))
+  (add-hook 'after-change-major-mode-hook 'nrm/capf-order-hook)
+  (defun nrm/cape-emoji-add ()
+    "Adds cape-emoji to completion-at-point-functions."
+    (interactive)
+    (add-hook 'completion-at-point-functions 'cape-emoji -89 t))
+  (defun nrm/cape-emoji-remove ()
+    "Removes cape-emoji from completion-at-point-functions."
+    (interactive)
+    (remove-hook 'completion-at-point-functions 'cape-emoji t)))
 
 ;; _____________________________________________________________________________
 ;; Dired

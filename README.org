@@ -354,7 +354,18 @@ A set of complementary packages that provide minibuffer completion. I saw this s
 
 ** Completion at point
 
-Text completion for source code and natural language.
+These packages enable auto-completion when writing in a buffer.
+
+My rules for how to try completion are as follows:
+- Firstly, try to complete a file name or an emoji
+- Secondly, try to complete according to the mode-specific completions
+  - For example, programming-language specific completions
+- Lastly, fall back to "prose completion"
+  - That is, try to complete from words I've written before or from a dictionary
+
+
+In programming modes, emoji completion is disabled by default to avoid conflicts, for example with ~:keywords~ in ELisp, path separators in Rust, account name separators in Beancount, etc. The interactive functions ~nrm/cape-emoji-add~ and ~nrm/cape-emoji-remove~ can be used to override this behaviour ad hoc.
+
 
 #+begin_src emacs-lisp
 
@@ -373,8 +384,21 @@ Text completion for source code and natural language.
   ;; Extra capfs
   (use-package cape
     :config
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-    (add-to-list 'completion-at-point-functions #'cape-file))
+    (setq completion-at-point-functions (list (cape-capf-super #'cape-dabbrev #'cape-dict)))
+    (defun nrm/capf-order-hook ()
+      "Set completion-at-point-functions locally in my preferred order."
+      (add-hook 'completion-at-point-functions 'cape-file -90 t)
+      (unless (derived-mode-p 'prog-mode)
+        (add-hook 'completion-at-point-functions 'cape-emoji -89 t)))
+    (add-hook 'after-change-major-mode-hook 'nrm/capf-order-hook)
+    (defun nrm/cape-emoji-add ()
+      "Adds cape-emoji to completion-at-point-functions."
+      (interactive)
+      (add-hook 'completion-at-point-functions 'cape-emoji -89 t))
+    (defun nrm/cape-emoji-remove ()
+      "Removes cape-emoji from completion-at-point-functions."
+      (interactive)
+      (remove-hook 'completion-at-point-functions 'cape-emoji t)))
 #+end_src
 
 * Built-in mode improvements
