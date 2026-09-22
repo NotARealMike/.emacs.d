@@ -117,7 +117,7 @@
     ("<right>" "Right third" (lambda () (interactive) (set-frame-size-and-position (selected-frame) (/ 1.0 3) 1.0 (/ 2.0 3) 0.0)))
     ("RET" "Maximise" (lambda () (interactive) (set-frame-size-and-position (selected-frame) 1.0 1.0 0.0 0.0)))]
    ["Misc"
-    ("d" "Default width" (lambda () (interactive) (set-frame-size-and-position (selected-frame) nrm/single-frame-width 1.0 nil nil)))
+    ("d" "Default width" (lambda () (interactive) (set-frame-size-and-position (selected-frame) nrm/single-frame-width 1.0 nil 0.0)))
     ("m" "Faux maximised" (lambda () (interactive) (set-frame-size-and-position (selected-frame) 1.0 1.0 0.0 0.0)))]
    ])
 
