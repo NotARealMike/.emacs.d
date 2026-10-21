@@ -950,6 +950,14 @@ This function is meant to be used as a condition in display-buffer-alist."
          (window-parameters . ((no-other-window . t)
                                (mode-line-format . none))))
 
+        ;; Display Org agenda and capture dispatch buffers below current window
+        ((or . ("\\*Agenda Commands\\*"
+                "\\*Org Select\\*"))
+         (display-buffer-in-side-window)
+         (dedicated . t)
+         (side . bottom)
+         (slot . 0))
+
         ;; Display compilation buffers in a dedicated frame
         ("\\*compilation\\*"
          nrm/display-buffer-in-named-frame
