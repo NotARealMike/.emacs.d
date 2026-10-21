@@ -285,6 +285,9 @@
   (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$")))
 
 (use-package wdired
+  :bind
+  (:map dired-mode-map
+        ("e" . wdired-change-to-wdired-mode))
   :custom
   (wdired-use-dired-vertical-movement t))
 
